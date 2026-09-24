@@ -1,69 +1,79 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import React from "react";
+import { TopHeader } from "@/components/TopHeader";
+import { Navbar } from "@/components/Navbar";
+import { HeroSection } from "@/components/HeroSection";
+import { CategoryGrid } from "@/components/CategoryGrid";
+import { BestDeals } from "@/components/BestDeals";
+import { ProductCatalog } from "@/components/ProductCatalog";
+import { BrandShowcase } from "@/components/BrandShowcase";
+import { WhyChooseUs } from "@/components/WhyChooseUs";
+import { ReviewsSection } from "@/components/ReviewsSection";
+import { ContactCTASection } from "@/components/ContactCTASection";
+import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
+
+// Interactive Modals
+import { ProductDetailModal } from "@/components/ProductDetailModal";
+import { CartDrawer } from "@/components/CartDrawer";
+import { CheckoutModal } from "@/components/CheckoutModal";
+import { OrderConfirmationModal } from "@/components/OrderConfirmationModal";
+import { OrderTrackingModal } from "@/components/OrderTrackingModal";
+import { RequestQuoteModal } from "@/components/RequestQuoteModal";
+import { CustomerAuthModal } from "@/components/CustomerAuthModal";
+import { ToastNotification } from "@/components/ToastNotification";
+
+export default function HomePage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      {/* Utility Top Bar */}
+      <TopHeader />
+
+      {/* Main Navigation with Live Search */}
+      <Navbar />
+
+      <main style={{ flex: 1 }}>
+        {/* Hero Section with Quick CTAs & Value Props */}
+        <HeroSection />
+
+        {/* Shop By Category Grid (11+ Categories) */}
+        <CategoryGrid />
+
+        {/* Flash Deals & Limited Stock Countdown */}
+        <BestDeals />
+
+        {/* Full Shop / Interactive Product Catalog with Filters */}
+        <ProductCatalog />
+
+        {/* Authorized Brands Showcase */}
+        <BrandShowcase />
+
+        {/* Why Choose Adhikari Hardware Trust Pillars */}
+        <WhyChooseUs />
+
+        {/* Verified Customer & Contractor Reviews */}
+        <ReviewsSection />
+
+        {/* Contact & Site Delivery Helpline Section */}
+        <ContactCTASection />
       </main>
+
+      {/* Complete Footer */}
+      <Footer />
+
+      {/* Mobile Sticky Bottom Navigation */}
+      <MobileBottomNav />
+
+      {/* Dynamic Popups & Dialogs */}
+      <ProductDetailModal />
+      <CartDrawer />
+      <CheckoutModal />
+      <OrderConfirmationModal />
+      <OrderTrackingModal />
+      <RequestQuoteModal />
+      <CustomerAuthModal />
+      <ToastNotification />
     </div>
   );
 }
