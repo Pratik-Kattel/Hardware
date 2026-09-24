@@ -14,12 +14,12 @@ export function TopHeader() {
           {/* Left Info */}
           <div style={{ display: "flex", alignItems: "center", gap: "18px", flexWrap: "wrap" }}>
             <div className="top-bar-item">
-              <MapPin size={13} color="var(--accent-orange)" />
+              <MapPin size={13} color="var(--accent-steel)" />
               <span>Kalanki, Ring Road, Kathmandu, Nepal</span>
             </div>
 
             <div className="top-bar-item">
-              <Phone size={13} color="var(--accent-orange)" />
+              <Phone size={13} color="var(--accent-steel)" />
               <a
                 href="tel:9800000000"
                 style={{ color: "#FFFFFF", fontWeight: 600, letterSpacing: "0.02em" }}
@@ -37,7 +37,7 @@ export function TopHeader() {
           {/* Right Links & Delivery Notice */}
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
             <div className="top-bar-item" style={{ color: "#FFFFFF" }}>
-              <Truck size={13} color="var(--accent-orange)" />
+              <Truck size={13} color="var(--accent-steel)" />
               <span>
                 Same-Day Delivery across <strong>Kathmandu Valley</strong>
               </span>
@@ -57,14 +57,14 @@ export function TopHeader() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = "#FFFFFF")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
               >
-                <Sparkles size={12} color="var(--accent-orange)" />
+                <Sparkles size={12} color="var(--accent-steel)" />
                 <span>Track Order</span>
               </button>
 
               <button
                 onClick={() => openModal("request_quote")}
                 style={{
-                  color: "var(--accent-orange)",
+                  color: "var(--accent-steel)",
                   fontSize: "12px",
                   fontWeight: 600,
                   display: "flex",

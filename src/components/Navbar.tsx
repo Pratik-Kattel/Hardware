@@ -121,7 +121,7 @@ export function Navbar() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "var(--accent-orange)",
+                  color: "var(--accent-steel)",
                   border: "1px solid var(--border-medium)",
                 }}
               >
@@ -141,7 +141,7 @@ export function Navbar() {
                   }}
                 >
                   <span>ADHIKARI</span>
-                  <span style={{ color: "var(--accent-orange)" }}>HARDWARE</span>
+                  <span style={{ color: "var(--accent-steel)" }}>HARDWARE</span>
                 </div>
                 <div
                   style={{
@@ -175,11 +175,11 @@ export function Navbar() {
                 background: "var(--bg-surface-secondary)",
                 borderRadius: "var(--radius-full)",
                 border: searchFocused
-                  ? "2px solid var(--accent-orange)"
+                  ? "2px solid var(--accent-steel)"
                   : "2px solid var(--border-medium)",
                 padding: "2px 6px 2px 18px",
                 transition: "all var(--transition-fast)",
-                boxShadow: searchFocused ? "0 0 0 4px rgba(234, 88, 12, 0.12)" : "none",
+                boxShadow: searchFocused ? "0 0 0 3px rgba(74, 101, 114, 0.18)" : "none",
               }}
             >
               <Search size={18} color="var(--text-muted)" style={{ marginRight: "10px", flexShrink: 0 }} />
@@ -313,7 +313,7 @@ export function Navbar() {
                         </div>
                       </div>
                       <div style={{ textAlign: "right", flexShrink: 0 }}>
-                        <div style={{ fontWeight: 700, color: "var(--accent-orange)", fontSize: "13px" }}>
+                        <div style={{ fontWeight: 700, color: "var(--accent-steel)", fontSize: "13px" }}>
                           NPR {prod.price.toLocaleString()}
                         </div>
                         {prod.inStock ? (
@@ -357,7 +357,7 @@ export function Navbar() {
                 e.currentTarget.style.background = "#FFFFFF";
               }}
             >
-              <FileSpreadsheet size={16} color="var(--accent-orange)" />
+              <FileSpreadsheet size={16} color="var(--accent-steel)" />
               <span>Request Quote</span>
             </button>
 
@@ -386,7 +386,7 @@ export function Navbar() {
                     position: "absolute",
                     top: "-4px",
                     right: "-4px",
-                    background: "var(--accent-orange)",
+                    background: "var(--accent-steel)",
                     color: "#FFFFFF",
                     fontSize: "10px",
                     fontWeight: 700,
@@ -429,7 +429,7 @@ export function Navbar() {
                       position: "absolute",
                       top: "-8px",
                       right: "-10px",
-                      background: "var(--accent-orange)",
+                      background: "var(--accent-steel)",
                       color: "#ffffff",
                       fontSize: "10px",
                       fontWeight: 800,
@@ -538,7 +538,7 @@ export function Navbar() {
                       textAlign: "left",
                       fontSize: "13px",
                       fontWeight: selectedCategory === "all" ? 700 : 500,
-                      color: selectedCategory === "all" ? "var(--accent-orange)" : "var(--primary)",
+                      color: selectedCategory === "all" ? "var(--accent-steel)" : "var(--primary)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
@@ -562,7 +562,7 @@ export function Navbar() {
                         textAlign: "left",
                         fontSize: "13px",
                         fontWeight: selectedCategory === cat.id ? 700 : 500,
-                        color: selectedCategory === cat.id ? "var(--accent-orange)" : "var(--primary)",
+                        color: selectedCategory === cat.id ? "var(--accent-steel)" : "var(--primary)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
@@ -606,12 +606,12 @@ export function Navbar() {
                   style={{
                     fontSize: "13px",
                     fontWeight: selectedCategory === item.id ? 700 : 500,
-                    color: selectedCategory === item.id ? "var(--accent-orange)" : "var(--text-main)",
+                    color: selectedCategory === item.id ? "var(--accent-steel)" : "var(--text-main)",
                     padding: "4px 8px",
                     borderRadius: "var(--radius-sm)",
                     transition: "color 0.2s",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent-orange)")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--accent-steel)")}
                   onMouseLeave={(e) => {
                     if (selectedCategory !== item.id) {
                       e.currentTarget.style.color = "var(--text-main)";
@@ -627,14 +627,14 @@ export function Navbar() {
                 style={{
                   fontSize: "13px",
                   fontWeight: 700,
-                  color: "var(--accent-orange)",
+                  color: "var(--highlight-rust)",
                   display: "flex",
                   alignItems: "center",
                   gap: "4px",
                   padding: "4px 8px",
                 }}
               >
-                <Flame size={14} color="var(--accent-orange)" />
+                <Flame size={14} color="var(--highlight-rust)" />
                 <span>Best Sellers</span>
               </a>
             </nav>
@@ -651,10 +651,10 @@ export function Navbar() {
               }}
               className="nav-helpline"
             >
-              <PhoneCall size={14} color="var(--accent-orange)" />
+              <PhoneCall size={14} color="var(--accent-steel)" />
               <span>
                 Call Us:{" "}
-                <a href="tel:9800000000" style={{ color: "var(--accent-orange)", fontWeight: 700 }}>
+                <a href="tel:9800000000" style={{ color: "var(--accent-steel)", fontWeight: 700 }}>
                   9800000000
                 </a>
               </span>
@@ -669,7 +669,7 @@ export function Navbar() {
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(14, 34, 56, 0.7)",
+            background: "rgba(28, 28, 30, 0.7)",
             zIndex: 1000,
             display: "flex",
           }}
@@ -741,7 +741,7 @@ export function Navbar() {
                     padding: "8px 12px",
                     borderRadius: "var(--radius-sm)",
                     background: selectedCategory === "all" ? "var(--primary-surface)" : "transparent",
-                    color: selectedCategory === "all" ? "var(--accent-orange)" : "var(--primary)",
+                    color: selectedCategory === "all" ? "var(--accent-steel)" : "var(--primary)",
                     fontWeight: 600,
                   }}
                 >
@@ -756,7 +756,7 @@ export function Navbar() {
                       padding: "8px 12px",
                       borderRadius: "var(--radius-sm)",
                       background: selectedCategory === cat.id ? "var(--primary-surface)" : "transparent",
-                      color: selectedCategory === cat.id ? "var(--accent-orange)" : "var(--primary)",
+                      color: selectedCategory === cat.id ? "var(--accent-steel)" : "var(--primary)",
                       fontWeight: 500,
                       fontSize: "14px",
                     }}
@@ -771,7 +771,7 @@ export function Navbar() {
               <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>Support & Order Desk</div>
               <a
                 href="tel:9800000000"
-                style={{ fontSize: "16px", fontWeight: 700, color: "var(--accent-orange)" }}
+                style={{ fontSize: "16px", fontWeight: 700, color: "var(--accent-steel)" }}
               >
                 9800000000
               </a>

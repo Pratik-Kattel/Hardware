@@ -39,7 +39,7 @@ export function ContactCTASection() {
     <section
       style={{
         padding: "64px 0",
-        background: "#0F1B2D",
+        background: "#1C1C1E",
         color: "#FFFFFF",
         position: "relative",
       }}
@@ -56,13 +56,13 @@ export function ContactCTASection() {
         >
           {/* Left Column: Direct Call & Store Info */}
           <div>
-            {/* Plain uppercase orange eyebrow, NO pill background */}
+            {/* Plain uppercase steel-blue eyebrow, NO pill */}
             <div
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
                 letterSpacing: "0.1em",
-                color: "#F15A24",
+                color: "#A4B8C4",
                 textTransform: "uppercase",
                 marginBottom: "10px",
               }}
@@ -94,10 +94,10 @@ export function ContactCTASection() {
               Call our central dispatch desk directly or visit our Kalanki hardware superstore. We dispatch mini-trucks and delivery vans across Kathmandu, Lalitpur, and Bhaktapur every 2 hours.
             </p>
 
-            {/* Direct Phone Highlight Box - Clean border, no gradient */}
+            {/* Direct Phone Highlight Box */}
             <div
               style={{
-                background: "#1A2E4C",
+                background: "#2C2C2E",
                 border: "1px solid rgba(255, 255, 255, 0.15)",
                 borderRadius: "var(--radius-md)",
                 padding: "20px 24px",
@@ -112,7 +112,7 @@ export function ContactCTASection() {
                   width: "50px",
                   height: "50px",
                   borderRadius: "var(--radius-sm)",
-                  background: "#F15A24",
+                  background: "#4A6572",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -160,11 +160,11 @@ export function ContactCTASection() {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <MapPin size={16} color="#F15A24" style={{ flexShrink: 0 }} />
+                <MapPin size={16} color="#A4B8C4" style={{ flexShrink: 0 }} />
                 <span>Adhikari Hardware, Kalanki Chowk (Ring Road), Kathmandu, Nepal</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <Clock size={16} color="#F15A24" style={{ flexShrink: 0 }} />
+                <Clock size={16} color="#A4B8C4" style={{ flexShrink: 0 }} />
                 <span>Open 7 Days a Week: 7:00 AM – 8:00 PM</span>
               </div>
             </div>
@@ -177,7 +177,7 @@ export function ContactCTASection() {
                 background: "#FFFFFF",
                 borderRadius: "var(--radius-lg)",
                 padding: "32px",
-                color: "#1F2937",
+                color: "#1C1C1E",
                 border: "1px solid #E5E7EB",
                 boxShadow: "none",
               }}
@@ -186,7 +186,7 @@ export function ContactCTASection() {
                 style={{
                   fontSize: "20px",
                   fontWeight: 700,
-                  color: "#0F1B2D",
+                  color: "#1C1C1E",
                   marginBottom: "4px",
                 }}
               >
@@ -195,7 +195,7 @@ export function ContactCTASection() {
               <p
                 style={{
                   fontSize: "13px",
-                  color: "#6B7280",
+                  color: "#6E6E73",
                   marginBottom: "20px",
                 }}
               >
@@ -204,11 +204,11 @@ export function ContactCTASection() {
 
               {sent ? (
                 <div style={{ textAlign: "center", padding: "20px" }}>
-                  <CheckCircle size={36} color="#10B981" style={{ margin: "0 auto 10px auto" }} />
-                  <div style={{ fontWeight: 700, color: "#0F1B2D" }}>
+                  <CheckCircle size={36} color="#1E824C" style={{ margin: "0 auto 10px auto" }} />
+                  <div style={{ fontWeight: 700, color: "#1C1C1E" }}>
                     Callback Request Received
                   </div>
-                  <p style={{ fontSize: "13px", color: "#4B5563", marginTop: "4px" }}>
+                  <p style={{ fontSize: "13px", color: "#3A3A3C", marginTop: "4px" }}>
                     We are connecting you with our site logistics manager.
                   </p>
                 </div>
@@ -249,15 +249,14 @@ export function ContactCTASection() {
                     />
                   </div>
 
-                  {/* "Call Me Back" button: solid orange #F15A24, NO glow/shadow */}
+                  {/* "Call Me Back" button: Muted Steel-Blue #4A6572 */}
                   <button
                     type="submit"
                     className="btn btn-primary btn-full btn-lg"
                     style={{
-                      background: "#F15A24",
+                      background: "#4A6572",
                       color: "#FFFFFF",
                       border: "none",
-                      boxShadow: "none",
                       gap: "8px",
                       fontWeight: 700,
                     }}
@@ -274,7 +273,7 @@ export function ContactCTASection() {
                   style={{
                     fontSize: "12px",
                     fontWeight: 600,
-                    color: "#F15A24",
+                    color: "#4A6572",
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "5px",

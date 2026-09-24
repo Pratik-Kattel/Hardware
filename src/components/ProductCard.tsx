@@ -35,7 +35,7 @@ export function ProductCard({ product }: ProductCardProps) {
         boxShadow: "none",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "#0F1B2D";
+        e.currentTarget.style.borderColor = "#1C1C1E";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.borderColor = "#E5E7EB";
@@ -55,7 +55,7 @@ export function ProductCard({ product }: ProductCardProps) {
             style={{
               fontSize: "10px",
               fontWeight: 700,
-              background: "#F15A24",
+              background: "#C1512D",
               color: "#FFFFFF",
               padding: "2px 7px",
               borderRadius: "var(--radius-sm)",
@@ -86,11 +86,11 @@ export function ProductCard({ product }: ProductCardProps) {
           alignItems: "center",
           justifyContent: "center",
           transition: "border-color 0.15s",
-          color: isFavorite ? "#F15A24" : "#6B7280",
+          color: isFavorite ? "#C1512D" : "#6E6E73",
         }}
         aria-label="Toggle Wishlist"
       >
-        <Heart size={16} fill={isFavorite ? "#F15A24" : "none"} />
+        <Heart size={16} fill={isFavorite ? "#C1512D" : "none"} />
       </button>
 
       {/* Product Image Container */}
@@ -127,7 +127,7 @@ export function ProductCard({ product }: ProductCardProps) {
             bottom: "8px",
             left: "50%",
             transform: "translateX(-50%)",
-            background: "#0F1B2D",
+            background: "#1C1C1E",
             color: "#FFFFFF",
             padding: "5px 12px",
             borderRadius: "var(--radius-sm)",
@@ -169,12 +169,12 @@ export function ProductCard({ product }: ProductCardProps) {
               fontWeight: 700,
               textTransform: "uppercase",
               letterSpacing: "0.04em",
-              color: "#F15A24",
+              color: "#4A6572",
             }}
           >
             {product.brand}
           </span>
-          <span style={{ fontSize: "11px", color: "#6B7280" }}>
+          <span style={{ fontSize: "11px", color: "#6E6E73" }}>
             {product.subcategory}
           </span>
         </div>
@@ -185,7 +185,7 @@ export function ProductCard({ product }: ProductCardProps) {
           style={{
             fontSize: "14px",
             fontWeight: 600,
-            color: "#0F1B2D",
+            color: "#1C1C1E",
             lineHeight: "1.35",
             marginBottom: "8px",
             cursor: "pointer",
@@ -217,7 +217,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 gap: "2px",
                 fontSize: "12px",
                 fontWeight: 600,
-                color: "#1F2937",
+                color: "#1C1C1E",
               }}
             >
               <Star size={12} fill="#D97706" color="#D97706" />
@@ -233,7 +233,7 @@ export function ProductCard({ product }: ProductCardProps) {
               style={{
                 fontSize: "11px",
                 fontWeight: 600,
-                color: "#10B981",
+                color: "#1E824C",
                 display: "flex",
                 alignItems: "center",
                 gap: "3px",
@@ -247,7 +247,7 @@ export function ProductCard({ product }: ProductCardProps) {
               style={{
                 fontSize: "11px",
                 fontWeight: 600,
-                color: "#EF4444",
+                color: "#C1512D",
                 display: "flex",
                 alignItems: "center",
                 gap: "3px",
@@ -276,7 +276,7 @@ export function ProductCard({ product }: ProductCardProps) {
               style={{
                 fontSize: "17px",
                 fontWeight: 800,
-                color: "#0F1B2D",
+                color: "#1C1C1E",
                 lineHeight: "1.1",
               }}
             >
@@ -302,7 +302,7 @@ export function ProductCard({ product }: ProductCardProps) {
             style={{
               padding: "7px 12px",
               gap: "5px",
-              background: "#F15A24",
+              background: "#4A6572",
               color: "#FFFFFF",
               border: "none",
               boxShadow: "none",

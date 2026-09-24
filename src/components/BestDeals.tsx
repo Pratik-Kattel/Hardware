@@ -16,7 +16,6 @@ import {
 export function BestDeals() {
   const { addToCart, openProductDetail } = useStore();
 
-  // Real urgency countdown timer for limited weekly stock
   const [timeLeft, setTimeLeft] = useState({
     hours: 14,
     minutes: 42,
@@ -39,19 +38,17 @@ export function BestDeals() {
     return () => clearInterval(timer);
   }, []);
 
-  // Filter deal products with real discounts
   const dealProducts = PRODUCTS.filter(
     (p) => (p.discountPercent && p.discountPercent > 0) || p.isBestDeal
   );
 
-  // Embla Carousel setup: 4 visible desktop / 2 tablet / 1 mobile
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
       align: "start",
       slidesToScroll: 1,
     },
-    [Autoplay({ delay: 4500, stopOnMouseEnter: true, stopOnInteraction: false })]
+    [Autoplay({ delay: 5000, stopOnMouseEnter: true, stopOnInteraction: false })]
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -82,15 +79,15 @@ export function BestDeals() {
       id="deals-section"
       style={{
         padding: "64px 0",
-        background: "#F8F9FA",
+        background: "#FAFAFA",
         borderBottom: "1px solid #E5E7EB",
       }}
     >
       <div className="container">
-        {/* Banner: Solid Navy #0F1B2D (NO gradient blend), Clean Border */}
+        {/* Banner: Deep Charcoal #1C1C1E */}
         <div
           style={{
-            background: "#0F1B2D",
+            background: "#1C1C1E",
             borderRadius: "var(--radius-lg)",
             padding: "28px 32px",
             color: "#FFFFFF",
@@ -100,17 +97,16 @@ export function BestDeals() {
             justifyContent: "space-between",
             flexWrap: "wrap",
             gap: "20px",
-            border: "1px solid #1A2E4C",
+            border: "1px solid #2C2C2E",
           }}
         >
           <div>
-            {/* Standardized plain uppercase eyebrow */}
             <div
               style={{
                 fontSize: "12px",
                 fontWeight: 700,
                 letterSpacing: "0.1em",
-                color: "#F15A24",
+                color: "#A4B8C4",
                 textTransform: "uppercase",
                 marginBottom: "6px",
               }}
@@ -131,7 +127,7 @@ export function BestDeals() {
             </h2>
 
             <p style={{ fontSize: "14px", color: "#9CA3AF", maxWidth: "560px" }}>
-              Authorized wholesale-discounted power tools, waterproofing compounds, and electrical gear.
+              Authorized discounted power tools, waterproofing compounds, and electrical gear.
             </p>
           </div>
 
@@ -141,13 +137,13 @@ export function BestDeals() {
               display: "flex",
               alignItems: "center",
               gap: "12px",
-              background: "#1A2E4C",
+              background: "#2C2C2E",
               border: "1px solid rgba(255, 255, 255, 0.12)",
               borderRadius: "var(--radius-md)",
               padding: "10px 18px",
             }}
           >
-            <Clock size={18} color="#F15A24" />
+            <Clock size={18} color="#A4B8C4" />
             <div style={{ textAlign: "left" }}>
               <div
                 style={{
@@ -186,11 +182,10 @@ export function BestDeals() {
             marginBottom: "16px",
           }}
         >
-          <div style={{ fontSize: "13px", fontWeight: 600, color: "#6B7280" }}>
+          <div style={{ fontSize: "13px", fontWeight: 600, color: "#6E6E73" }}>
             Showing {dealProducts.length} Discounted Items
           </div>
 
-          {/* Navigation Arrows */}
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <button
               onClick={scrollPrev}
@@ -201,20 +196,14 @@ export function BestDeals() {
                 borderRadius: "var(--radius-sm)",
                 background: "#FFFFFF",
                 border: "1px solid #E5E7EB",
-                color: "#0F1B2D",
+                color: "#1C1C1E",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                transition: "background var(--transition-fast), border-color var(--transition-fast)",
+                transition: "border-color var(--transition-fast)",
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#0F1B2D";
-                e.currentTarget.style.background = "#F3F4F6";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "#E5E7EB";
-                e.currentTarget.style.background = "#FFFFFF";
-              }}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#E5E7EB")}
             >
               <ChevronLeft size={18} />
             </button>
@@ -228,20 +217,14 @@ export function BestDeals() {
                 borderRadius: "var(--radius-sm)",
                 background: "#FFFFFF",
                 border: "1px solid #E5E7EB",
-                color: "#0F1B2D",
+                color: "#1C1C1E",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                transition: "background var(--transition-fast), border-color var(--transition-fast)",
+                transition: "border-color var(--transition-fast)",
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#0F1B2D";
-                e.currentTarget.style.background = "#F3F4F6";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "#E5E7EB";
-                e.currentTarget.style.background = "#FFFFFF";
-              }}
+              onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
+              onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#E5E7EB")}
             >
               <ChevronRight size={18} />
             </button>
@@ -274,21 +257,21 @@ export function BestDeals() {
                       flexDirection: "column",
                       height: "100%",
                       position: "relative",
-                      boxShadow: "none",
                       transition: "border-color var(--transition-fast)",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#0F1B2D")}
+                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
                     onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#E5E7EB")}
                   >
-                    {/* Factual SAVE % Badge (tied to real price diff) */}
+                    {/* Factual SAVE % Badge in Warm Rust / Terracotta */}
                     {prod.discountPercent && prod.discountPercent > 0 && (
                       <div
                         style={{
                           position: "absolute",
                           top: "14px",
                           left: "14px",
-                          background: "#F15A24",
-                          color: "#FFFFFF",
+                          background: "#FBEFEB",
+                          color: "#C1512D",
+                          border: "1px solid #F0D0C7",
                           fontSize: "11px",
                           fontWeight: 700,
                           padding: "3px 8px",
@@ -309,8 +292,11 @@ export function BestDeals() {
                         overflow: "hidden",
                         borderRadius: "var(--radius-sm)",
                         marginBottom: "12px",
-                        background: "#F8F9FA",
+                        background: "#FAFAFA",
                         border: "1px solid #E5E7EB",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
                       <img
@@ -319,17 +305,18 @@ export function BestDeals() {
                         style={{
                           width: "100%",
                           height: "100%",
-                          objectFit: "cover",
+                          objectFit: "contain",
+                          padding: "8px",
                         }}
                       />
                     </div>
 
-                    {/* Brand & Subcategory */}
+                    {/* Brand */}
                     <div
                       style={{
                         fontSize: "11px",
                         fontWeight: 700,
-                        color: "#F15A24",
+                        color: "#4A6572",
                         textTransform: "uppercase",
                         letterSpacing: "0.04em",
                         marginBottom: "2px",
@@ -344,7 +331,7 @@ export function BestDeals() {
                       style={{
                         fontSize: "14px",
                         fontWeight: 600,
-                        color: "#0F1B2D",
+                        color: "#1C1C1E",
                         margin: "0 0 10px 0",
                         cursor: "pointer",
                         display: "-webkit-box",
@@ -368,7 +355,7 @@ export function BestDeals() {
                         marginBottom: "12px",
                       }}
                     >
-                      <span style={{ fontSize: "18px", fontWeight: 800, color: "#0F1B2D" }}>
+                      <span style={{ fontSize: "18px", fontWeight: 800, color: "#1C1C1E" }}>
                         NPR {prod.price.toLocaleString()}
                       </span>
                       {prod.originalPrice && (
@@ -388,15 +375,15 @@ export function BestDeals() {
                     <div
                       style={{
                         fontSize: "11px",
-                        color: "#4B5563",
+                        color: "#6E6E73",
                         marginBottom: "14px",
                       }}
                     >
                       <span>In Stock: </span>
-                      <strong style={{ color: "#F15A24" }}>{stockRemaining} units left</strong>
+                      <strong style={{ color: "#3A3A3C" }}>{stockRemaining} units left</strong>
                     </div>
 
-                    {/* Add to Cart Button */}
+                    {/* Add to Cart Button in Muted Steel-Blue */}
                     <button
                       onClick={() => addToCart(prod, 1)}
                       className="btn btn-primary btn-full btn-sm"
@@ -404,10 +391,9 @@ export function BestDeals() {
                         gap: "6px",
                         padding: "9px",
                         marginTop: "auto",
-                        background: "#F15A24",
+                        background: "#4A6572",
                         color: "#FFFFFF",
                         border: "none",
-                        boxShadow: "none",
                       }}
                     >
                       <ShoppingCart size={15} />
@@ -420,7 +406,7 @@ export function BestDeals() {
           </div>
         </div>
 
-        {/* Carousel Dots */}
+        {/* Carousel Dots in Muted Steel-Blue #4A6572 */}
         <div
           style={{
             display: "flex",
@@ -439,7 +425,7 @@ export function BestDeals() {
                 width: selectedIndex === idx ? "20px" : "6px",
                 height: "6px",
                 borderRadius: "3px",
-                background: selectedIndex === idx ? "#F15A24" : "#D1D5DB",
+                background: selectedIndex === idx ? "#4A6572" : "#D1D5DB",
                 border: "none",
                 transition: "all 0.2s ease",
               }}
@@ -447,7 +433,7 @@ export function BestDeals() {
           ))}
         </div>
 
-        {/* Bottom Catalog Link */}
+        {/* Bottom Catalog Link in Muted Steel-Blue */}
         <div style={{ textAlign: "center", marginTop: "24px" }}>
           <a
             href="#shop-section"
@@ -457,7 +443,7 @@ export function BestDeals() {
               gap: "6px",
               fontSize: "13px",
               fontWeight: 700,
-              color: "#F15A24",
+              color: "#4A6572",
             }}
           >
             <span>Explore All Materials &amp; Hardware Catalog</span>

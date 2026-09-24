@@ -91,7 +91,7 @@ export function CartDrawer() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <ShoppingBag size={22} color="var(--accent-orange)" />
+            <ShoppingBag size={22} color="var(--accent-steel)" />
             <span style={{ fontSize: "17px", fontWeight: 800, color: "var(--primary)" }}>
               Shopping Cart ({cartCount})
             </span>
@@ -119,7 +119,7 @@ export function CartDrawer() {
           ) : (
             <div style={{ color: "var(--text-secondary)" }}>
               Add <strong>NPR {(5000 - cartSubtotal).toLocaleString()}</strong> more to get{" "}
-              <strong style={{ color: "var(--accent-orange)" }}>FREE Valley Delivery</strong>!
+              <strong style={{ color: "var(--accent-steel)" }}>FREE Valley Delivery</strong>!
             </div>
           )}
         </div>
@@ -199,7 +199,7 @@ export function CartDrawer() {
 
                 {/* Details */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--accent-orange)", textTransform: "uppercase" }}>
+                  <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--accent-steel)", textTransform: "uppercase" }}>
                     {item.product.brand}
                   </div>
                   <div
@@ -371,7 +371,7 @@ export function CartDrawer() {
 
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "16px", fontWeight: 800, color: "var(--primary)", paddingTop: "8px", borderTop: "1px solid var(--border-light)" }}>
                 <span>Total (VAT incl.)</span>
-                <span style={{ color: "var(--accent-orange)" }}>NPR {cartTotal.toLocaleString()}</span>
+                <span style={{ color: "var(--accent-steel)" }}>NPR {cartTotal.toLocaleString()}</span>
               </div>
             </div>
 

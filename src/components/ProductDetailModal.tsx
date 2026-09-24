@@ -16,6 +16,7 @@ import {
   FileCheck,
   Plus,
   Minus,
+  Check,
 } from "lucide-react";
 
 export function ProductDetailModal() {
@@ -60,80 +61,143 @@ export function ProductDetailModal() {
   };
 
   return (
-    <div className="modal-overlay" onClick={closeModal}>
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(28, 28, 30, 0.6)",
+        zIndex: 1000,
+        display: "flex",
+        justifyContent: "flex-end",
+        transition: "opacity 0.2s ease",
+      }}
+      onClick={closeModal}
+    >
+      {/* Slide-in Drawer from Right at Full Viewport Height */}
       <div
-        className="modal-content"
         style={{
-          maxWidth: "880px",
-          padding: "0",
-          borderRadius: "var(--radius-xl)",
-          overflow: "hidden",
+          width: "100%",
+          maxWidth: "840px",
+          height: "100vh",
+          background: "#FFFFFF",
+          boxShadow: "-10px 0 35px rgba(0, 0, 0, 0.15)",
+          display: "flex",
+          flexDirection: "column",
+          overflowY: "auto",
+          animation: "slideInDrawer 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+          position: "relative",
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
-        <div className="modal-header">
+        {/* Drawer Header */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "20px 32px",
+            borderBottom: "1px solid #E5E7EB",
+            position: "sticky",
+            top: 0,
+            background: "#FFFFFF",
+            zIndex: 10,
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span className="badge badge-navy" style={{ fontSize: "11px" }}>
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 600,
+                color: "#4A6572",
+                background: "#EBF0F2",
+                padding: "3px 8px",
+                borderRadius: "var(--radius-sm)",
+              }}
+            >
               SKU: {selectedProduct.sku}
             </span>
-            <span className="badge badge-amber" style={{ fontSize: "11px" }}>
-              {selectedProduct.brand} Official
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 600,
+                color: "#1C1C1E",
+                background: "#F4F4F6",
+                padding: "3px 8px",
+                borderRadius: "var(--radius-sm)",
+              }}
+            >
+              {selectedProduct.brand} Official Partner
             </span>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <button
               onClick={handleShare}
               style={{
                 width: "36px",
                 height: "36px",
-                borderRadius: "50%",
-                background: "var(--bg-surface-secondary)",
+                borderRadius: "var(--radius-sm)",
+                background: "#FAFAFA",
+                border: "1px solid #E5E7EB",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "var(--text-muted)",
+                color: "#3A3A3C",
+                transition: "border-color var(--transition-fast)",
               }}
-              title="Share Product"
+              title="Share Product Link"
             >
               <Share2 size={16} />
             </button>
 
             <button
               onClick={closeModal}
-              className="modal-close-btn"
-              aria-label="Close dialog"
+              style={{
+                width: "36px",
+                height: "36px",
+                borderRadius: "var(--radius-sm)",
+                background: "#FAFAFA",
+                border: "1px solid #E5E7EB",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#1C1C1E",
+                transition: "border-color var(--transition-fast)",
+              }}
+              aria-label="Close product view"
             >
               <X size={18} />
             </button>
           </div>
         </div>
 
-        {/* Modal Body */}
-        <div style={{ padding: "24px 30px", maxHeight: "calc(88vh - 80px)", overflowY: "auto" }}>
-          {/* Main Product Info Grid */}
+        {/* Drawer Body - Spacious 50/50 Grid */}
+        <div style={{ padding: "32px", display: "flex", flexDirection: "column", gap: "36px" }}>
+          {/* Main Product Info: 50% Image Column, 50% Info Column */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1.1fr",
-              gap: "30px",
-              marginBottom: "32px",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "36px",
+              alignItems: "start",
             }}
             className="product-detail-grid"
           >
-            {/* Left: Images */}
+            {/* Left 50%: Large Image & Thumbnails */}
             <div>
               {/* Primary Large Image */}
               <div
                 style={{
                   width: "100%",
-                  height: "320px",
+                  height: "380px",
                   borderRadius: "var(--radius-lg)",
                   overflow: "hidden",
-                  background: "#f8fafc",
-                  border: "1px solid var(--border-light)",
-                  marginBottom: "12px",
+                  background: "#FAFAFA",
+                  border: "1px solid #E5E7EB",
+                  marginBottom: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
                 <img
@@ -142,97 +206,83 @@ export function ProductDetailModal() {
                   style={{
                     width: "100%",
                     height: "100%",
-                    objectFit: "cover",
+                    objectFit: "contain",
+                    padding: "16px",
                   }}
                 />
               </div>
 
-              {/* Thumbnails */}
+              {/* Large Thumbnails Strip */}
               {selectedProduct.images.length > 1 && (
-                <div style={{ display: "flex", gap: "10px" }}>
+                <div style={{ display: "flex", gap: "12px" }}>
                   {selectedProduct.images.map((img, idx) => (
                     <button
                       key={idx}
                       onClick={() => setActiveImageIndex(idx)}
                       style={{
-                        width: "64px",
-                        height: "64px",
+                        width: "76px",
+                        height: "76px",
                         borderRadius: "var(--radius-md)",
                         overflow: "hidden",
                         border:
                           activeImageIndex === idx
-                            ? "2px solid var(--accent-orange)"
-                            : "1px solid var(--border-medium)",
+                            ? "2px solid #4A6572"
+                            : "1px solid #E5E7EB",
+                        background: "#FAFAFA",
                         cursor: "pointer",
+                        padding: "4px",
+                        transition: "border-color var(--transition-fast)",
                       }}
                     >
                       <img
                         src={img}
                         alt="thumbnail"
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
                       />
                     </button>
                   ))}
                 </div>
               )}
-
-              {/* Trust Badges */}
-              <div
-                style={{
-                  marginTop: "20px",
-                  padding: "14px",
-                  background: "var(--primary-surface)",
-                  borderRadius: "var(--radius-md)",
-                  border: "1px solid var(--border-light)",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "10px",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--primary)" }}>
-                  <ShieldCheck size={16} color="var(--accent-orange)" />
-                  <span><strong>100% Genuine Guarantee</strong> with Nepal Brand Warranty</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--primary)" }}>
-                  <FileCheck size={16} color="var(--success)" />
-                  <span><strong>Official 13% VAT Bill</strong> provided for Tax Compliance</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", color: "var(--primary)" }}>
-                  <RotateCcw size={16} color="var(--info)" />
-                  <span><strong>7-Day Replacement</strong> for manufacturing defects</span>
-                </div>
-              </div>
             </div>
 
-            {/* Right: Details & Purchase */}
-            <div>
+            {/* Right 50%: Details & Purchase Actions with Generous Whitespace */}
+            <div style={{ display: "flex", flexDirection: "column" }}>
               {/* Brand & Subcategory */}
-              <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--accent-orange)", textTransform: "uppercase", marginBottom: "4px" }}>
+              <div
+                style={{
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  color: "#4A6572",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  marginBottom: "8px",
+                }}
+              >
                 {selectedProduct.brand} • {selectedProduct.subcategory}
               </div>
 
               {/* Title */}
-              <h2
+              <h1
                 style={{
                   fontSize: "22px",
                   fontWeight: 800,
-                  color: "var(--primary)",
+                  color: "#1C1C1E",
                   lineHeight: "1.3",
-                  marginBottom: "12px",
+                  marginBottom: "14px",
                 }}
               >
                 {selectedProduct.name}
-              </h2>
+              </h1>
 
-              {/* Rating & Stock */}
+              {/* Rating & Stock Availability */}
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  paddingBottom: "16px",
-                  borderBottom: "1px solid var(--border-light)",
-                  marginBottom: "16px",
+                  paddingBottom: "18px",
+                  borderBottom: "1px solid #E5E7EB",
+                  marginBottom: "22px",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
@@ -241,88 +291,103 @@ export function ProductDetailModal() {
                       display: "flex",
                       alignItems: "center",
                       gap: "3px",
-                      background: "var(--accent-amber-light)",
-                      color: "var(--accent-amber-dark)",
+                      background: "#FEF3C7",
+                      color: "#D97706",
                       padding: "2px 8px",
                       borderRadius: "var(--radius-sm)",
-                      fontSize: "13px",
+                      fontSize: "12px",
                       fontWeight: 700,
                     }}
                   >
-                    <Star size={13} fill="var(--accent-amber)" color="var(--accent-amber)" />
+                    <Star size={13} fill="#D97706" color="#D97706" />
                     <span>{selectedProduct.rating}</span>
                   </div>
-                  <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-                    ({selectedProduct.reviewsCount} verified Nepal reviews)
+                  <span style={{ fontSize: "12px", color: "#6E6E73" }}>
+                    ({selectedProduct.reviewsCount} verified reviews)
                   </span>
                 </div>
 
                 <div
                   style={{
                     fontSize: "12px",
-                    fontWeight: 700,
-                    color: selectedProduct.inStock ? "var(--success)" : "var(--error)",
+                    fontWeight: 600,
+                    color: selectedProduct.inStock ? "#1E824C" : "#C1512D",
                     display: "flex",
                     alignItems: "center",
                     gap: "4px",
                   }}
                 >
                   <CheckCircle2 size={14} />
-                  <span>In Stock ({selectedProduct.stockCount} {selectedProduct.unit}s available)</span>
+                  <span>
+                    {selectedProduct.inStock
+                      ? `In Stock (${selectedProduct.stockCount} ${selectedProduct.unit}s)`
+                      : "Currently Out of Stock"}
+                  </span>
                 </div>
               </div>
 
-              {/* Price Block */}
-              <div style={{ marginBottom: "20px" }}>
-                <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "4px" }}>
-                  <span style={{ fontSize: "30px", fontWeight: 800, color: "var(--primary)" }}>
+              {/* Price Block - Generous Spacing */}
+              <div style={{ marginBottom: "26px" }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: "12px", marginBottom: "6px" }}>
+                  <span style={{ fontSize: "32px", fontWeight: 800, color: "#1C1C1E", letterSpacing: "-0.02em" }}>
                     NPR {selectedProduct.price.toLocaleString()}
                   </span>
                   {selectedProduct.originalPrice && (
-                    <span style={{ fontSize: "16px", color: "var(--text-muted)", textDecoration: "line-through" }}>
+                    <span style={{ fontSize: "16px", color: "#6E6E73", textDecoration: "line-through" }}>
                       NPR {selectedProduct.originalPrice.toLocaleString()}
                     </span>
                   )}
                   {selectedProduct.discountPercent && (
-                    <span className="badge badge-crimson" style={{ fontSize: "12px", fontWeight: 800 }}>
-                      -{selectedProduct.discountPercent}% OFF
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        background: "#FBEFEB",
+                        color: "#C1512D",
+                        border: "1px solid #F0D0C7",
+                        padding: "3px 8px",
+                        borderRadius: "var(--radius-sm)",
+                      }}
+                    >
+                      SAVE {selectedProduct.discountPercent}%
                     </span>
                   )}
                 </div>
-                <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-                  Unit: <strong>{selectedProduct.unit}</strong> • Inclusive of all Nepali taxes &amp; 13% VAT
+                <div style={{ fontSize: "12px", color: "#6E6E73" }}>
+                  Unit: <strong>{selectedProduct.unit}</strong> • Inclusive of all Nepali taxes and official 13% VAT bill
                 </div>
               </div>
 
-              {/* Kathmandu Express Shipping Notice */}
+              {/* Kathmandu Express Shipping Note */}
               <div
                 style={{
-                  background: "var(--bg-surface-secondary)",
+                  background: "#FAFAFA",
+                  border: "1px solid #E5E7EB",
                   borderRadius: "var(--radius-md)",
                   padding: "12px 16px",
-                  marginBottom: "24px",
+                  marginBottom: "28px",
                   display: "flex",
                   alignItems: "center",
-                  gap: "10px",
+                  gap: "12px",
                 }}
               >
-                <Truck size={20} color="var(--accent-orange)" style={{ flexShrink: 0 }} />
-                <div style={{ fontSize: "12px", color: "var(--text-main)" }}>
-                  <strong>Same-Day Delivery in Kathmandu Valley:</strong> Order before 2:00 PM for dispatch today from Kalanki warehouse.
+                <Truck size={18} color="#4A6572" style={{ flexShrink: 0 }} />
+                <div style={{ fontSize: "12px", color: "#3A3A3C", lineHeight: "1.4" }}>
+                  <strong>Same-Day Dispatch in Kathmandu Valley:</strong> Orders confirmed before 2:00 PM are dispatched directly from our central Kalanki depot.
                 </div>
               </div>
 
               {/* Quantity Stepper & Actions */}
-              <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "16px" }}>
                 {/* Stepper */}
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    border: "1.5px solid var(--border-medium)",
+                    border: "1px solid #D1D5DB",
                     borderRadius: "var(--radius-md)",
                     overflow: "hidden",
-                    height: "44px",
+                    height: "46px",
                   }}
                 >
                   <button
@@ -330,21 +395,22 @@ export function ProductDetailModal() {
                     style={{
                       padding: "0 14px",
                       height: "100%",
-                      background: "var(--bg-surface-secondary)",
-                      color: "var(--primary)",
+                      background: "#FAFAFA",
+                      color: "#1C1C1E",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                     }}
+                    aria-label="Decrease quantity"
                   >
-                    <Minus size={16} />
+                    <Minus size={15} />
                   </button>
                   <span
                     style={{
-                      padding: "0 18px",
+                      padding: "0 16px",
                       fontWeight: 700,
                       fontSize: "15px",
-                      color: "var(--primary)",
+                      color: "#1C1C1E",
                     }}
                   >
                     {quantity}
@@ -354,29 +420,32 @@ export function ProductDetailModal() {
                     style={{
                       padding: "0 14px",
                       height: "100%",
-                      background: "var(--bg-surface-secondary)",
-                      color: "var(--primary)",
+                      background: "#FAFAFA",
+                      color: "#1C1C1E",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                     }}
+                    aria-label="Increase quantity"
                   >
-                    <Plus size={16} />
+                    <Plus size={15} />
                   </button>
                 </div>
 
-                {/* Add to Cart */}
+                {/* Add to Cart in Muted Steel-Blue */}
                 <button
                   onClick={() => addToCart(selectedProduct, quantity)}
                   className="btn btn-primary"
                   style={{
                     flex: 1,
-                    height: "44px",
+                    height: "46px",
                     fontSize: "14px",
                     fontWeight: 700,
+                    background: "#4A6572",
+                    color: "#FFFFFF",
                   }}
                 >
-                  <ShoppingCart size={18} />
+                  <ShoppingCart size={17} />
                   <span>Add to Cart</span>
                 </button>
 
@@ -384,31 +453,33 @@ export function ProductDetailModal() {
                 <button
                   onClick={() => toggleWishlist(selectedProduct.id)}
                   style={{
-                    width: "44px",
-                    height: "44px",
+                    width: "46px",
+                    height: "46px",
                     borderRadius: "var(--radius-md)",
-                    border: "1.5px solid var(--border-medium)",
+                    border: "1px solid #D1D5DB",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: isFavorite ? "var(--accent-crimson)" : "var(--text-muted)",
-                    background: "#ffffff",
+                    color: isFavorite ? "#C1512D" : "#6E6E73",
+                    background: "#FFFFFF",
                   }}
                   title="Save to Wishlist"
+                  aria-label="Toggle Wishlist"
                 >
-                  <Heart size={20} fill={isFavorite ? "var(--accent-crimson)" : "none"} />
+                  <Heart size={19} fill={isFavorite ? "#C1512D" : "none"} />
                 </button>
               </div>
 
-              {/* Buy Now Button */}
+              {/* Instant Checkout / Buy Now */}
               <button
                 onClick={handleBuyNow}
                 className="btn btn-secondary btn-full"
                 style={{
-                  height: "44px",
+                  height: "46px",
                   fontSize: "14px",
                   fontWeight: 700,
-                  marginBottom: "16px",
+                  background: "#1C1C1E",
+                  color: "#FFFFFF",
                 }}
               >
                 <span>Instant Checkout (Buy Now)</span>
@@ -416,9 +487,65 @@ export function ProductDetailModal() {
             </div>
           </div>
 
-          {/* Details & Specs Tabs */}
-          <div style={{ borderTop: "1px solid var(--border-light)", paddingTop: "24px" }}>
-            <div style={{ display: "flex", gap: "10px", borderBottom: "1px solid var(--border-light)", marginBottom: "20px" }}>
+          {/* Plain 3-Column Trust Row (Clean icon+text row, NOT a boxed card block) */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: "24px",
+              padding: "20px 0",
+              borderTop: "1px solid #E5E7EB",
+              borderBottom: "1px solid #E5E7EB",
+            }}
+            className="trust-row-grid"
+          >
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+              <ShieldCheck size={20} color="#4A6572" style={{ flexShrink: 0, marginTop: "2px" }} />
+              <div>
+                <strong style={{ fontSize: "13px", color: "#1C1C1E", display: "block" }}>
+                  100% Genuine Guarantee
+                </strong>
+                <span style={{ fontSize: "12px", color: "#6E6E73" }}>
+                  Official brand warranties with verified serial numbers
+                </span>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+              <FileCheck size={20} color="#4A6572" style={{ flexShrink: 0, marginTop: "2px" }} />
+              <div>
+                <strong style={{ fontSize: "13px", color: "#1C1C1E", display: "block" }}>
+                  Official 13% VAT Bill
+                </strong>
+                <span style={{ fontSize: "12px", color: "#6E6E73" }}>
+                  Authorized tax invoices with IRD registered PAN 602918239
+                </span>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+              <RotateCcw size={20} color="#4A6572" style={{ flexShrink: 0, marginTop: "2px" }} />
+              <div>
+                <strong style={{ fontSize: "13px", color: "#1C1C1E", display: "block" }}>
+                  7-Day Replacement
+                </strong>
+                <span style={{ fontSize: "12px", color: "#6E6E73" }}>
+                  Hassle-free replacement for defective tools and accessories
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Details & Specs Tabs - Restyled in Poppins + Steel-Blue Active Tab */}
+          <div>
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                borderBottom: "1px solid #E5E7EB",
+                marginBottom: "24px",
+              }}
+            >
               {[
                 { id: "specs", label: "Technical Specifications" },
                 { id: "desc", label: "Product Description" },
@@ -428,12 +555,13 @@ export function ProductDetailModal() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
                   style={{
-                    padding: "10px 18px",
+                    padding: "10px 16px",
                     fontSize: "14px",
                     fontWeight: activeTab === tab.id ? 700 : 500,
-                    color: activeTab === tab.id ? "var(--accent-orange)" : "var(--text-muted)",
-                    borderBottom: activeTab === tab.id ? "3px solid var(--accent-orange)" : "3px solid transparent",
+                    color: activeTab === tab.id ? "#4A6572" : "#6E6E73",
+                    borderBottom: activeTab === tab.id ? "2px solid #4A6572" : "2px solid transparent",
                     background: "none",
+                    transition: "color var(--transition-fast)",
                   }}
                 >
                   {tab.label}
@@ -456,29 +584,21 @@ export function ProductDetailModal() {
                       <tr
                         key={key}
                         style={{
-                          background: idx % 2 === 0 ? "var(--bg-surface-secondary)" : "#ffffff",
+                          background: idx % 2 === 0 ? "#FAFAFA" : "#FFFFFF",
+                          borderBottom: "1px solid #E5E7EB",
                         }}
                       >
                         <td
                           style={{
-                            padding: "10px 16px",
+                            padding: "10px 14px",
                             fontWeight: 600,
-                            color: "var(--primary)",
+                            color: "#1C1C1E",
                             width: "35%",
-                            borderBottom: "1px solid var(--border-light)",
                           }}
                         >
                           {key}
                         </td>
-                        <td
-                          style={{
-                            padding: "10px 16px",
-                            color: "var(--text-secondary)",
-                            borderBottom: "1px solid var(--border-light)",
-                          }}
-                        >
-                          {val}
-                        </td>
+                        <td style={{ padding: "10px 14px", color: "#3A3A3C" }}>{val}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -488,88 +608,113 @@ export function ProductDetailModal() {
 
             {/* Tab 2: Description */}
             {activeTab === "desc" && (
-              <div style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: "1.7" }}>
+              <div style={{ fontSize: "14px", color: "#3A3A3C", lineHeight: "1.7" }}>
                 <p style={{ marginBottom: "14px" }}>{selectedProduct.description}</p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "14px" }}>
-                  {selectedProduct.tags.map((tag) => (
-                    <span key={tag} className="badge badge-navy" style={{ fontSize: "11px" }}>
-                      #{tag}
-                    </span>
-                  ))}
+                <div style={{ marginTop: "16px" }}>
+                  <div style={{ fontWeight: 700, color: "#1C1C1E", marginBottom: "8px" }}>
+                    Standard Package Includes:
+                  </div>
+                  <ul style={{ paddingLeft: "20px", display: "flex", flexDirection: "column", gap: "6px" }}>
+                    <li>1x Genuine {selectedProduct.name}</li>
+                    <li>Official Manufacturer Warranty Certificate (Nepal)</li>
+                    <li>Technical Operation Manual &amp; Safety Guide</li>
+                    <li>Standard Authorized Service Coverage at Kalanki Center</li>
+                  </ul>
                 </div>
               </div>
             )}
 
             {/* Tab 3: Delivery */}
             {activeTab === "delivery" && (
-              <div style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: "1.6" }}>
-                <div style={{ fontWeight: 700, color: "var(--primary)", marginBottom: "8px" }}>
-                  Dispatch from Adhikari Hardware Central Hub (Kalanki, Kathmandu):
+              <div style={{ fontSize: "14px", color: "#3A3A3C", lineHeight: "1.7" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                  <div
+                    style={{
+                      background: "#FAFAFA",
+                      border: "1px solid #E5E7EB",
+                      borderRadius: "var(--radius-md)",
+                      padding: "16px",
+                    }}
+                  >
+                    <div style={{ fontWeight: 700, color: "#1C1C1E", marginBottom: "4px" }}>
+                      Kathmandu, Lalitpur &amp; Bhaktapur
+                    </div>
+                    <p style={{ fontSize: "13px", color: "#6E6E73" }}>
+                      Same-day courier and site delivery for orders placed before 2:00 PM. Flat delivery charge: NPR 150 (Free for orders above NPR 10,000).
+                    </p>
+                  </div>
+
+                  <div
+                    style={{
+                      background: "#FAFAFA",
+                      border: "1px solid #E5E7EB",
+                      borderRadius: "var(--radius-md)",
+                      padding: "16px",
+                    }}
+                  >
+                    <div style={{ fontWeight: 700, color: "#1C1C1E", marginBottom: "4px" }}>
+                      Bulk Heavy Freight / Cement &amp; Steel
+                    </div>
+                    <p style={{ fontSize: "13px", color: "#6E6E73" }}>
+                      Dedicated mini-truck site delivery dispatched directly from Kalanki depot. Delivery scheduled within 4 hours.
+                    </p>
+                  </div>
                 </div>
-                <ul style={{ paddingLeft: "20px", display: "flex", flexDirection: "column", gap: "6px" }}>
-                  <li><strong>Inside Ring Road (Kathmandu/Lalitpur):</strong> NPR 150 (FREE for orders above NPR 5,000). Delivered within 3-6 hours.</li>
-                  <li><strong>Outside Ring Road / Bhaktapur / Kirtipur:</strong> NPR 250 flat fee.</li>
-                  <li><strong>Outside Kathmandu Valley (Pokhara, Narayangarh, Butwal, Biratnagar, etc.):</strong> NPR 500 via trusted transport courier.</li>
-                  <li><strong>Store Pickup:</strong> Free instant collection at our Kalanki store counter.</li>
-                </ul>
               </div>
             )}
           </div>
 
-          {/* Related Products Section */}
+          {/* Related Products Strip */}
           {relatedProducts.length > 0 && (
-            <div style={{ marginTop: "36px", paddingTop: "24px", borderTop: "1px solid var(--border-light)" }}>
-              <h3 style={{ fontSize: "16px", fontWeight: 700, color: "var(--primary)", marginBottom: "16px" }}>
-                Frequently Bought Together
-              </h3>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                  gap: "16px",
-                }}
-              >
+            <div style={{ borderTop: "1px solid #E5E7EB", paddingTop: "24px" }}>
+              <div style={{ fontSize: "14px", fontWeight: 700, color: "#1C1C1E", marginBottom: "16px" }}>
+                Other {selectedProduct.subcategory} Options
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
                 {relatedProducts.map((rel) => (
                   <div
                     key={rel.id}
-                    onClick={() => openProductDetail(rel)}
+                    onClick={() => {
+                      openProductDetail(rel);
+                      setActiveImageIndex(0);
+                    }}
                     style={{
-                      border: "1px solid var(--border-light)",
+                      background: "#FFFFFF",
+                      border: "1px solid #E5E7EB",
                       borderRadius: "var(--radius-md)",
                       padding: "12px",
                       cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      background: "#ffffff",
+                      transition: "border-color var(--transition-fast)",
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#1C1C1E")}
+                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#E5E7EB")}
                   >
                     <img
                       src={rel.images[0]}
                       alt={rel.name}
                       style={{
-                        width: "50px",
-                        height: "50px",
-                        objectFit: "cover",
-                        borderRadius: "var(--radius-sm)",
+                        width: "100%",
+                        height: "100px",
+                        objectFit: "contain",
+                        marginBottom: "8px",
                       }}
                     />
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: 600,
-                          color: "var(--primary)",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        {rel.name}
-                      </div>
-                      <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--accent-orange)" }}>
-                        NPR {rel.price.toLocaleString()}
-                      </div>
+                    <div style={{ fontSize: "11px", fontWeight: 700, color: "#4A6572" }}>{rel.brand}</div>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: 600,
+                        color: "#1C1C1E",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      {rel.name}
+                    </div>
+                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#1C1C1E" }}>
+                      NPR {rel.price.toLocaleString()}
                     </div>
                   </div>
                 ))}
@@ -580,10 +725,23 @@ export function ProductDetailModal() {
       </div>
 
       <style jsx>{`
+        @keyframes slideInDrawer {
+          from {
+            transform: translateX(100%);
+          }
+          to {
+            transform: translateX(0);
+          }
+        }
+
         @media (max-width: 768px) {
           .product-detail-grid {
             grid-template-columns: 1fr !important;
-            gap: 20px !important;
+            gap: 24px !important;
+          }
+          .trust-row-grid {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
           }
         }
       `}</style>

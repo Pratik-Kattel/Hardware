@@ -76,7 +76,7 @@ export function MobileBottomNav() {
           flexDirection: "column",
           alignItems: "center",
           gap: "2px",
-          color: "var(--accent-orange)",
+          color: "var(--accent-steel)",
           fontSize: "11px",
           fontWeight: 700,
         }}
@@ -106,7 +106,7 @@ export function MobileBottomNav() {
                 position: "absolute",
                 top: "-6px",
                 right: "-10px",
-                background: "var(--accent-orange)",
+                background: "var(--accent-steel)",
                 color: "#ffffff",
                 fontSize: "10px",
                 fontWeight: 800,

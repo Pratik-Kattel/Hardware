@@ -96,7 +96,7 @@ export function CustomerAuthModal() {
               {/* Profile Card */}
               <div
                 style={{
-                  background: "#0F1B2D",
+                  background: "#1C1C1E",
                   borderRadius: "var(--radius-lg)",
                   padding: "20px",
                   color: "#ffffff",
@@ -142,7 +142,7 @@ export function CustomerAuthModal() {
                     onClick={() => setShowAddAddress(!showAddAddress)}
                     style={{
                       fontSize: "12px",
-                      color: "var(--accent-orange)",
+                      color: "var(--accent-steel)",
                       fontWeight: 600,
                       display: "flex",
                       alignItems: "center",
@@ -223,7 +223,7 @@ export function CustomerAuthModal() {
                         background: "#ffffff",
                       }}
                     >
-                      <MapPin size={16} color="var(--accent-orange)" style={{ marginTop: "2px", flexShrink: 0 }} />
+                      <MapPin size={16} color="var(--accent-steel)" style={{ marginTop: "2px", flexShrink: 0 }} />
                       <div style={{ flex: 1, fontSize: "13px" }}>
                         <div style={{ fontWeight: 700, color: "var(--primary)" }}>{addr.fullName}</div>
                         <div style={{ color: "var(--text-secondary)" }}>{addr.area}, {addr.city}</div>

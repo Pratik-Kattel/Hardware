@@ -69,10 +69,10 @@ export function ReviewsSection() {
             </p>
           </div>
 
-          {/* Clean Rating Summary Bar - No glassmorphism, 1px border #E5E7EB */}
+          {/* Clean Rating Summary Bar - 1px border #E5E7EB */}
           <div
             style={{
-              background: "#F8F9FA",
+              background: "#FAFAFA",
               border: "1px solid #E5E7EB",
               borderRadius: "var(--radius-md)",
               padding: "12px 20px",
@@ -86,11 +86,11 @@ export function ReviewsSection() {
                 style={{
                   fontSize: "26px",
                   fontWeight: 800,
-                  color: "#0F1B2D",
+                  color: "#1C1C1E",
                   lineHeight: "1",
                 }}
               >
-                4.9<span style={{ fontSize: "14px", color: "#6B7280", fontWeight: 500 }}>/5.0</span>
+                4.9<span style={{ fontSize: "14px", color: "#6E6E73", fontWeight: 500 }}>/5.0</span>
               </div>
               <div style={{ display: "flex", gap: "2px", marginTop: "3px" }}>
                 {[...Array(5)].map((_, i) => (
@@ -101,7 +101,7 @@ export function ReviewsSection() {
             <div
               style={{
                 fontSize: "12px",
-                color: "#4B5563",
+                color: "#3A3A3C",
                 borderLeft: "1px solid #E5E7EB",
                 paddingLeft: "14px",
                 maxWidth: "240px",
@@ -132,13 +132,13 @@ export function ReviewsSection() {
               borderRadius: "var(--radius-sm)",
               background: "#FFFFFF",
               border: "1px solid #E5E7EB",
-              color: "#0F1B2D",
+              color: "#1C1C1E",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               transition: "border-color var(--transition-fast)",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#0F1B2D")}
+            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#E5E7EB")}
           >
             <ChevronLeft size={18} />
@@ -153,13 +153,13 @@ export function ReviewsSection() {
               borderRadius: "var(--radius-sm)",
               background: "#FFFFFF",
               border: "1px solid #E5E7EB",
-              color: "#0F1B2D",
+              color: "#1C1C1E",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               transition: "border-color var(--transition-fast)",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#0F1B2D")}
+            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#E5E7EB")}
           >
             <ChevronRight size={18} />
@@ -181,7 +181,7 @@ export function ReviewsSection() {
               >
                 <div
                   style={{
-                    background: "#F8F9FA",
+                    background: "#FAFAFA",
                     border: "1px solid #E5E7EB",
                     borderRadius: "var(--radius-lg)",
                     padding: "24px",
@@ -189,7 +189,10 @@ export function ReviewsSection() {
                     flexDirection: "column",
                     height: "100%",
                     position: "relative",
+                    transition: "border-color var(--transition-fast)",
                   }}
+                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#E5E7EB")}
                 >
                   {/* Subtle Quote Icon */}
                   <div
@@ -214,7 +217,7 @@ export function ReviewsSection() {
                   <p
                     style={{
                       fontSize: "14px",
-                      color: "#1F2937",
+                      color: "#1C1C1E",
                       lineHeight: "1.6",
                       marginBottom: "18px",
                       flex: 1,
@@ -228,9 +231,8 @@ export function ReviewsSection() {
                     <span
                       style={{
                         fontSize: "11px",
-                        color: "#4B5563",
-                        background: "#FFFFFF",
-                        border: "1px solid #E5E7EB",
+                        color: "#4A6572",
+                        background: "#EBF0F2",
                         padding: "3px 8px",
                         borderRadius: "var(--radius-sm)",
                       }}
@@ -250,7 +252,7 @@ export function ReviewsSection() {
                     }}
                   >
                     <img
-                      src={rev.avatar}
+                      src={`${rev.avatar}&fm=webp`}
                       alt={rev.name}
                       style={{
                         width: "42px",
@@ -265,7 +267,7 @@ export function ReviewsSection() {
                         style={{
                           fontSize: "14px",
                           fontWeight: 700,
-                          color: "#0F1B2D",
+                          color: "#1C1C1E",
                           display: "flex",
                           alignItems: "center",
                           gap: "5px",
@@ -274,14 +276,14 @@ export function ReviewsSection() {
                         <span>{rev.name}</span>
                         {rev.verifiedPurchase && (
                           <span title="Verified Site Buyer" style={{ display: "inline-flex" }}>
-                            <CheckCircle2 size={13} color="#10B981" />
+                            <CheckCircle2 size={13} color="#1E824C" />
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: "12px", color: "#F15A24", fontWeight: 600 }}>
+                      <div style={{ fontSize: "12px", color: "#4A6572", fontWeight: 600 }}>
                         {rev.role}
                       </div>
-                      <div style={{ fontSize: "11px", color: "#6B7280" }}>
+                      <div style={{ fontSize: "11px", color: "#6E6E73" }}>
                         {rev.location} • {rev.date}
                       </div>
                     </div>
@@ -292,7 +294,7 @@ export function ReviewsSection() {
           </div>
         </div>
 
-        {/* Carousel Dots */}
+        {/* Carousel Dots in Muted Steel-Blue #4A6572 */}
         <div
           style={{
             display: "flex",
@@ -311,7 +313,7 @@ export function ReviewsSection() {
                 width: selectedIndex === idx ? "20px" : "6px",
                 height: "6px",
                 borderRadius: "3px",
-                background: selectedIndex === idx ? "#F15A24" : "#D1D5DB",
+                background: selectedIndex === idx ? "#4A6572" : "#D1D5DB",
                 border: "none",
                 transition: "all 0.2s ease",
               }}

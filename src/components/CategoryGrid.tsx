@@ -20,7 +20,7 @@ import { ProductCategory } from "@/types";
 
 // Consistent Lucide icon mapping with uniform strokeWidth={2}
 const getCategoryIcon = (iconName: string) => {
-  const iconProps = { size: 24, strokeWidth: 2, color: "#0F1B2D" };
+  const iconProps = { size: 24, strokeWidth: 2, color: "#1C1C1E" };
   switch (iconName) {
     case "Drill":
     case "Wrench":
@@ -62,7 +62,7 @@ export function CategoryGrid() {
   return (
     <section style={{ padding: "64px 0", background: "#FFFFFF", borderBottom: "1px solid #E5E7EB" }}>
       <div className="container">
-        {/* Section Header: Standardized plain uppercase eyebrow, NO pill background */}
+        {/* Section Header: Standardized steel-blue plain uppercase eyebrow, NO pill */}
         <div className="section-header">
           <span className="section-tag">Explore Hardware Inventory</span>
           <h2 className="section-title">Shop by Category</h2>
@@ -71,7 +71,7 @@ export function CategoryGrid() {
           </p>
         </div>
 
-        {/* Categories Grid - White cards with 1px border #E5E7EB, no shadows-as-decoration */}
+        {/* Categories Grid - White cards with 1px border #E5E7EB */}
         <div
           style={{
             display: "grid",
@@ -88,7 +88,7 @@ export function CategoryGrid() {
                 onClick={() => handleCategoryClick(cat.id)}
                 style={{
                   background: "#FFFFFF",
-                  border: isSelected ? "1.5px solid #F15A24" : "1px solid #E5E7EB",
+                  border: isSelected ? "1.5px solid #4A6572" : "1px solid #E5E7EB",
                   borderRadius: "var(--radius-lg)",
                   padding: "22px",
                   cursor: "pointer",
@@ -99,7 +99,7 @@ export function CategoryGrid() {
                   boxShadow: "none",
                 }}
                 onMouseEnter={(e) => {
-                  if (!isSelected) e.currentTarget.style.borderColor = "#0F1B2D";
+                  if (!isSelected) e.currentTarget.style.borderColor = "#4A6572";
                 }}
                 onMouseLeave={(e) => {
                   if (!isSelected) e.currentTarget.style.borderColor = "#E5E7EB";
@@ -119,7 +119,7 @@ export function CategoryGrid() {
                       width: "44px",
                       height: "44px",
                       borderRadius: "var(--radius-md)",
-                      background: "#F8F9FA",
+                      background: "#FAFAFA",
                       border: "1px solid #E5E7EB",
                       display: "flex",
                       alignItems: "center",
@@ -133,8 +133,8 @@ export function CategoryGrid() {
                     style={{
                       fontSize: "11px",
                       fontWeight: 600,
-                      color: "#6B7280",
-                      background: "#F3F4F6",
+                      color: "#6E6E73",
+                      background: "#F4F4F6",
                       padding: "3px 8px",
                       borderRadius: "var(--radius-sm)",
                     }}
@@ -143,12 +143,12 @@ export function CategoryGrid() {
                   </span>
                 </div>
 
-                {/* Name & Nepali Name (Retained for genuine local context) */}
+                {/* Name & Nepali Name */}
                 <h3
                   style={{
                     fontSize: "17px",
                     fontWeight: 700,
-                    color: "#0F1B2D",
+                    color: "#1C1C1E",
                     marginBottom: "4px",
                     display: "flex",
                     alignItems: "center",
@@ -162,7 +162,7 @@ export function CategoryGrid() {
                       style={{
                         fontSize: "12px",
                         fontWeight: 500,
-                        color: "#6B7280",
+                        color: "#6E6E73",
                       }}
                     >
                       {cat.nepaliName}
@@ -174,7 +174,7 @@ export function CategoryGrid() {
                 <p
                   style={{
                     fontSize: "13px",
-                    color: "#4B5563",
+                    color: "#3A3A3C",
                     lineHeight: "1.5",
                     marginBottom: "16px",
                     flex: 1,
@@ -197,8 +197,8 @@ export function CategoryGrid() {
                       key={sub}
                       style={{
                         fontSize: "11px",
-                        color: "#6B7280",
-                        background: "#F8F9FA",
+                        color: "#6E6E73",
+                        background: "#FAFAFA",
                         border: "1px solid #E5E7EB",
                         padding: "2px 7px",
                         borderRadius: "var(--radius-sm)",
@@ -209,7 +209,7 @@ export function CategoryGrid() {
                   ))}
                 </div>
 
-                {/* Bottom Action Link */}
+                {/* Bottom Action Link in Steel-Blue */}
                 <div
                   style={{
                     display: "flex",
@@ -217,7 +217,7 @@ export function CategoryGrid() {
                     gap: "5px",
                     fontSize: "13px",
                     fontWeight: 700,
-                    color: "#F15A24",
+                    color: "#4A6572",
                     marginTop: "auto",
                   }}
                 >

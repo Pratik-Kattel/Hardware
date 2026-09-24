@@ -44,7 +44,7 @@ export function OrderConfirmationModal() {
         {/* Header */}
         <div
           style={{
-            background: "#0F1B2D",
+            background: "#1C1C1E",
             color: "#ffffff",
             padding: "32px 30px",
             textAlign: "center",
@@ -153,7 +153,7 @@ export function OrderConfirmationModal() {
               marginBottom: "20px",
             }}
           >
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--accent-orange)", textTransform: "uppercase", marginBottom: "8px" }}>
+            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--accent-steel)", textTransform: "uppercase", marginBottom: "8px" }}>
               Delivery Destination
             </div>
             <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
@@ -265,7 +265,7 @@ export function OrderConfirmationModal() {
               }}
             >
               <span>Total Paid / Payable:</span>
-              <span style={{ color: "var(--accent-orange)" }}>NPR {currentOrder.total.toLocaleString()}</span>
+              <span style={{ color: "var(--accent-steel)" }}>NPR {currentOrder.total.toLocaleString()}</span>
             </div>
           </div>
 
@@ -302,10 +302,10 @@ export function OrderConfirmationModal() {
               gap: "6px",
             }}
           >
-            <PhoneCall size={14} color="var(--accent-orange)" />
+            <PhoneCall size={14} color="var(--accent-steel)" />
             <span>
               Have queries regarding your delivery? Call our dispatch desk:{" "}
-              <a href="tel:9800000000" style={{ color: "var(--accent-orange)", fontWeight: 700 }}>
+              <a href="tel:9800000000" style={{ color: "var(--accent-steel)", fontWeight: 700 }}>
                 9800000000
               </a>
             </span>

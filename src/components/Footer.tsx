@@ -24,7 +24,7 @@ export function Footer() {
   return (
     <footer
       style={{
-        background: "#0F1B2D",
+        background: "#1C1C1E",
         color: "#D1D5DB",
         borderTop: "1px solid rgba(255, 255, 255, 0.1)",
         paddingTop: "56px",
@@ -50,19 +50,19 @@ export function Footer() {
                   width: "38px",
                   height: "38px",
                   borderRadius: "var(--radius-sm)",
-                  background: "#1A2E4C",
+                  background: "#2C2C2E",
                   border: "1px solid rgba(255, 255, 255, 0.15)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#F15A24",
+                  color: "#4A6572",
                 }}
               >
                 <Wrench size={19} />
               </div>
               <div style={{ fontSize: "18px", fontWeight: 800, color: "#FFFFFF", letterSpacing: "-0.02em" }}>
                 <span>ADHIKARI</span>{" "}
-                <span style={{ color: "#F15A24" }}>HARDWARE</span>
+                <span style={{ color: "#4A6572" }}>HARDWARE</span>
               </div>
             </div>
 
@@ -72,17 +72,17 @@ export function Footer() {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "13px" }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
-                <MapPin size={15} color="#F15A24" style={{ marginTop: "3px", flexShrink: 0 }} />
+                <MapPin size={15} color="#4A6572" style={{ marginTop: "3px", flexShrink: 0 }} />
                 <span>Kalanki Chowk, Ring Road, Kathmandu, Nepal</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Phone size={15} color="#F15A24" style={{ flexShrink: 0 }} />
+                <Phone size={15} color="#4A6572" style={{ flexShrink: 0 }} />
                 <a href="tel:9800000000" style={{ color: "#FFFFFF", fontWeight: 700 }}>
                   9800000000
                 </a>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Clock size={15} color="#F15A24" style={{ flexShrink: 0 }} />
+                <Clock size={15} color="#4A6572" style={{ flexShrink: 0 }} />
                 <span>Open 7:00 AM – 8:00 PM (Daily)</span>
               </div>
             </div>
@@ -107,7 +107,7 @@ export function Footer() {
                 <button
                   onClick={() => handleCategoryNav("power-tools")}
                   style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F15A24")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Power Tools (Bosch, Makita)
@@ -117,7 +117,7 @@ export function Footer() {
                 <button
                   onClick={() => handleCategoryNav("hand-tools")}
                   style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F15A24")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Hand Tools (Stanley, Taparia)
@@ -127,7 +127,7 @@ export function Footer() {
                 <button
                   onClick={() => handleCategoryNav("plumbing")}
                   style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F15A24")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Plumbing (Astral CPVC)
@@ -137,7 +137,7 @@ export function Footer() {
                 <button
                   onClick={() => handleCategoryNav("electrical")}
                   style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F15A24")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Electrical (Havells Pure Copper)
@@ -147,7 +147,7 @@ export function Footer() {
                 <button
                   onClick={() => handleCategoryNav("paint-supplies")}
                   style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F15A24")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Paints (Asian Paints)
@@ -157,7 +157,7 @@ export function Footer() {
                 <button
                   onClick={() => handleCategoryNav("construction-materials")}
                   style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F15A24")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Cement &amp; TMT Steel Rebars
@@ -185,7 +185,7 @@ export function Footer() {
                 <button
                   onClick={() => openModal("track_order")}
                   style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F15A24")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Track Order Status
@@ -195,7 +195,7 @@ export function Footer() {
                 <button
                   onClick={() => openModal("request_quote")}
                   style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F15A24")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Request Contractor Bulk Quote
@@ -205,7 +205,7 @@ export function Footer() {
                 <button
                   onClick={() => openModal("auth")}
                   style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F15A24")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Customer Account &amp; History
@@ -214,7 +214,7 @@ export function Footer() {
               <li>
                 <a
                   href="#deals-section"
-                  style={{ color: "#F15A24", fontWeight: 600 }}
+                  style={{ color: "#C1512D", fontWeight: 600 }}
                 >
                   Weekly Flash Deals
                 </a>

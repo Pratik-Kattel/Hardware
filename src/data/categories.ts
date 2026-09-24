@@ -9,7 +9,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "Angle grinders, rotary hammer drills, cordless drivers & circular saws from top brands.",
     productCount: 42,
     popularSubcategories: ["Angle Grinders", "Hammer Drills", "Cordless Drivers", "Circular Saws", "Marble Cutters"],
-    image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "hand-tools",
@@ -19,7 +19,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "Hammers, wrenches, pliers, measuring tapes, and chisels built for endurance.",
     productCount: 68,
     popularSubcategories: ["Claw Hammers", "Pliers & Cutters", "Spanner Sets", "Measuring Tapes", "Screwdrivers"],
-    image: "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "plumbing",
@@ -29,7 +29,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "CPVC/PVC pipes, brass ball valves, water pumps, fittings, and leak solutions.",
     productCount: 54,
     popularSubcategories: ["CPVC Pipes & Fittings", "Brass Bib Cocks", "Water Pumps", "PVC Drainage", "Teflon & Unions"],
-    image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "electrical",
@@ -39,7 +39,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "Copper cables, modular switches, LED battens, MCB distribution boards & conduit pipes.",
     productCount: 75,
     popularSubcategories: ["Copper Wires & Cables", "Modular Switches", "LED Lights", "Circuit Breakers (MCB)", "Conduit Pipes"],
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "fasteners",
@@ -49,7 +49,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "Expansion anchor bolts, drywall screws, rawl plugs, door hinges and stainless steel nuts.",
     productCount: 90,
     popularSubcategories: ["Anchor Bolts", "Drywall Screws", "Rawl Plugs", "Door Hinges & Aldrops", "Wood Screws"],
-    image: "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1586864387967-d02ef85d93e8?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "paint-supplies",
@@ -59,7 +59,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "Weather-resistant exterior paint, interior luxury emulsions, primers, rollers & brushes.",
     productCount: 50,
     popularSubcategories: ["Exterior Weatherproof", "Interior Emulsion", "Primers & Putty", "Rollers & Brushes", "Waterproofing"],
-    image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "construction-materials",
@@ -69,7 +69,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "OPC/PPC Cements, TMT rebars, binding wire, waterproofing chemicals & admixtures.",
     productCount: 36,
     popularSubcategories: ["OPC / PPC Cement", "TMT Steel Rebars", "Binding Wire", "Concrete Admixtures", "Curing Compounds"],
-    image: "https://images.unsplash.com/photo-1590069261209-f8e9b8642343?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1590069261209-f8e9b8642343?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "safety-equipment",
@@ -79,7 +79,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "Steel-toe boots, industrial helmets, safety harnesses, goggles & respirator masks.",
     productCount: 32,
     popularSubcategories: ["Safety Helmets", "Steel Toe Boots", "Cut-Resistant Gloves", "Dust & Gas Masks", "High-Vis Vests"],
-    image: "https://images.unsplash.com/photo-1578873375972-005697dca0f3?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1578873375972-005697dca0f3?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "gardening",
@@ -89,7 +89,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "Braided hose pipes, pruning shears, spray nozzles, shovels & outdoor maintenance tools.",
     productCount: 28,
     popularSubcategories: ["Garden Hose Pipes", "Pruning Shears", "Adjustable Nozzles", "Garden Rakes", "Sprayers"],
-    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "bathroom-sanitary",
@@ -99,7 +99,7 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "Chrome wall mixers, showers, porcelain basins, commodes, stainless sinks & traps.",
     productCount: 45,
     popularSubcategories: ["Wall Mixers & Faucets", "Overhead Showers", "Wash Basins", "SS Kitchen Sinks", "Floor Drains"],
-    image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "adhesives-sealants",
@@ -109,6 +109,6 @@ export const CATEGORIES: CategoryInfo[] = [
     description: "Heavy-duty epoxy adhesives, waterproof wood glue, silicone weather sealants & M-Seal.",
     productCount: 26,
     popularSubcategories: ["Epoxy Adhesives", "Wood Adhesive (Fevicol)", "Silicone Sealants", "Plumbing M-Seal", "Tape Adhesives"],
-    image: "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
 ];

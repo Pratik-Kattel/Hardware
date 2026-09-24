@@ -88,7 +88,7 @@ export function CheckoutModal() {
         {/* Header */}
         <div className="modal-header">
           <div>
-            <div style={{ fontSize: "12px", color: "var(--accent-orange)", fontWeight: 700, textTransform: "uppercase" }}>
+            <div style={{ fontSize: "12px", color: "var(--accent-steel)", fontWeight: 700, textTransform: "uppercase" }}>
               Secure Kathmandu Checkout
             </div>
             <h3 style={{ fontSize: "20px", fontWeight: 800, color: "var(--primary)" }}>
@@ -223,7 +223,7 @@ export function CheckoutModal() {
                 id="contractor-vat-check"
                 checked={isContractorOrder}
                 onChange={(e) => setIsContractorOrder(e.target.checked)}
-                style={{ width: "18px", height: "18px", accentColor: "var(--accent-orange)" }}
+                style={{ width: "18px", height: "18px", accentColor: "var(--accent-steel)" }}
               />
               <label htmlFor="contractor-vat-check" style={{ fontSize: "13px", fontWeight: 600, color: "var(--primary)", cursor: "pointer" }}>
                 I need a Commercial Tax Invoice / Company VAT Bill for this order
@@ -283,8 +283,8 @@ export function CheckoutModal() {
               <div
                 onClick={() => setPaymentMethod("cod")}
                 style={{
-                  border: paymentMethod === "cod" ? "2px solid var(--accent-orange)" : "1.5px solid var(--border-medium)",
-                  background: paymentMethod === "cod" ? "var(--accent-orange-light)" : "#ffffff",
+                  border: paymentMethod === "cod" ? "2px solid var(--accent-steel)" : "1.5px solid var(--border-medium)",
+                  background: paymentMethod === "cod" ? "var(--accent-steel-light)" : "#ffffff",
                   borderRadius: "var(--radius-md)",
                   padding: "16px",
                   cursor: "pointer",
@@ -299,11 +299,11 @@ export function CheckoutModal() {
                   name="paymentMethod"
                   checked={paymentMethod === "cod"}
                   onChange={() => setPaymentMethod("cod")}
-                  style={{ marginTop: "4px", accentColor: "var(--accent-orange)" }}
+                  style={{ marginTop: "4px", accentColor: "var(--accent-steel)" }}
                 />
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: "6px", fontWeight: 700, color: "var(--primary)", fontSize: "14px" }}>
-                    <Banknote size={18} color="var(--accent-orange)" />
+                    <Banknote size={18} color="var(--accent-steel)" />
                     <span>Cash on Delivery</span>
                   </div>
                   <div style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "4px" }}>
@@ -589,7 +589,7 @@ export function CheckoutModal() {
                 }}
               >
                 <span>Grand Total</span>
-                <span style={{ color: "var(--accent-orange)" }}>NPR {cartTotal.toLocaleString()}</span>
+                <span style={{ color: "var(--accent-steel)" }}>NPR {cartTotal.toLocaleString()}</span>
               </div>
             </div>
 

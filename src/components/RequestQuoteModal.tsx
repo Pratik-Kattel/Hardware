@@ -65,7 +65,7 @@ export function RequestQuoteModal() {
         {/* Header */}
         <div
           style={{
-            background: "#0F1B2D",
+            background: "#1C1C1E",
             color: "#ffffff",
             padding: "24px 30px",
             position: "relative",

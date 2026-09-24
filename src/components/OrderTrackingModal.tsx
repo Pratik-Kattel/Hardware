@@ -42,7 +42,7 @@ export function OrderTrackingModal() {
         {/* Modal Header */}
         <div className="modal-header">
           <div>
-            <div style={{ fontSize: "12px", color: "var(--accent-orange)", fontWeight: 700, textTransform: "uppercase" }}>
+            <div style={{ fontSize: "12px", color: "var(--accent-steel)", fontWeight: 700, textTransform: "uppercase" }}>
               Kathmandu Delivery Status
             </div>
             <h3 style={{ fontSize: "20px", fontWeight: 800, color: "var(--primary)" }}>
@@ -80,7 +80,7 @@ export function OrderTrackingModal() {
               {/* Order Status Banner */}
               <div
                 style={{
-                  background: "#0F1B2D",
+                  background: "#1C1C1E",
                   borderRadius: "var(--radius-lg)",
                   padding: "20px 24px",
                   color: "#ffffff",
@@ -144,7 +144,7 @@ export function OrderTrackingModal() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: "var(--accent-orange)",
+                      color: "var(--accent-steel)",
                       boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
                     }}
                   >
@@ -210,19 +210,19 @@ export function OrderTrackingModal() {
                           background: step.done
                             ? "var(--success)"
                             : step.current
-                            ? "var(--accent-orange)"
+                            ? "var(--accent-steel)"
                             : "#ffffff",
                           border: step.done
                             ? "none"
                             : step.current
-                            ? "2px solid var(--accent-orange)"
+                            ? "2px solid var(--accent-steel)"
                             : "2px solid var(--border-medium)",
                           color: step.done ? "#ffffff" : "var(--text-muted)",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                           flexShrink: 0,
-                          boxShadow: step.current ? "0 0 0 4px rgba(234, 88, 12, 0.2)" : "none",
+                          boxShadow: step.current ? "0 0 0 3px rgba(74, 101, 114, 0.2)" : "none",
                         }}
                       >
                         {step.done ? <CheckCircle2 size={16} /> : <Clock size={14} />}
@@ -274,7 +274,7 @@ export function OrderTrackingModal() {
                       }}
                     >
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <Package size={14} color="var(--accent-orange)" />
+                        <Package size={14} color="var(--accent-steel)" />
                         <span>{it.name} (x{it.quantity})</span>
                       </div>
                       <span style={{ fontWeight: 700 }}>NPR {(it.price * it.quantity).toLocaleString()}</span>

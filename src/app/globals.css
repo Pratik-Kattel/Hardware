@@ -1,48 +1,49 @@
 /* =========================================================
-   ADHIKARI HARDWARE - DESIGN SYSTEM & REFINED INDUSTRIAL STYLES
-   Structure, Spacing & Restraint (Reference: JP Engineering)
+   ADHIKARI HARDWARE - DESIGN SYSTEM & GLOBAL STYLES (ROUND 2)
+   Font: Poppins ONLY (Site-wide: headings, body, buttons, nav, prices)
    Color Palette:
-     - Base Background: #FFFFFF / #F8F9FA
-     - Primary Navy: #0F1B2D (Headings & Footer only)
-     - Accent Orange: #F15A24 (CTAs, price, active states, small tags only)
-     - Neutral Borders/Cards: #E5E7EB, white cards with 1px border, no decorative shadows
-     - Gradients: NONE site-wide
+     - Text / Headers: Deep Charcoal #1C1C1E
+     - Secondary Text: Warm Graphite #3A3A3C
+     - Primary Accent: Muted Steel-Blue #4A6572 (CTAs, links, active states)
+     - Highlight: Warm Rust / Terracotta #C1512D (Used sparingly: discounts, badges only)
+     - Base Backgrounds: White #FFFFFF / #FAFAFA throughout
+     - Neutral Borders: #E5E7EB
+     - No orange-dominant branding, NO gradients anywhere
    ========================================================= */
 
 :root {
-  /* Brand Industrial Color Palette - Solid colors only, NO gradients */
-  --primary: #0F1B2D;
-  --primary-dark: #0F1B2D;
-  --primary-light: #1A2E4C;
-  --primary-surface: #F8F9FA;
+  /* Text & Primary Brand Colors */
+  --primary: #1C1C1E;
+  --primary-dark: #1C1C1E;
+  --primary-light: #2C2C2E;
+  --primary-surface: #F4F4F6;
 
-  /* Accent & Action Color - Orange #F15A24 */
-  --accent-orange: #F15A24;
-  --accent-orange-hover: #D84815;
-  --accent-orange-light: #FFF2ED;
+  /* Primary Accent: Muted Steel-Blue */
+  --accent-steel: #4A6572;
+  --accent-steel-hover: #344955;
+  --accent-steel-light: #EBF0F2;
 
-  /* Secondary Accents */
-  --accent-amber: #D97706;
-  --accent-amber-light: #FEF3C7;
-  --accent-crimson: #DC2626;
-  --accent-crimson-light: #FEE2E2;
+  /* Highlight Color: Warm Rust / Terracotta (Used sparingly for discounts/badges) */
+  --highlight-rust: #C1512D;
+  --highlight-rust-hover: #A64223;
+  --highlight-rust-light: #FBEFEB;
 
   /* Functional Status Colors */
-  --success: #10B981;
-  --success-light: #D1FAE5;
-  --warning: #F59E0B;
+  --success: #1E824C;
+  --success-light: #EAF5EE;
+  --warning: #D97706;
   --warning-light: #FEF3C7;
-  --error: #EF4444;
-  --error-light: #FEE2E2;
+  --error: #C1512D;
+  --error-light: #FBEFEB;
 
   /* Neutrals & Clean Surfaces */
-  --bg-page: #F8F9FA;
+  --bg-page: #FAFAFA;
   --bg-surface: #FFFFFF;
-  --bg-surface-secondary: #F3F4F6;
+  --bg-surface-secondary: #F4F4F6;
 
-  --text-main: #1F2937;
-  --text-secondary: #4B5563;
-  --text-muted: #6B7280;
+  --text-main: #1C1C1E;
+  --text-secondary: #3A3A3C;
+  --text-muted: #6E6E73;
   --text-light: #9CA3AF;
   --text-inverse: #FFFFFF;
 
@@ -50,11 +51,11 @@
   --border-medium: #D1D5DB;
   --border-strong: #9CA3AF;
 
-  /* Clean Restrained Shadows - No decorative glows */
+  /* Restrained Functional Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
-  --shadow-xl: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 8px -1px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 12px 24px -4px rgba(0, 0, 0, 0.12);
 
   /* Radii */
   --radius-sm: 4px;
@@ -78,10 +79,11 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
 }
 
 html {
-  font-family: var(--font-poppins), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
   color: var(--text-main);
   background-color: var(--bg-page);
   scroll-behavior: smooth;
@@ -94,13 +96,16 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
   font-size: 15px;
   line-height: 1.6;
+  color: var(--text-main);
   background-color: var(--bg-page);
 }
 
-/* Typography Defaults */
+/* Typography Defaults - Strict Poppins */
 h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
   color: var(--primary);
   font-weight: 700;
   line-height: 1.25;
@@ -109,10 +114,11 @@ h1, h2, h3, h4, h5, h6 {
 a {
   color: inherit;
   text-decoration: none;
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
 }
 
 button {
-  font-family: inherit;
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
   cursor: pointer;
   border: none;
   background: none;
@@ -120,7 +126,7 @@ button {
 }
 
 input, select, textarea {
-  font-family: inherit;
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
   font-size: 14px;
 }
 
@@ -152,37 +158,31 @@ img {
   letter-spacing: 0.02em;
 }
 
-.badge-amber {
-  background: var(--accent-amber-light);
-  color: var(--accent-amber);
-  border: 1px solid #FCD34D;
+.badge-steel {
+  background: var(--accent-steel-light);
+  color: var(--accent-steel);
+  border: 1px solid #CFDCE2;
 }
 
-.badge-orange {
-  background: var(--accent-orange-light);
-  color: var(--accent-orange);
-  border: 1px solid #FED7AA;
-}
-
-.badge-crimson {
-  background: var(--accent-crimson-light);
-  color: var(--accent-crimson);
-  border: 1px solid #FECACA;
+.badge-rust {
+  background: var(--highlight-rust-light);
+  color: var(--highlight-rust);
+  border: 1px solid #F0D0C7;
 }
 
 .badge-green {
   background: var(--success-light);
-  color: #065F46;
-  border: 1px solid #A7F3D0;
+  color: #1E824C;
+  border: 1px solid #C4E3D1;
 }
 
-.badge-navy {
+.badge-charcoal {
   background: var(--bg-surface-secondary);
   color: var(--primary);
   border: 1px solid var(--border-light);
 }
 
-/* Buttons - Solid colors, crisp borders, NO decorative drop-shadows or glows */
+/* Buttons - Solid colors, crisp borders, Muted Steel-Blue as Primary Accent */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -195,15 +195,16 @@ img {
   transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
   white-space: nowrap;
   box-shadow: none;
+  font-family: var(--font-poppins), 'Poppins', sans-serif !important;
 }
 
 .btn-primary {
-  background: var(--accent-orange);
+  background: var(--accent-steel);
   color: #FFFFFF;
   border: 1px solid transparent;
 }
 .btn-primary:hover {
-  background: var(--accent-orange-hover);
+  background: var(--accent-steel-hover);
   box-shadow: none;
 }
 
@@ -258,7 +259,7 @@ img {
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #F1F5F9;
+  background: #F1F3F5;
 }
 ::-webkit-scrollbar-thumb {
   background: #CBD5E1;
@@ -272,7 +273,7 @@ img {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 27, 45, 0.7);
+  background: rgba(28, 28, 30, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -283,7 +284,7 @@ img {
 .modal-content {
   background: #FFFFFF;
   border-radius: var(--radius-lg);
-  max-width: 680px;
+  max-width: 700px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
@@ -347,10 +348,10 @@ img {
 
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   outline: none;
-  border-color: var(--accent-orange);
+  border-color: var(--accent-steel);
 }
 
-/* Standardized Section Eyebrows site-wide: Plain uppercase orange text, NO pill background */
+/* Standardized Section Eyebrows site-wide: Muted Steel-Blue plain uppercase text */
 .section-header {
   text-align: center;
   max-width: 720px;
@@ -363,7 +364,7 @@ img {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--accent-orange);
+  color: var(--accent-steel);
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
@@ -415,18 +416,6 @@ img {
   position: sticky;
   top: 0;
   z-index: 900;
-}
-
-/* Standard Card Container - 1px border #E5E7EB, no shadows-as-decoration */
-.card-standard {
-  background: #FFFFFF;
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  transition: border-color var(--transition-fast);
-}
-.card-standard:hover {
-  border-color: var(--border-medium);
 }
 
 /* Responsive adjustments */

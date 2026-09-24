@@ -8,12 +8,12 @@ export function WhyChooseUs() {
     <section
       style={{
         padding: "72px 0",
-        background: "#F8F9FA",
+        background: "#FAFAFA",
         borderBottom: "1px solid #E5E7EB",
       }}
     >
       <div className="container">
-        {/* Section Header: Plain uppercase label, NO pill background */}
+        {/* Section Header: Steel-Blue plain uppercase label, NO pill */}
         <div className="section-header" style={{ marginBottom: "48px" }}>
           <span className="section-tag">The Adhikari Hardware Advantage</span>
           <h2 className="section-title">Why Kathmandu Trusts Us</h2>
@@ -51,18 +51,18 @@ export function WhyChooseUs() {
                 style={{
                   fontSize: "44px",
                   fontWeight: 800,
-                  color: "#0F1B2D",
+                  color: "#1C1C1E",
                   lineHeight: "1",
                   marginBottom: "8px",
                   letterSpacing: "-0.02em",
                 }}
               >
-                20+ <span style={{ fontSize: "20px", fontWeight: 700, color: "#F15A24" }}>Years</span>
+                20+ <span style={{ fontSize: "20px", fontWeight: 700, color: "#4A6572" }}>Years</span>
               </div>
-              <div style={{ fontSize: "16px", fontWeight: 700, color: "#0F1B2D", marginBottom: "4px" }}>
+              <div style={{ fontSize: "16px", fontWeight: 700, color: "#1C1C1E", marginBottom: "4px" }}>
                 Two Decades in Hardware Distribution
               </div>
-              <p style={{ fontSize: "13px", color: "#6B7280", lineHeight: "1.5" }}>
+              <p style={{ fontSize: "13px", color: "#6E6E73", lineHeight: "1.5" }}>
                 Supplying verified construction materials, power tools, and industrial fittings since 2004 from our Kalanki central depot.
               </p>
             </div>
@@ -78,18 +78,18 @@ export function WhyChooseUs() {
                 style={{
                   fontSize: "44px",
                   fontWeight: 800,
-                  color: "#0F1B2D",
+                  color: "#1C1C1E",
                   lineHeight: "1",
                   marginBottom: "8px",
                   letterSpacing: "-0.02em",
                 }}
               >
-                2,400+ <span style={{ fontSize: "20px", fontWeight: 700, color: "#F15A24" }}>Orders</span>
+                2,400+ <span style={{ fontSize: "20px", fontWeight: 700, color: "#4A6572" }}>Orders</span>
               </div>
-              <div style={{ fontSize: "16px", fontWeight: 700, color: "#0F1B2D", marginBottom: "4px" }}>
+              <div style={{ fontSize: "16px", fontWeight: 700, color: "#1C1C1E", marginBottom: "4px" }}>
                 Verified Site Deliveries Completed
               </div>
-              <p style={{ fontSize: "13px", color: "#6B7280", lineHeight: "1.5" }}>
+              <p style={{ fontSize: "13px", color: "#6E6E73", lineHeight: "1.5" }}>
                 Direct mini-truck and van dispatches delivered to residential construction gates, civil contractors, and workshop counters across Kathmandu Valley.
               </p>
             </div>
@@ -100,18 +100,18 @@ export function WhyChooseUs() {
                 style={{
                   fontSize: "44px",
                   fontWeight: 800,
-                  color: "#0F1B2D",
+                  color: "#1C1C1E",
                   lineHeight: "1",
                   marginBottom: "8px",
                   letterSpacing: "-0.02em",
                 }}
               >
-                100% <span style={{ fontSize: "20px", fontWeight: 700, color: "#F15A24" }}>Tax Invoiced</span>
+                100% <span style={{ fontSize: "20px", fontWeight: 700, color: "#4A6572" }}>Tax Invoiced</span>
               </div>
-              <div style={{ fontSize: "16px", fontWeight: 700, color: "#0F1B2D", marginBottom: "4px" }}>
+              <div style={{ fontSize: "16px", fontWeight: 700, color: "#1C1C1E", marginBottom: "4px" }}>
                 Official 13% Government VAT Bills
               </div>
-              <p style={{ fontSize: "13px", color: "#6B7280", lineHeight: "1.5" }}>
+              <p style={{ fontSize: "13px", color: "#6E6E73", lineHeight: "1.5" }}>
                 Fully compliant IRD billing with verifiable PAN (602918239) for audit-ready contractor accounting and transparent wholesale purchases.
               </p>
             </div>
@@ -144,13 +144,13 @@ export function WhyChooseUs() {
                   marginTop: "2px",
                 }}
               >
-                <ShieldCheck size={22} color="#F15A24" />
+                <ShieldCheck size={22} color="#4A6572" />
               </div>
               <div>
-                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "#0F1B2D", marginBottom: "6px" }}>
+                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "#1C1C1E", marginBottom: "6px" }}>
                   100% Manufacturer Genuine Guarantee
                 </h3>
-                <p style={{ fontSize: "14px", color: "#4B5563", lineHeight: "1.6" }}>
+                <p style={{ fontSize: "14px", color: "#3A3A3C", lineHeight: "1.6" }}>
                   Zero counterfeits. Direct manufacturer warranties with verifiable serial numbers on every Bosch, Makita, DeWalt, and Astral item.
                 </p>
               </div>
@@ -172,13 +172,13 @@ export function WhyChooseUs() {
                   marginTop: "2px",
                 }}
               >
-                <HardHat size={22} color="#F15A24" />
+                <HardHat size={22} color="#4A6572" />
               </div>
               <div>
-                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "#0F1B2D", marginBottom: "6px" }}>
+                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "#1C1C1E", marginBottom: "6px" }}>
                   Contractor Wholesale Rates &amp; Quotations
                 </h3>
-                <p style={{ fontSize: "14px", color: "#4B5563", lineHeight: "1.6" }}>
+                <p style={{ fontSize: "14px", color: "#3A3A3C", lineHeight: "1.6" }}>
                   Tiered commercial pricing and fast turnaround quotations for civil engineers, licensed master plumbers, and certified electricians.
                 </p>
               </div>
@@ -200,13 +200,13 @@ export function WhyChooseUs() {
                   marginTop: "2px",
                 }}
               >
-                <Headphones size={22} color="#F15A24" />
+                <Headphones size={22} color="#4A6572" />
               </div>
               <div>
-                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "#0F1B2D", marginBottom: "6px" }}>
+                <h3 style={{ fontSize: "17px", fontWeight: 700, color: "#1C1C1E", marginBottom: "6px" }}>
                   Master Technical Material Sizing
                 </h3>
-                <p style={{ fontSize: "14px", color: "#4B5563", lineHeight: "1.6" }}>
+                <p style={{ fontSize: "14px", color: "#3A3A3C", lineHeight: "1.6" }}>
                   Consult our veteran Kalanki store staff to accurately calculate pipe diameters, circuit breaker ratings, and primer square footage prior to ordering.
                 </p>
               </div>

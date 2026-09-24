@@ -145,7 +145,7 @@ export function ProductCatalog() {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 700, color: "var(--primary)" }}>
-                <SlidersHorizontal size={18} color="var(--accent-orange)" />
+                <SlidersHorizontal size={18} color="var(--accent-steel)" />
                 <span>Filters</span>
               </div>
 
@@ -155,7 +155,7 @@ export function ProductCatalog() {
                   style={{
                     fontSize: "12px",
                     fontWeight: 600,
-                    color: "var(--accent-orange)",
+                    color: "var(--accent-steel)",
                     display: "flex",
                     alignItems: "center",
                     gap: "4px",
@@ -188,7 +188,7 @@ export function ProductCatalog() {
                   style={{
                     width: "18px",
                     height: "18px",
-                    accentColor: "var(--accent-orange)",
+                    accentColor: "var(--accent-steel)",
                     cursor: "pointer",
                   }}
                 />
@@ -228,7 +228,7 @@ export function ProductCatalog() {
                     padding: "7px 10px",
                     borderRadius: "var(--radius-sm)",
                     background: selectedCategory === "all" ? "var(--primary-surface)" : "transparent",
-                    color: selectedCategory === "all" ? "var(--accent-orange)" : "var(--text-secondary)",
+                    color: selectedCategory === "all" ? "var(--accent-steel)" : "var(--text-secondary)",
                     fontSize: "13px",
                     fontWeight: selectedCategory === "all" ? 700 : 500,
                     textAlign: "left",
@@ -249,7 +249,7 @@ export function ProductCatalog() {
                       padding: "7px 10px",
                       borderRadius: "var(--radius-sm)",
                       background: selectedCategory === cat.id ? "var(--primary-surface)" : "transparent",
-                      color: selectedCategory === cat.id ? "var(--accent-orange)" : "var(--text-secondary)",
+                      color: selectedCategory === cat.id ? "var(--accent-steel)" : "var(--text-secondary)",
                       fontSize: "13px",
                       fontWeight: selectedCategory === cat.id ? 700 : 500,
                       textAlign: "left",
@@ -297,7 +297,7 @@ export function ProductCatalog() {
                     padding: "6px 10px",
                     borderRadius: "var(--radius-sm)",
                     background: selectedBrand === "all" ? "var(--primary-surface)" : "transparent",
-                    color: selectedBrand === "all" ? "var(--accent-orange)" : "var(--text-secondary)",
+                    color: selectedBrand === "all" ? "var(--accent-steel)" : "var(--text-secondary)",
                     fontSize: "13px",
                     fontWeight: selectedBrand === "all" ? 700 : 500,
                     textAlign: "left",
@@ -317,7 +317,7 @@ export function ProductCatalog() {
                       padding: "6px 10px",
                       borderRadius: "var(--radius-sm)",
                       background: selectedBrand === b.name ? "var(--primary-surface)" : "transparent",
-                      color: selectedBrand === b.name ? "var(--accent-orange)" : "var(--text-secondary)",
+                      color: selectedBrand === b.name ? "var(--accent-steel)" : "var(--text-secondary)",
                       fontSize: "13px",
                       fontWeight: selectedBrand === b.name ? 700 : 500,
                       textAlign: "left",
@@ -346,7 +346,7 @@ export function ProductCatalog() {
                 }}
               >
                 <span>Max Price</span>
-                <span style={{ color: "var(--accent-orange)" }}>
+                <span style={{ color: "var(--accent-steel)", fontWeight: 700 }}>
                   NPR {priceRange[1].toLocaleString()}
                 </span>
               </div>
@@ -359,7 +359,7 @@ export function ProductCatalog() {
                 onChange={(e) => setPriceRange([0, Number(e.target.value)])}
                 style={{
                   width: "100%",
-                  accentColor: "var(--accent-orange)",
+                  accentColor: "var(--accent-steel)",
                   cursor: "pointer",
                 }}
               />
@@ -404,7 +404,7 @@ export function ProductCatalog() {
 
                 {selectedCategory !== "all" && (
                   <span
-                    className="badge badge-amber"
+                    className="badge badge-steel"
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
@@ -420,7 +420,7 @@ export function ProductCatalog() {
 
                 {selectedBrand !== "all" && (
                   <span
-                    className="badge badge-orange"
+                    className="badge badge-steel"
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
@@ -526,7 +526,7 @@ export function ProductCatalog() {
                     alignItems: "center",
                     justifyContent: "center",
                     margin: "0 auto 16px auto",
-                    color: "var(--accent-orange)",
+                    color: "var(--accent-steel)",
                   }}
                 >
                   <PackageOpen size={36} />

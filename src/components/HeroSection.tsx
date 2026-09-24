@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
   HardHat,
+  CheckCircle2,
 } from "lucide-react";
 import { useStore } from "@/context/StoreContext";
 import { ProductCategory } from "@/types";
@@ -24,7 +25,9 @@ interface HeroSlide {
   ctaText: string;
   ctaAction: "category" | "quote";
   categoryId?: ProductCategory;
-  bgImage: string;
+  mainImage: string;
+  detailImage: string;
+  detailBadge: string;
 }
 
 const HERO_SLIDES: HeroSlide[] = [
@@ -37,7 +40,9 @@ const HERO_SLIDES: HeroSlide[] = [
     ctaText: "Shop Power Tools",
     ctaAction: "category",
     categoryId: "power-tools",
-    bgImage: "/images/hero/hero-power-tools.jpg",
+    mainImage: "/images/hero/hero-power-tools-main.webp",
+    detailImage: "/images/hero/hero-power-tools-detail.webp",
+    detailBadge: "Verified Serial Warranties",
   },
   {
     id: "plumbing",
@@ -48,7 +53,9 @@ const HERO_SLIDES: HeroSlide[] = [
     ctaText: "Shop Plumbing & Pipes",
     ctaAction: "category",
     categoryId: "plumbing",
-    bgImage: "/images/hero/hero-plumbing-pipes.jpg",
+    mainImage: "/images/hero/hero-plumbing-pipes-main.webp",
+    detailImage: "/images/hero/hero-plumbing-detail.webp",
+    detailBadge: "Pressure Tested Schedules",
   },
   {
     id: "cement-steel",
@@ -59,7 +66,9 @@ const HERO_SLIDES: HeroSlide[] = [
     ctaText: "Request Contractor Bulk Quote",
     ctaAction: "quote",
     categoryId: "construction-materials",
-    bgImage: "/images/hero/hero-cement-steel.jpg",
+    mainImage: "/images/hero/hero-cement-steel-main.webp",
+    detailImage: "/images/hero/hero-steel-detail.webp",
+    detailBadge: "53-Grade & Fe-500D Grade",
   },
 ];
 
@@ -67,6 +76,7 @@ export function HeroSection() {
   const { openModal, setSelectedCategory } = useStore();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  // Embla setup with touch swipe support, manual arrows, and pause on hover/touch
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, duration: 25 },
     [Autoplay({ delay: 5500, stopOnMouseEnter: true, stopOnInteraction: false })]
@@ -110,136 +120,197 @@ export function HeroSection() {
 
   return (
     <div>
-      {/* 1. Full-Width Real Photo Auto-Rotating Slider (3 Slides Max) */}
+      {/* 1. Hero Slider with Layered Multi-Photo Set per Slide */}
       <section
         style={{
           position: "relative",
           overflow: "hidden",
-          background: "#0F1B2D",
+          background: "#FFFFFF",
+          borderBottom: "1px solid #E5E7EB",
         }}
         aria-label="Featured Hardware Categories"
       >
         <div ref={emblaRef} style={{ overflow: "hidden" }}>
           <div style={{ display: "flex", userSelect: "none" }}>
-            {HERO_SLIDES.map((slide, idx) => (
+            {HERO_SLIDES.map((slide) => (
               <div
                 key={slide.id}
                 style={{
                   flex: "0 0 100%",
                   minWidth: "100%",
                   position: "relative",
-                  height: "540px",
-                  display: "flex",
-                  alignItems: "center",
+                  padding: "54px 0 60px 0",
+                  background: "#FAFAFA",
                 }}
               >
-                {/* Background Photo */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    backgroundImage: `url(${slide.bgImage})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                />
-
-                {/* Dark Overlay ONLY for text legibility (Solid black at 40% opacity, NO gradient) */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    backgroundColor: "rgba(0, 0, 0, 0.40)",
-                  }}
-                />
-
-                {/* Slide Text Content */}
-                <div className="container" style={{ position: "relative", zIndex: 2 }}>
-                  <div style={{ maxWidth: "700px" }}>
-                    {/* Category Eyebrow: Plain uppercase orange text, NO pill */}
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        fontWeight: 700,
-                        letterSpacing: "0.12em",
-                        color: "#F15A24",
-                        textTransform: "uppercase",
-                        marginBottom: "12px",
-                      }}
-                    >
-                      {slide.categoryTag}
-                    </div>
-
-                    {/* Headline */}
-                    <h1
-                      style={{
-                        fontSize: "40px",
-                        fontWeight: 800,
-                        lineHeight: "1.2",
-                        color: "#FFFFFF",
-                        letterSpacing: "-0.02em",
-                        marginBottom: "16px",
-                      }}
-                      className="hero-headline"
-                    >
-                      {slide.headline}
-                    </h1>
-
-                    {/* Subtext */}
-                    <p
-                      style={{
-                        fontSize: "16px",
-                        lineHeight: "1.6",
-                        color: "#F3F4F6",
-                        marginBottom: "28px",
-                        maxWidth: "620px",
-                      }}
-                    >
-                      {slide.subtext}
-                    </p>
-
-                    {/* CTA Button */}
-                    <div style={{ display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
-                      <button
-                        onClick={() => handleCtaClick(slide)}
-                        className="btn btn-primary btn-lg"
+                <div className="container">
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1.05fr 0.95fr",
+                      gap: "48px",
+                      alignItems: "center",
+                    }}
+                    className="hero-slide-grid"
+                  >
+                    {/* Left Column: Heading, Value Prop, CTAs */}
+                    <div>
+                      {/* Category Eyebrow: Muted Steel-Blue plain uppercase text */}
+                      <div
                         style={{
-                          background: "#F15A24",
-                          color: "#FFFFFF",
-                          border: "none",
-                          boxShadow: "none",
-                          gap: "8px",
+                          fontSize: "12px",
                           fontWeight: 700,
+                          letterSpacing: "0.12em",
+                          color: "#4A6572",
+                          textTransform: "uppercase",
+                          marginBottom: "12px",
                         }}
                       >
-                        <span>{slide.ctaText}</span>
-                        <ArrowRight size={17} />
-                      </button>
+                        {slide.categoryTag}
+                      </div>
 
-                      {slide.ctaAction !== "quote" && (
+                      {/* Main Headline */}
+                      <h1
+                        style={{
+                          fontSize: "38px",
+                          fontWeight: 800,
+                          lineHeight: "1.2",
+                          color: "#1C1C1E",
+                          letterSpacing: "-0.02em",
+                          marginBottom: "16px",
+                        }}
+                        className="hero-headline"
+                      >
+                        {slide.headline}
+                      </h1>
+
+                      {/* Subtext */}
+                      <p
+                        style={{
+                          fontSize: "15px",
+                          lineHeight: "1.65",
+                          color: "#3A3A3C",
+                          marginBottom: "28px",
+                          maxWidth: "560px",
+                        }}
+                      >
+                        {slide.subtext}
+                      </p>
+
+                      {/* CTAs in Muted Steel-Blue Palette */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
                         <button
-                          onClick={() => openModal("request_quote")}
-                          className="btn btn-lg"
+                          onClick={() => handleCtaClick(slide)}
+                          className="btn btn-primary btn-lg"
                           style={{
-                            background: "rgba(255, 255, 255, 0.15)",
+                            background: "#4A6572",
                             color: "#FFFFFF",
-                            border: "1px solid rgba(255, 255, 255, 0.4)",
-                            backdropFilter: "none",
+                            border: "none",
                             gap: "8px",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "#FFFFFF";
-                            e.currentTarget.style.color = "#0F1B2D";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)";
-                            e.currentTarget.style.color = "#FFFFFF";
+                            fontWeight: 700,
                           }}
                         >
-                          <HardHat size={17} />
+                          <span>{slide.ctaText}</span>
+                          <ArrowRight size={17} />
+                        </button>
+
+                        <button
+                          onClick={() => openModal("request_quote")}
+                          className="btn btn-outline btn-lg"
+                          style={{
+                            background: "#FFFFFF",
+                            color: "#1C1C1E",
+                            border: "1px solid #D1D5DB",
+                            gap: "8px",
+                            fontWeight: 600,
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = "#1C1C1E";
+                            e.currentTarget.style.background = "#F4F4F6";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = "#D1D5DB";
+                            e.currentTarget.style.background = "#FFFFFF";
+                          }}
+                        >
+                          <HardHat size={17} color="#4A6572" />
                           <span>Contractor Rates</span>
                         </button>
-                      )}
+                      </div>
+                    </div>
+
+                    {/* Right Column: Layered Multi-Photo Set (2-3 authentic store & warehouse shots) */}
+                    <div style={{ position: "relative" }} className="hero-photo-cluster">
+                      {/* Main Primary Warehouse Shot */}
+                      <div
+                        style={{
+                          width: "88%",
+                          height: "360px",
+                          borderRadius: "var(--radius-lg)",
+                          overflow: "hidden",
+                          border: "1px solid #E5E7EB",
+                          boxShadow: "0 8px 24px -6px rgba(0, 0, 0, 0.08)",
+                          background: "#FFFFFF",
+                        }}
+                      >
+                        <img
+                          src={slide.mainImage}
+                          alt={slide.headline}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      </div>
+
+                      {/* Overlapping Inset Detail Shot (Workbench / Close-up photo) */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: "-20px",
+                          right: "0",
+                          width: "56%",
+                          height: "220px",
+                          borderRadius: "var(--radius-md)",
+                          overflow: "hidden",
+                          border: "3px solid #FFFFFF",
+                          boxShadow: "0 12px 28px -6px rgba(0, 0, 0, 0.14)",
+                          background: "#FFFFFF",
+                          zIndex: 3,
+                        }}
+                      >
+                        <img
+                          src={slide.detailImage}
+                          alt="Detail workbench view"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+
+                        {/* Factual Quality Badge Chip */}
+                        <div
+                          style={{
+                            position: "absolute",
+                            bottom: "8px",
+                            left: "8px",
+                            background: "rgba(28, 28, 30, 0.85)",
+                            color: "#FFFFFF",
+                            padding: "3px 8px",
+                            borderRadius: "var(--radius-sm)",
+                            fontSize: "10px",
+                            fontWeight: 600,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                          }}
+                        >
+                          <CheckCircle2 size={11} color="#A4B8C4" />
+                          <span>{slide.detailBadge}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -248,7 +319,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Prev / Next Arrows */}
+        {/* Prev / Next Manual Arrows */}
         <button
           onClick={scrollPrev}
           aria-label="Previous slide"
@@ -258,21 +329,27 @@ export function HeroSection() {
             top: "50%",
             transform: "translateY(-50%)",
             zIndex: 10,
-            width: "42px",
-            height: "42px",
-            borderRadius: "4px",
-            background: "rgba(15, 27, 45, 0.7)",
-            color: "#FFFFFF",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
+            width: "40px",
+            height: "40px",
+            borderRadius: "var(--radius-sm)",
+            background: "#FFFFFF",
+            color: "#1C1C1E",
+            border: "1px solid #D1D5DB",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            transition: "background 0.15s",
+            transition: "border-color 0.15s, background-color 0.15s",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "#0F1B2D")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(15, 27, 45, 0.7)")}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "#4A6572";
+            e.currentTarget.style.background = "#F4F4F6";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "#D1D5DB";
+            e.currentTarget.style.background = "#FFFFFF";
+          }}
         >
-          <ChevronLeft size={22} />
+          <ChevronLeft size={20} />
         </button>
 
         <button
@@ -284,28 +361,34 @@ export function HeroSection() {
             top: "50%",
             transform: "translateY(-50%)",
             zIndex: 10,
-            width: "42px",
-            height: "42px",
-            borderRadius: "4px",
-            background: "rgba(15, 27, 45, 0.7)",
-            color: "#FFFFFF",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
+            width: "40px",
+            height: "40px",
+            borderRadius: "var(--radius-sm)",
+            background: "#FFFFFF",
+            color: "#1C1C1E",
+            border: "1px solid #D1D5DB",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            transition: "background 0.15s",
+            transition: "border-color 0.15s, background-color 0.15s",
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = "#0F1B2D")}
-          onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(15, 27, 45, 0.7)")}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "#4A6572";
+            e.currentTarget.style.background = "#F4F4F6";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "#D1D5DB";
+            e.currentTarget.style.background = "#FFFFFF";
+          }}
         >
-          <ChevronRight size={22} />
+          <ChevronRight size={20} />
         </button>
 
-        {/* Dot Indicators */}
+        {/* Dot Indicators restyled in Muted Steel-Blue #4A6572 */}
         <div
           style={{
             position: "absolute",
-            bottom: "22px",
+            bottom: "16px",
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 10,
@@ -320,10 +403,10 @@ export function HeroSection() {
               onClick={() => scrollTo(idx)}
               aria-label={`Go to slide ${idx + 1}`}
               style={{
-                width: selectedIndex === idx ? "28px" : "10px",
-                height: "8px",
-                borderRadius: "4px",
-                background: selectedIndex === idx ? "#F15A24" : "rgba(255, 255, 255, 0.5)",
+                width: selectedIndex === idx ? "26px" : "8px",
+                height: "6px",
+                borderRadius: "3px",
+                background: selectedIndex === idx ? "#4A6572" : "#D1D5DB",
                 border: "none",
                 transition: "all 0.2s ease",
               }}
@@ -332,7 +415,7 @@ export function HeroSection() {
         </div>
       </section>
 
-      {/* 2. Plain Thin Info-Bar Below Hero (Single Row, Icon + Text, No Card Backgrounds - JP Engineering style) */}
+      {/* 2. Plain Thin Info-Bar Below Hero (Single Row, Icon + Text, No Card Backgrounds) */}
       <div
         style={{
           background: "#FFFFFF",
@@ -350,44 +433,44 @@ export function HeroSection() {
             className="info-bar-grid"
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <ShieldCheck size={20} color="#F15A24" style={{ flexShrink: 0 }} />
+              <ShieldCheck size={20} color="#4A6572" style={{ flexShrink: 0 }} />
               <div style={{ fontSize: "13px", lineHeight: "1.3" }}>
-                <strong style={{ color: "#0F1B2D" }}>100% Genuine Brands</strong>
-                <div style={{ color: "#6B7280", fontSize: "12px" }}>Direct manufacturer warranty</div>
+                <strong style={{ color: "#1C1C1E" }}>100% Genuine Brands</strong>
+                <div style={{ color: "#6E6E73", fontSize: "12px" }}>Direct manufacturer warranty</div>
               </div>
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Truck size={20} color="#F15A24" style={{ flexShrink: 0 }} />
+              <Truck size={20} color="#4A6572" style={{ flexShrink: 0 }} />
               <div style={{ fontSize: "13px", lineHeight: "1.3" }}>
-                <strong style={{ color: "#0F1B2D" }}>Same-Day Dispatch</strong>
-                <div style={{ color: "#6B7280", fontSize: "12px" }}>Across Kathmandu Valley</div>
+                <strong style={{ color: "#1C1C1E" }}>Same-Day Dispatch</strong>
+                <div style={{ color: "#6E6E73", fontSize: "12px" }}>Across Kathmandu Valley</div>
               </div>
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <ReceiptText size={20} color="#F15A24" style={{ flexShrink: 0 }} />
+              <ReceiptText size={20} color="#4A6572" style={{ flexShrink: 0 }} />
               <div style={{ fontSize: "13px", lineHeight: "1.3" }}>
-                <strong style={{ color: "#0F1B2D" }}>13% Official VAT Bills</strong>
-                <div style={{ color: "#6B7280", fontSize: "12px" }}>Tax compliant invoicing</div>
+                <strong style={{ color: "#1C1C1E" }}>13% Official VAT Bills</strong>
+                <div style={{ color: "#6E6E73", fontSize: "12px" }}>Tax compliant invoicing</div>
               </div>
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Clock size={20} color="#F15A24" style={{ flexShrink: 0 }} />
+              <Clock size={20} color="#4A6572" style={{ flexShrink: 0 }} />
               <div style={{ fontSize: "13px", lineHeight: "1.3" }}>
-                <strong style={{ color: "#0F1B2D" }}>Open Daily 7AM – 8PM</strong>
-                <div style={{ color: "#6B7280", fontSize: "12px" }}>Kalanki Ring Road Depot</div>
+                <strong style={{ color: "#1C1C1E" }}>Open Daily 7AM – 8PM</strong>
+                <div style={{ color: "#6E6E73", fontSize: "12px" }}>Kalanki Ring Road Depot</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 3. Plain Counter Row (JP Engineering style: Years of Experience / Orders Delivered, not boxed cards) */}
+      {/* 3. Plain Counter Row (JP Engineering style: Real Numbers, Plain Layout) */}
       <section
         style={{
-          background: "#F8F9FA",
+          background: "#FAFAFA",
           borderBottom: "1px solid #E5E7EB",
           padding: "36px 0",
         }}
@@ -406,17 +489,17 @@ export function HeroSection() {
                 style={{
                   fontSize: "36px",
                   fontWeight: 800,
-                  color: "#0F1B2D",
+                  color: "#1C1C1E",
                   lineHeight: "1.1",
                   marginBottom: "4px",
                 }}
               >
                 20+
               </div>
-              <div style={{ fontSize: "14px", fontWeight: 700, color: "#1F2937" }}>
+              <div style={{ fontSize: "14px", fontWeight: 700, color: "#3A3A3C" }}>
                 Years in Business
               </div>
-              <div style={{ fontSize: "12px", color: "#6B7280", marginTop: "2px" }}>
+              <div style={{ fontSize: "12px", color: "#6E6E73", marginTop: "2px" }}>
                 Supplying hardware since 2004
               </div>
             </div>
@@ -426,17 +509,17 @@ export function HeroSection() {
                 style={{
                   fontSize: "36px",
                   fontWeight: 800,
-                  color: "#0F1B2D",
+                  color: "#1C1C1E",
                   lineHeight: "1.1",
                   marginBottom: "4px",
                 }}
               >
                 2,400+
               </div>
-              <div style={{ fontSize: "14px", fontWeight: 700, color: "#1F2937" }}>
+              <div style={{ fontSize: "14px", fontWeight: 700, color: "#3A3A3C" }}>
                 Orders Delivered
               </div>
-              <div style={{ fontSize: "12px", color: "#6B7280", marginTop: "2px" }}>
+              <div style={{ fontSize: "12px", color: "#6E6E73", marginTop: "2px" }}>
                 Direct to sites &amp; workshops
               </div>
             </div>
@@ -446,17 +529,17 @@ export function HeroSection() {
                 style={{
                   fontSize: "36px",
                   fontWeight: 800,
-                  color: "#0F1B2D",
+                  color: "#1C1C1E",
                   lineHeight: "1.1",
                   marginBottom: "4px",
                 }}
               >
                 12+
               </div>
-              <div style={{ fontSize: "14px", fontWeight: 700, color: "#1F2937" }}>
+              <div style={{ fontSize: "14px", fontWeight: 700, color: "#3A3A3C" }}>
                 Authorized Brand Lines
               </div>
-              <div style={{ fontSize: "12px", color: "#6B7280", marginTop: "2px" }}>
+              <div style={{ fontSize: "12px", color: "#6E6E73", marginTop: "2px" }}>
                 Bosch, Makita, Astral &amp; more
               </div>
             </div>
@@ -466,17 +549,17 @@ export function HeroSection() {
                 style={{
                   fontSize: "36px",
                   fontWeight: 800,
-                  color: "#0F1B2D",
+                  color: "#1C1C1E",
                   lineHeight: "1.1",
                   marginBottom: "4px",
                 }}
               >
                 100%
               </div>
-              <div style={{ fontSize: "14px", fontWeight: 700, color: "#1F2937" }}>
+              <div style={{ fontSize: "14px", fontWeight: 700, color: "#3A3A3C" }}>
                 VAT &amp; Tax Compliant
               </div>
-              <div style={{ fontSize: "12px", color: "#6B7280", marginTop: "2px" }}>
+              <div style={{ fontSize: "12px", color: "#6E6E73", marginTop: "2px" }}>
                 Official PAN 602918239
               </div>
             </div>
@@ -486,6 +569,14 @@ export function HeroSection() {
 
       <style jsx>{`
         @media (max-width: 992px) {
+          .hero-slide-grid {
+            grid-template-columns: 1fr !important;
+            gap: 36px !important;
+          }
+          .hero-photo-cluster {
+            max-width: 520px;
+            margin: 0 auto;
+          }
           .info-bar-grid {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 16px !important;
@@ -495,7 +586,7 @@ export function HeroSection() {
             gap: 24px !important;
           }
           .hero-headline {
-            font-size: 30px !important;
+            font-size: 28px !important;
           }
         }
         @media (max-width: 600px) {
