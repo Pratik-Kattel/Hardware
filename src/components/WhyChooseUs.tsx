@@ -15,14 +15,14 @@ export function WhyChooseUs() {
       <div className="container">
         {/* Section Header: Steel-Blue plain uppercase label, NO pill */}
         <div className="section-header" style={{ marginBottom: "48px" }}>
-          <span className="section-tag">The Adhikari Hardware Advantage</span>
+          <span className="section-tag">THE NEW ADHIKARI TRADERS ADVANTAGE</span>
           <h2 className="section-title">Why Kathmandu Trusts Us</h2>
           <p className="section-subtitle">
             Reliable hardware procurement built on two decades of integrity, rapid site delivery, and genuine brands.
           </p>
         </div>
 
-        {/* Varied Layout: 3 JP Engineering-style Stat Counters + 3 Inline Unboxed Features */}
+        {/* Varied Layout: 3 Stat Counters + 3 Inline Unboxed Features */}
         <div
           style={{
             display: "grid",
@@ -32,7 +32,7 @@ export function WhyChooseUs() {
           }}
           className="trust-grid"
         >
-          {/* Left Column: 3 Stat / Number Counters (JP Engineering Style) */}
+          {/* Left Column: 3 Stat / Number Counters */}
           <div
             style={{
               display: "flex",
@@ -63,7 +63,7 @@ export function WhyChooseUs() {
                 Two Decades in Hardware Distribution
               </div>
               <p style={{ fontSize: "13px", color: "#6E6E73", lineHeight: "1.5" }}>
-                Supplying verified construction materials, power tools, and industrial fittings since 2004 from our Kalanki central depot.
+                Supplying verified construction materials, power tools, and industrial fittings since 2004 from our Kathmandu central depot.
               </p>
             </div>
 
@@ -207,7 +207,7 @@ export function WhyChooseUs() {
                   Master Technical Material Sizing
                 </h3>
                 <p style={{ fontSize: "14px", color: "#3A3A3C", lineHeight: "1.6" }}>
-                  Consult our veteran Kalanki store staff to accurately calculate pipe diameters, circuit breaker ratings, and primer square footage prior to ordering.
+                  Consult our veteran Kathmandu store staff to accurately calculate pipe diameters, circuit breaker ratings, and primer square footage prior to ordering.
                 </p>
               </div>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Phone, MapPin, Clock, Truck, FileText, Sparkles } from "lucide-react";
+import { Phone, MapPin, Clock, Truck, FileText } from "lucide-react";
 import { useStore } from "@/context/StoreContext";
 
 export function TopHeader() {
@@ -15,16 +15,16 @@ export function TopHeader() {
           <div style={{ display: "flex", alignItems: "center", gap: "18px", flexWrap: "wrap" }}>
             <div className="top-bar-item">
               <MapPin size={13} color="var(--accent-steel)" />
-              <span>Kalanki, Ring Road, Kathmandu, Nepal</span>
+              <span>Kathmandu, Bagmati Province 44600</span>
             </div>
 
             <div className="top-bar-item">
               <Phone size={13} color="var(--accent-steel)" />
               <a
-                href="tel:9800000000"
+                href="tel:9851145065"
                 style={{ color: "#FFFFFF", fontWeight: 600, letterSpacing: "0.02em" }}
               >
-                9800000000
+                985-1145065
               </a>
             </div>
 
@@ -44,23 +44,6 @@ export function TopHeader() {
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-              <button
-                onClick={() => openModal("track_order")}
-                style={{
-                  color: "#D1D5DB",
-                  fontSize: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
-                  transition: "color 0.15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#FFFFFF")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-              >
-                <Sparkles size={12} color="var(--accent-steel)" />
-                <span>Track Order</span>
-              </button>
-
               <button
                 onClick={() => openModal("request_quote")}
                 style={{

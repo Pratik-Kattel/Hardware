@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useStore } from "@/context/StoreContext";
 import {
   Wrench,
@@ -8,18 +9,9 @@ import {
   Phone,
   Clock,
 } from "lucide-react";
-import { ProductCategory } from "@/types";
 
 export function Footer() {
-  const { setSelectedCategory, openModal } = useStore();
-
-  const handleCategoryNav = (cat: ProductCategory) => {
-    setSelectedCategory(cat);
-    const shopEl = document.getElementById("shop-section");
-    if (shopEl) {
-      shopEl.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const { openModal } = useStore();
 
   return (
     <footer
@@ -61,28 +53,28 @@ export function Footer() {
                 <Wrench size={19} />
               </div>
               <div style={{ fontSize: "18px", fontWeight: 800, color: "#FFFFFF", letterSpacing: "-0.02em" }}>
-                <span>ADHIKARI</span>{" "}
-                <span style={{ color: "#4A6572" }}>HARDWARE</span>
+                <span>NEW ADHIKARI</span>{" "}
+                <span style={{ color: "#4A6572" }}>TRADERS</span>
               </div>
             </div>
 
-            <p style={{ fontSize: "13px", color: "#9CA3AF", lineHeight: "1.65", marginBottom: "18px" }}>
-              Adhikari Hardware is Nepal&apos;s leading hardware store and building materials distributor located in Kalanki, Kathmandu. Serving contractors, tradesmen, and builders with genuine tools, electrical supplies, pipes, and official 13% VAT invoices.
+            <p style={{ fontSize: "14px", color: "#9CA3AF", lineHeight: "1.65", marginBottom: "18px" }}>
+              New Adhikari Traders is Nepal&apos;s trusted hardware store and building materials distributor located in Kathmandu, Bagmati Province. Serving contractors, tradesmen, and builders with genuine tools, electrical supplies, pipes, and official 13% VAT invoices.
             </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "13px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "14px" }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
-                <MapPin size={15} color="#4A6572" style={{ marginTop: "3px", flexShrink: 0 }} />
-                <span>Kalanki Chowk, Ring Road, Kathmandu, Nepal</span>
+                <MapPin size={16} color="#4A6572" style={{ marginTop: "3px", flexShrink: 0 }} />
+                <span>Kathmandu, Bagmati Province 44600, Nepal</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Phone size={15} color="#4A6572" style={{ flexShrink: 0 }} />
-                <a href="tel:9800000000" style={{ color: "#FFFFFF", fontWeight: 700 }}>
-                  9800000000
+                <Phone size={16} color="#4A6572" style={{ flexShrink: 0 }} />
+                <a href="tel:9851145065" style={{ color: "#FFFFFF", fontWeight: 700 }}>
+                  985-1145065
                 </a>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Clock size={15} color="#4A6572" style={{ flexShrink: 0 }} />
+                <Clock size={16} color="#4A6572" style={{ flexShrink: 0 }} />
                 <span>Open 7:00 AM – 8:00 PM (Daily)</span>
               </div>
             </div>
@@ -92,7 +84,7 @@ export function Footer() {
           <div>
             <div
               style={{
-                fontSize: "13px",
+                fontSize: "15px",
                 fontWeight: 700,
                 color: "#FFFFFF",
                 textTransform: "uppercase",
@@ -102,66 +94,74 @@ export function Footer() {
             >
               Hardware Categories
             </div>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "9px", fontSize: "13px" }}>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", fontSize: "14px" }}>
               <li>
-                <button
-                  onClick={() => handleCategoryNav("power-tools")}
-                  style={{ color: "#D1D5DB", transition: "color 0.15s" }}
+                <Link
+                  href="/category/power-tools"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Power Tools (Bosch, Makita)
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => handleCategoryNav("hand-tools")}
-                  style={{ color: "#D1D5DB", transition: "color 0.15s" }}
+                <Link
+                  href="/category/hand-tools"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Hand Tools (Stanley, Taparia)
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => handleCategoryNav("plumbing")}
-                  style={{ color: "#D1D5DB", transition: "color 0.15s" }}
+                <Link
+                  href="/category/plumbing"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Plumbing (Astral CPVC)
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => handleCategoryNav("electrical")}
-                  style={{ color: "#D1D5DB", transition: "color 0.15s" }}
+                <Link
+                  href="/category/electrical"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Electrical (Havells Pure Copper)
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => handleCategoryNav("paint-supplies")}
-                  style={{ color: "#D1D5DB", transition: "color 0.15s" }}
+                <Link
+                  href="/category/paint-supplies"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Paints (Asian Paints)
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  onClick={() => handleCategoryNav("construction-materials")}
-                  style={{ color: "#D1D5DB", transition: "color 0.15s" }}
+                <Link
+                  href="/category/construction-materials"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
                   Cement &amp; TMT Steel Rebars
-                </button>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/products"
+                  style={{ color: "var(--accent-steel)", fontWeight: 600, textDecoration: "none" }}
+                >
+                  Browse All Categories →
+                </Link>
               </li>
             </ul>
           </div>
@@ -170,7 +170,7 @@ export function Footer() {
           <div>
             <div
               style={{
-                fontSize: "13px",
+                fontSize: "14px",
                 fontWeight: 700,
                 color: "#FFFFFF",
                 textTransform: "uppercase",
@@ -180,21 +180,40 @@ export function Footer() {
             >
               Contractor &amp; Support
             </div>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "9px", fontSize: "13px" }}>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", fontSize: "14px" }}>
               <li>
-                <button
-                  onClick={() => openModal("track_order")}
-                  style={{ color: "#D1D5DB", transition: "color 0.15s" }}
+                <Link
+                  href="/account/orders"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
-                  Track Order Status
-                </button>
+                  My Orders &amp; Purchase History
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/wishlist"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
+                >
+                  My Saved Wishlist
+                </Link>
               </li>
               <li>
                 <button
                   onClick={() => openModal("request_quote")}
-                  style={{ color: "#D1D5DB", transition: "color 0.15s" }}
+                  style={{
+                    color: "#D1D5DB",
+                    transition: "color 0.15s",
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    cursor: "pointer",
+                    textAlign: "left",
+                    fontSize: "14px",
+                  }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
                 >
@@ -202,22 +221,12 @@ export function Footer() {
                 </button>
               </li>
               <li>
-                <button
-                  onClick={() => openModal("auth")}
-                  style={{ color: "#D1D5DB", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  Customer Account &amp; History
-                </button>
-              </li>
-              <li>
-                <a
-                  href="#deals-section"
-                  style={{ color: "#C1512D", fontWeight: 600 }}
+                <Link
+                  href="/products?filter=deals"
+                  style={{ color: "#C1512D", fontWeight: 600, textDecoration: "none" }}
                 >
                   Weekly Flash Deals
-                </a>
+                </Link>
               </li>
               <li>
                 <span style={{ color: "#9CA3AF" }}>Kathmandu Valley Same-Day Dispatch</span>
@@ -232,7 +241,7 @@ export function Footer() {
           <div>
             <div
               style={{
-                fontSize: "13px",
+                fontSize: "15px",
                 fontWeight: 700,
                 color: "#FFFFFF",
                 textTransform: "uppercase",
@@ -242,7 +251,7 @@ export function Footer() {
             >
               Payment Methods
             </div>
-            <p style={{ fontSize: "12px", color: "#9CA3AF", lineHeight: "1.5", marginBottom: "14px" }}>
+            <p style={{ fontSize: "14px", color: "#9CA3AF", lineHeight: "1.5", marginBottom: "14px" }}>
               We accept direct digital payments or Cash on Delivery at your construction site.
             </p>
 
@@ -253,7 +262,7 @@ export function Footer() {
                   background: "rgba(255, 255, 255, 0.08)",
                   border: "1px solid rgba(255, 255, 255, 0.15)",
                   color: "#FFFFFF",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   fontWeight: 600,
                   padding: "6px 12px",
                   borderRadius: "var(--radius-sm)",
@@ -267,7 +276,7 @@ export function Footer() {
                   background: "rgba(255, 255, 255, 0.08)",
                   border: "1px solid rgba(255, 255, 255, 0.15)",
                   color: "#FFFFFF",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   fontWeight: 600,
                   padding: "6px 12px",
                   borderRadius: "var(--radius-sm)",
@@ -281,7 +290,7 @@ export function Footer() {
                   background: "rgba(255, 255, 255, 0.08)",
                   border: "1px solid rgba(255, 255, 255, 0.15)",
                   color: "#FFFFFF",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   fontWeight: 600,
                   padding: "6px 12px",
                   borderRadius: "var(--radius-sm)",
@@ -295,7 +304,7 @@ export function Footer() {
                   background: "rgba(255, 255, 255, 0.08)",
                   border: "1px solid rgba(255, 255, 255, 0.15)",
                   color: "#FFFFFF",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   fontWeight: 600,
                   padding: "6px 12px",
                   borderRadius: "var(--radius-sm)",
@@ -311,7 +320,7 @@ export function Footer() {
                 border: "1px solid rgba(255, 255, 255, 0.08)",
                 borderRadius: "var(--radius-sm)",
                 padding: "10px 12px",
-                fontSize: "11px",
+                fontSize: "14px",
                 color: "#9CA3AF",
                 lineHeight: "1.4",
               }}
@@ -331,18 +340,18 @@ export function Footer() {
             justifyContent: "space-between",
             flexWrap: "wrap",
             gap: "14px",
-            fontSize: "12px",
+            fontSize: "14px",
             color: "#9CA3AF",
           }}
         >
           <div>
-            © 2026 <strong>Adhikari Hardware</strong> (Kathmandu, Nepal). All rights reserved.
+            © 2026 <strong>New Adhikari Traders</strong> (Kathmandu, Nepal). All rights reserved.
           </div>
 
           <div style={{ display: "flex", gap: "18px" }}>
-            <span>Toll-Free Phone: 9800000000</span>
+            <span>Direct Phone: 985-1145065</span>
             <span>Currency: NPR (Rs.)</span>
-            <span>Kalanki, Kathmandu</span>
+            <span>Kathmandu, Bagmati Province 44600</span>
           </div>
         </div>
       </div>

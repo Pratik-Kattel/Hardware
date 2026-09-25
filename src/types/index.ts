@@ -97,7 +97,7 @@ export interface Order {
   total: number;
   paymentMethod: PaymentMethod;
   paymentStatus: "paid" | "pending_cod" | "pending_verification";
-  orderStatus: "Order Placed" | "Confirmed by Kalanki Warehouse" | "Dispatched" | "Out for Delivery" | "Delivered";
+  orderStatus: "Order Placed" | "Confirmed by Warehouse" | "Dispatched" | "Out for Delivery" | "Delivered";
   createdAt: string;
   estimatedDelivery: string;
   trackingTimeline: {

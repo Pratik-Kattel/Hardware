@@ -97,8 +97,8 @@ const INITIAL_DEMO_ADDRESSES: CustomerAddress[] = [
   {
     id: "addr-1",
     fullName: "Suman Adhikari",
-    phone: "9800000000",
-    area: "Kalanki Chowk, Near Bafal Bridge",
+    phone: "985-1145065",
+    area: "Ring Road, Ward 14",
     city: "Kathmandu",
     landmark: "Behind Global IME Bank",
     isDefault: true,
@@ -106,7 +106,7 @@ const INITIAL_DEMO_ADDRESSES: CustomerAddress[] = [
   {
     id: "addr-2",
     fullName: "Suman Adhikari (Site 2)",
-    phone: "9800000000",
+    phone: "985-1145065",
     area: "Kumaripati, Jawalakhel Road",
     city: "Lalitpur",
     landmark: "Opposite St. Xavier's School",
@@ -118,7 +118,7 @@ const INITIAL_ORDERS: Order[] = [
   {
     id: "ADH-98412",
     customerName: "Suman Adhikari",
-    customerPhone: "9800000000",
+    customerPhone: "985-1145065",
     customerEmail: "suman.adhikari@gmail.com",
     deliveryAddress: INITIAL_DEMO_ADDRESSES[0],
     items: [
@@ -152,13 +152,13 @@ const INITIAL_ORDERS: Order[] = [
     trackingTimeline: [
       {
         status: "Order Confirmed & VAT Bill Generated",
-        location: "Adhikari Hardware, Kalanki Central Hub",
+        location: "New Adhikari Traders, Kathmandu Central Hub",
         timestamp: "Today, 10:16 AM",
         done: true,
       },
       {
         status: "Quality Checked & Packed in Heavy Box",
-        location: "Kalanki Warehouse Dispatch Bay 2",
+        location: "Kathmandu Warehouse Dispatch Bay 2",
         timestamp: "Today, 11:30 AM",
         done: true,
       },
@@ -170,7 +170,7 @@ const INITIAL_ORDERS: Order[] = [
       },
       {
         status: "Out for Delivery to Your Doorstep",
-        location: "Kalanki Chowk Delivery Area",
+        location: "Kathmandu Delivery Area",
         timestamp: "Today, 3:10 PM",
         done: true,
         current: true,
@@ -217,7 +217,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<CustomerUser | null>({
     id: "usr-01",
     name: "Suman Adhikari",
-    phone: "9800000000",
+    phone: "985-1145065",
     email: "suman.adhikari@gmail.com",
     role: "customer",
     savedAddresses: INITIAL_DEMO_ADDRESSES,
@@ -426,7 +426,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     const demoUser: CustomerUser = {
       id: "usr-01",
       name: role === "contractor" ? "Rajesh Shrestha (Civil Builder)" : "Suman Adhikari",
-      phone: "9800000000",
+      phone: "985-1145065",
       email: role === "contractor" ? "rajesh.builders@gmail.com" : "suman.adhikari@gmail.com",
       role,
       companyName: role === "contractor" ? "Himalayan Builders & Construction Pvt. Ltd." : undefined,
@@ -489,14 +489,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       trackingTimeline: [
         {
           status: "Order Placed & VAT Invoice Created",
-          location: "Adhikari Hardware Online Store",
+          location: "New Adhikari Traders Online Store",
           timestamp: "Just now",
           done: true,
           current: true,
         },
         {
           status: "Order Packaging & Warehouse Quality Check",
-          location: "Adhikari Central Depot, Kalanki Ring Road",
+          location: "New Adhikari Traders Central Depot, Kathmandu",
           timestamp: "Expected in 2 hours",
           done: false,
         },

@@ -33,7 +33,7 @@ export function CustomerAuthModal() {
     addSavedAddress({
       id: `addr-${Date.now()}`,
       fullName: user?.name || "Customer",
-      phone: user?.phone || "9800000000",
+      phone: user?.phone || "985-1145065",
       area: newArea.trim(),
       city: newCity,
       landmark: newLandmark.trim(),
@@ -295,9 +295,9 @@ export function CustomerAuthModal() {
                   <div style={{ position: "relative" }}>
                     <input
                       type="text"
-                      defaultValue="9800000000"
+                      defaultValue="985-1145065"
                       className="form-input"
-                      placeholder="9800000000"
+                      placeholder="985-1145065"
                     />
                     <Phone size={16} color="var(--text-muted)" style={{ position: "absolute", right: "12px", top: "14px" }} />
                   </div>

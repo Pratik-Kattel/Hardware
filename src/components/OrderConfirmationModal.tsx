@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { useStore } from "@/context/StoreContext";
 import {
   CheckCircle2,
@@ -11,10 +12,12 @@ import {
   FileText,
   X,
   Share2,
+  Package,
 } from "lucide-react";
 
 export function OrderConfirmationModal() {
-  const { activeModal, closeModal, currentOrder, openModal } = useStore();
+  const router = useRouter();
+  const { activeModal, closeModal, currentOrder } = useStore();
 
   if (activeModal !== "order_confirmation" || !currentOrder) {
     return null;
@@ -24,9 +27,9 @@ export function OrderConfirmationModal() {
     window.print();
   };
 
-  const handleTrack = () => {
+  const handleViewOrder = () => {
     closeModal();
-    openModal("track_order");
+    router.push(`/account/orders/${currentOrder.id}`);
   };
 
   return (
@@ -107,7 +110,7 @@ export function OrderConfirmationModal() {
           </h2>
 
           <p style={{ fontSize: "14px", color: "#cbd5e1", maxWidth: "500px", margin: "0 auto" }}>
-            Order <strong>#{currentOrder.id}</strong> has been received by our Kalanki warehouse dispatch team.
+            Order <strong>#{currentOrder.id}</strong> has been received by our Kathmandu warehouse dispatch team.
           </p>
         </div>
 
@@ -135,12 +138,12 @@ export function OrderConfirmationModal() {
             </div>
 
             <button
-              onClick={handleTrack}
+              onClick={handleViewOrder}
               className="btn btn-primary btn-sm"
               style={{ gap: "6px" }}
             >
-              <Truck size={15} />
-              <span>Track Live Delivery</span>
+              <Package size={15} />
+              <span>View Order Status</span>
             </button>
           </div>
 
@@ -272,9 +275,29 @@ export function OrderConfirmationModal() {
           {/* Bottom Actions */}
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             <button
+              onClick={handleViewOrder}
+              className="btn btn-primary"
+              style={{
+                flex: "1 1 100%",
+                background: "#4A6572",
+                color: "#FFFFFF",
+                minHeight: "44px",
+                fontSize: "15px",
+                fontWeight: 700,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+              }}
+            >
+              <Truck size={18} />
+              <span>View in My Orders</span>
+            </button>
+
+            <button
               onClick={handlePrint}
               className="btn btn-outline"
-              style={{ flex: 1, gap: "6px" }}
+              style={{ flex: 1, minHeight: "44px", gap: "6px" }}
             >
               <Printer size={16} />
               <span>Print Official VAT Bill</span>
@@ -283,7 +306,7 @@ export function OrderConfirmationModal() {
             <button
               onClick={closeModal}
               className="btn btn-secondary"
-              style={{ flex: 1 }}
+              style={{ flex: 1, minHeight: "44px" }}
             >
               <span>Continue Shopping</span>
             </button>
@@ -305,8 +328,8 @@ export function OrderConfirmationModal() {
             <PhoneCall size={14} color="var(--accent-steel)" />
             <span>
               Have queries regarding your delivery? Call our dispatch desk:{" "}
-              <a href="tel:9800000000" style={{ color: "var(--accent-steel)", fontWeight: 700 }}>
-                9800000000
+              <a href="tel:9851145065" style={{ color: "var(--accent-steel)", fontWeight: 700 }}>
+                985-1145065
               </a>
             </span>
           </div>

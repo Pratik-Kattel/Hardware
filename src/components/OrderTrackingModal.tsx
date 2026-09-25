@@ -152,7 +152,7 @@ export function OrderTrackingModal() {
                   </div>
                   <div>
                     <div style={{ fontSize: "13px", fontWeight: 700, color: "var(--primary)" }}>
-                      Express Delivery Van (Route: Ring Road / Kalanki / Sitapaila)
+                      Express Delivery Van (Route: Ring Road / Sitapaila / Kathmandu)
                     </div>
                     <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
                       Driver: Ram Bahadur Adhikari • Vehicle: Ba 2 Cha 4920
@@ -161,7 +161,7 @@ export function OrderTrackingModal() {
                 </div>
 
                 <a
-                  href="tel:9800000000"
+                  href="tel:9851145065"
                   className="btn btn-outline btn-sm"
                   style={{ gap: "6px" }}
                 >

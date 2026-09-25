@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { PRODUCTS } from "@/data/products";
@@ -84,10 +85,10 @@ export function BestDeals() {
       }}
     >
       <div className="container">
-        {/* Banner: Deep Charcoal #1C1C1E */}
+        {/* Banner: Solid Navy #1E293B (NO gradient) */}
         <div
           style={{
-            background: "#1C1C1E",
+            background: "#1E293B",
             borderRadius: "var(--radius-lg)",
             padding: "28px 32px",
             color: "#FFFFFF",
@@ -97,7 +98,7 @@ export function BestDeals() {
             justifyContent: "space-between",
             flexWrap: "wrap",
             gap: "20px",
-            border: "1px solid #2C2C2E",
+            border: "1px solid #334155",
           }}
         >
           <div>
@@ -106,7 +107,7 @@ export function BestDeals() {
                 fontSize: "12px",
                 fontWeight: 700,
                 letterSpacing: "0.1em",
-                color: "#A4B8C4",
+                color: "#94A3B8",
                 textTransform: "uppercase",
                 marginBottom: "6px",
               }}
@@ -126,29 +127,29 @@ export function BestDeals() {
               Best Deals of the Week
             </h2>
 
-            <p style={{ fontSize: "14px", color: "#9CA3AF", maxWidth: "560px" }}>
+            <p style={{ fontSize: "14px", color: "#CBD5E1", maxWidth: "560px" }}>
               Authorized discounted power tools, waterproofing compounds, and electrical gear.
             </p>
           </div>
 
-          {/* Countdown Clock */}
+          {/* Countdown Clock - Poppins font only */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               gap: "12px",
-              background: "#2C2C2E",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
+              background: "#0F172A",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
               borderRadius: "var(--radius-md)",
               padding: "10px 18px",
             }}
           >
-            <Clock size={18} color="#A4B8C4" />
+            <Clock size={18} color="#94A3B8" />
             <div style={{ textAlign: "left" }}>
               <div
                 style={{
                   fontSize: "10px",
-                  color: "#9CA3AF",
+                  color: "#94A3B8",
                   textTransform: "uppercase",
                   fontWeight: 700,
                   letterSpacing: "0.06em",
@@ -160,9 +161,9 @@ export function BestDeals() {
                 style={{
                   fontSize: "17px",
                   fontWeight: 800,
-                  fontFamily: "monospace",
                   color: "#FFFFFF",
-                  letterSpacing: "0.06em",
+                  letterSpacing: "0.04em",
+                  fontVariantNumeric: "tabular-nums",
                 }}
               >
                 {String(timeLeft.hours).padStart(2, "0")}h :{" "}
@@ -283,9 +284,9 @@ export function BestDeals() {
                       </div>
                     )}
 
-                    {/* Product Image */}
-                    <div
-                      onClick={() => openProductDetail(prod)}
+                    {/* Product Image Link */}
+                    <Link
+                      href={`/product/${prod.id}`}
                       style={{
                         height: "180px",
                         cursor: "pointer",
@@ -297,6 +298,7 @@ export function BestDeals() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        textDecoration: "none",
                       }}
                     >
                       <img
@@ -309,7 +311,7 @@ export function BestDeals() {
                           padding: "8px",
                         }}
                       />
-                    </div>
+                    </Link>
 
                     {/* Brand */}
                     <div
@@ -325,25 +327,26 @@ export function BestDeals() {
                       {prod.brand}
                     </div>
 
-                    {/* Title */}
-                    <h3
-                      onClick={() => openProductDetail(prod)}
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: 600,
-                        color: "#1C1C1E",
-                        margin: "0 0 10px 0",
-                        cursor: "pointer",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                        minHeight: "40px",
-                        lineHeight: "1.35",
-                      }}
-                      title={prod.name}
-                    >
-                      {prod.name}
+                    {/* Title Link */}
+                    <h3 style={{ margin: "0 0 10px 0", minHeight: "40px" }}>
+                      <Link
+                        href={`/product/${prod.id}`}
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: 600,
+                          color: "#1C1C1E",
+                          cursor: "pointer",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          lineHeight: "1.35",
+                          textDecoration: "none",
+                        }}
+                        title={prod.name}
+                      >
+                        {prod.name}
+                      </Link>
                     </h3>
 
                     {/* Pricing */}

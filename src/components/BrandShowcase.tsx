@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { BRANDS } from "@/data/brands";
 import { useStore } from "@/context/StoreContext";
 
@@ -126,15 +127,13 @@ function BrandLogoBaselineSvg({ brandId }: { brandId: string }) {
 }
 
 export function BrandShowcase() {
+  const router = useRouter();
   const { setSelectedBrand } = useStore();
   const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
 
   const handleBrandClick = (brandName: string) => {
     setSelectedBrand(brandName);
-    const shopEl = document.getElementById("shop-section");
-    if (shopEl) {
-      shopEl.scrollIntoView({ behavior: "smooth" });
-    }
+    router.push(`/products?brand=${encodeURIComponent(brandName)}`);
   };
 
   // Repeated array for seamless continuous marquee loop

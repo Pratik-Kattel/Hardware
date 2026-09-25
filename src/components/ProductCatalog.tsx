@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { PRODUCTS } from "@/data/products";
 import { CATEGORIES } from "@/data/categories";
 import { BRANDS } from "@/data/brands";
@@ -20,6 +21,7 @@ import {
 import { ProductCategory } from "@/types";
 
 export function ProductCatalog() {
+  const searchParams = useSearchParams();
   const {
     searchQuery,
     setSearchQuery,
@@ -36,6 +38,20 @@ export function ProductCatalog() {
     viewMode,
     setViewMode,
   } = useStore();
+
+  // Sync URL search params
+  useEffect(() => {
+    if (!searchParams) return;
+    const search = searchParams.get("search");
+    const brand = searchParams.get("brand");
+    const category = searchParams.get("category");
+    const filter = searchParams.get("filter");
+
+    if (search !== null) setSearchQuery(search);
+    if (brand !== null) setSelectedBrand(brand);
+    if (category !== null) setSelectedCategory(category as ProductCategory);
+    if (filter === "deals") setSortOption("discount");
+  }, [searchParams, setSearchQuery, setSelectedBrand, setSelectedCategory, setSortOption]);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {

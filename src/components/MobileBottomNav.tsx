@@ -1,23 +1,12 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useStore } from "@/context/StoreContext";
-import { Home, Store, ShoppingCart, User, HardHat } from "lucide-react";
+import { Home, Store, ShoppingCart, User, Heart } from "lucide-react";
 
 export function MobileBottomNav() {
-  const { cartCount, openModal, setSelectedCategory } = useStore();
-
-  const handleHomeClick = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const handleShopClick = () => {
-    setSelectedCategory("all");
-    const shopEl = document.getElementById("shop-section");
-    if (shopEl) {
-      shopEl.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const { cartCount, wishlistCount, openModal } = useStore();
 
   return (
     <nav
@@ -32,71 +21,121 @@ export function MobileBottomNav() {
         display: "none",
         alignItems: "center",
         justifyContent: "space-around",
-        padding: "8px 0 10px 0",
+        padding: "4px 4px 6px 4px",
         zIndex: 899,
-        boxShadow: "0 -4px 12px rgba(0,0,0,0.08)",
+        boxShadow: "0 -4px 14px rgba(0, 0, 0, 0.08)",
+        height: "60px",
+        boxSizing: "border-box",
       }}
+      aria-label="Mobile Navigation Bar"
     >
-      <button
-        onClick={handleHomeClick}
+      <Link
+        href="/"
         style={{
+          minWidth: "48px",
+          minHeight: "48px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
           gap: "2px",
           color: "var(--primary)",
-          fontSize: "11px",
+          fontSize: "12px",
           fontWeight: 600,
+          textDecoration: "none",
         }}
+        aria-label="Home"
       >
         <Home size={20} />
         <span>Home</span>
-      </button>
+      </Link>
 
-      <button
-        onClick={handleShopClick}
+      <Link
+        href="/products"
         style={{
+          minWidth: "48px",
+          minHeight: "48px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
           gap: "2px",
           color: "var(--text-secondary)",
-          fontSize: "11px",
+          fontSize: "12px",
           fontWeight: 600,
+          textDecoration: "none",
         }}
+        aria-label="Product Catalog"
       >
         <Store size={20} />
-        <span>Shop</span>
-      </button>
+        <span>Catalog</span>
+      </Link>
 
-      <button
-        onClick={() => openModal("request_quote")}
+      <Link
+        href="/wishlist"
         style={{
+          minWidth: "48px",
+          minHeight: "48px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
           gap: "2px",
           color: "var(--accent-steel)",
-          fontSize: "11px",
-          fontWeight: 700,
+          fontSize: "12px",
+          fontWeight: 600,
+          textDecoration: "none",
+          position: "relative",
         }}
+        aria-label={`Wishlist (${wishlistCount} saved items)`}
       >
-        <HardHat size={20} />
-        <span>Quote</span>
-      </button>
+        <div style={{ position: "relative" }}>
+          <Heart size={20} />
+          {wishlistCount > 0 && (
+            <span
+              style={{
+                position: "absolute",
+                top: "-6px",
+                right: "-10px",
+                background: "var(--highlight-rust)",
+                color: "#ffffff",
+                fontSize: "10px",
+                fontWeight: 800,
+                minWidth: "16px",
+                height: "16px",
+                borderRadius: "8px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0 2px",
+              }}
+            >
+              {wishlistCount}
+            </span>
+          )}
+        </div>
+        <span>Wishlist</span>
+      </Link>
 
       <button
         onClick={() => openModal("cart")}
         style={{
+          minWidth: "48px",
+          minHeight: "48px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
           gap: "2px",
           color: "var(--text-secondary)",
-          fontSize: "11px",
+          fontSize: "12px",
           fontWeight: 600,
           position: "relative",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
         }}
+        aria-label={`My Cart with ${cartCount} items`}
       >
         <div style={{ position: "relative" }}>
           <ShoppingCart size={20} />
@@ -106,40 +145,46 @@ export function MobileBottomNav() {
                 position: "absolute",
                 top: "-6px",
                 right: "-10px",
-                background: "var(--accent-steel)",
+                background: "var(--highlight-rust)",
                 color: "#ffffff",
                 fontSize: "10px",
                 fontWeight: 800,
-                width: "16px",
+                minWidth: "16px",
                 height: "16px",
-                borderRadius: "50%",
+                borderRadius: "8px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                padding: "0 2px",
               }}
             >
               {cartCount}
             </span>
           )}
         </div>
-        <span>Cart</span>
+        <span>My Cart</span>
       </button>
 
-      <button
-        onClick={() => openModal("auth")}
+      <Link
+        href="/account/orders"
         style={{
+          minWidth: "48px",
+          minHeight: "48px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
           gap: "2px",
           color: "var(--text-secondary)",
-          fontSize: "11px",
+          fontSize: "12px",
           fontWeight: 600,
+          textDecoration: "none",
         }}
+        aria-label="My Orders"
       >
         <User size={20} />
-        <span>Account</span>
-      </button>
+        <span>My Orders</span>
+      </Link>
 
       <style jsx>{`
         @media (max-width: 768px) {

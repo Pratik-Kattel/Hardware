@@ -1,9 +1,11 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { CATEGORIES } from "@/data/categories";
 import { useStore } from "@/context/StoreContext";
 import {
+  Drill,
   Wrench,
   Hammer,
   Zap,
@@ -23,6 +25,7 @@ const getCategoryIcon = (iconName: string) => {
   const iconProps = { size: 24, strokeWidth: 2, color: "#1C1C1E" };
   switch (iconName) {
     case "Drill":
+      return <Drill {...iconProps} />;
     case "Wrench":
       return <Wrench {...iconProps} />;
     case "Hammer":
@@ -49,15 +52,7 @@ const getCategoryIcon = (iconName: string) => {
 };
 
 export function CategoryGrid() {
-  const { setSelectedCategory, selectedCategory } = useStore();
-
-  const handleCategoryClick = (catId: ProductCategory) => {
-    setSelectedCategory(catId);
-    const shopEl = document.getElementById("shop-section");
-    if (shopEl) {
-      shopEl.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const { selectedCategory } = useStore();
 
   return (
     <section style={{ padding: "64px 0", background: "#FFFFFF", borderBottom: "1px solid #E5E7EB" }}>
@@ -83,26 +78,29 @@ export function CategoryGrid() {
             const isSelected = selectedCategory === cat.id;
 
             return (
-              <div
+              <Link
                 key={cat.id}
-                onClick={() => handleCategoryClick(cat.id)}
+                href={`/category/${cat.id}`}
                 style={{
                   background: "#FFFFFF",
                   border: isSelected ? "1.5px solid #4A6572" : "1px solid #E5E7EB",
                   borderRadius: "var(--radius-lg)",
                   padding: "22px",
                   cursor: "pointer",
-                  transition: "border-color var(--transition-fast)",
+                  transition: "all var(--transition-fast)",
                   display: "flex",
                   flexDirection: "column",
                   position: "relative",
                   boxShadow: "none",
+                  textDecoration: "none",
                 }}
                 onMouseEnter={(e) => {
-                  if (!isSelected) e.currentTarget.style.borderColor = "#4A6572";
+                  e.currentTarget.style.borderColor = "#4A6572";
+                  e.currentTarget.style.transform = "translateY(-2px)";
                 }}
                 onMouseLeave={(e) => {
-                  if (!isSelected) e.currentTarget.style.borderColor = "#E5E7EB";
+                  e.currentTarget.style.borderColor = isSelected ? "#4A6572" : "#E5E7EB";
+                  e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
                 {/* Top Icon & Count */}
@@ -224,7 +222,7 @@ export function CategoryGrid() {
                   <span>Browse Products</span>
                   <ArrowRight size={13} />
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

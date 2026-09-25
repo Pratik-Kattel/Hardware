@@ -19,7 +19,7 @@ export function RequestQuoteModal() {
 
   const [contractorName, setContractorName] = useState(user?.name || "Rajesh Shrestha");
   const [companyName, setCompanyName] = useState(user?.companyName || "Himalayan Builders Pvt Ltd");
-  const [phone, setPhone] = useState(user?.phone || "9800000000");
+  const [phone, setPhone] = useState(user?.phone || "985-1145065");
   const [email, setEmail] = useState(user?.email || "rajesh.builders@gmail.com");
   const [projectLocation, setProjectLocation] = useState("Sitapaila / Ring Road, Kathmandu");
   const [projectType, setProjectType] = useState<any>("Residential Construction");
@@ -30,11 +30,18 @@ export function RequestQuoteModal() {
   const [taxPanNumber, setTaxPanNumber] = useState(user?.panNumber || "602918239");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [generatedQuoteId, setGeneratedQuoteId] = useState("");
+  const [formError, setFormError] = useState("");
 
   if (activeModal !== "request_quote") return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!contractorName.trim() || !phone.trim() || !projectLocation.trim() || !itemsNeeded.trim()) {
+      setFormError("Please enter your name, contact phone number, project site location, and material requirements.");
+      return;
+    }
+    setFormError("");
+
     const newQuote = submitQuoteRequest({
       contractorName,
       companyName,
@@ -281,8 +288,30 @@ export function RequestQuoteModal() {
                 </div>
               </div>
 
+              {/* Inline Form Error */}
+              {formError && (
+                <div
+                  style={{
+                    background: "#FEF2F2",
+                    border: "1px solid #FCA5A5",
+                    borderRadius: "var(--radius-md)",
+                    padding: "12px 16px",
+                    color: "#991B1B",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    marginBottom: "14px",
+                  }}
+                >
+                  {formError}
+                </div>
+              )}
+
               {/* Submit Button */}
-              <button type="submit" className="btn btn-accent btn-full btn-lg" style={{ gap: "8px" }}>
+              <button
+                type="submit"
+                className="btn btn-accent btn-full btn-lg"
+                style={{ gap: "8px", minHeight: "48px" }}
+              >
                 <Send size={18} />
                 <span>Submit Quotation Request</span>
               </button>
@@ -300,7 +329,7 @@ export function RequestQuoteModal() {
                 }}
               >
                 <ShieldCheck size={14} color="var(--success)" />
-                <span>Or speak to our contractor lead directly at 9800000000</span>
+                <span>Or speak to our contractor lead directly at 985-1145065</span>
               </div>
             </form>
           )}

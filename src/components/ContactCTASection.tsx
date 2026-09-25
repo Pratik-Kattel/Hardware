@@ -24,7 +24,7 @@ export function ContactCTASection() {
     setSent(true);
     addToast(
       "Callback Requested",
-      `Thank you! Our Kathmandu store team will call ${inquiryPhone} shortly.`,
+      `Thank you! Our New Adhikari Traders store team will call ${inquiryPhone} shortly.`,
       "success"
     );
     setTimeout(() => {
@@ -39,7 +39,7 @@ export function ContactCTASection() {
     <section
       style={{
         padding: "64px 0",
-        background: "#1C1C1E",
+        background: "#1E293B",
         color: "#FFFFFF",
         position: "relative",
       }}
@@ -62,7 +62,7 @@ export function ContactCTASection() {
                 fontSize: "12px",
                 fontWeight: 700,
                 letterSpacing: "0.1em",
-                color: "#A4B8C4",
+                color: "#94A3B8",
                 textTransform: "uppercase",
                 marginBottom: "10px",
               }}
@@ -86,18 +86,18 @@ export function ContactCTASection() {
             <p
               style={{
                 fontSize: "15px",
-                color: "#D1D5DB",
+                color: "#CBD5E1",
                 lineHeight: "1.6",
                 marginBottom: "28px",
               }}
             >
-              Call our central dispatch desk directly or visit our Kalanki hardware superstore. We dispatch mini-trucks and delivery vans across Kathmandu, Lalitpur, and Bhaktapur every 2 hours.
+              Call our central dispatch desk directly or visit our Kathmandu hardware store. We dispatch mini-trucks and delivery vans across Kathmandu, Lalitpur, and Bhaktapur every 2 hours.
             </p>
 
             {/* Direct Phone Highlight Box */}
             <div
               style={{
-                background: "#2C2C2E",
+                background: "#0F172A",
                 border: "1px solid rgba(255, 255, 255, 0.15)",
                 borderRadius: "var(--radius-md)",
                 padding: "20px 24px",
@@ -127,7 +127,7 @@ export function ContactCTASection() {
                 <div
                   style={{
                     fontSize: "11px",
-                    color: "#9CA3AF",
+                    color: "#94A3B8",
                     textTransform: "uppercase",
                     fontWeight: 700,
                     letterSpacing: "0.06em",
@@ -136,7 +136,7 @@ export function ContactCTASection() {
                   Direct Dispatch Helpline
                 </div>
                 <a
-                  href="tel:9800000000"
+                  href="tel:9851145065"
                   style={{
                     fontSize: "26px",
                     fontWeight: 800,
@@ -144,7 +144,7 @@ export function ContactCTASection() {
                     letterSpacing: "0.02em",
                   }}
                 >
-                  9800000000
+                  985-1145065
                 </a>
               </div>
             </div>
@@ -156,15 +156,15 @@ export function ContactCTASection() {
                 flexDirection: "column",
                 gap: "10px",
                 fontSize: "13px",
-                color: "#D1D5DB",
+                color: "#CBD5E1",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <MapPin size={16} color="#A4B8C4" style={{ flexShrink: 0 }} />
-                <span>Adhikari Hardware, Kalanki Chowk (Ring Road), Kathmandu, Nepal</span>
+                <MapPin size={16} color="#94A3B8" style={{ flexShrink: 0 }} />
+                <span>New Adhikari Traders, Kathmandu, Bagmati Province 44600</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <Clock size={16} color="#A4B8C4" style={{ flexShrink: 0 }} />
+                <Clock size={16} color="#94A3B8" style={{ flexShrink: 0 }} />
                 <span>Open 7 Days a Week: 7:00 AM – 8:00 PM</span>
               </div>
             </div>
@@ -249,16 +249,17 @@ export function ContactCTASection() {
                     />
                   </div>
 
-                  {/* "Call Me Back" button: Muted Steel-Blue #4A6572 */}
+                  {/* "Call Me Back" button: Solid Orange/Accent #C1512D with NO glow/shadow */}
                   <button
                     type="submit"
-                    className="btn btn-primary btn-full btn-lg"
+                    className="btn btn-full btn-lg"
                     style={{
-                      background: "#4A6572",
+                      background: "#C1512D",
                       color: "#FFFFFF",
                       border: "none",
                       gap: "8px",
                       fontWeight: 700,
+                      boxShadow: "none",
                     }}
                   >
                     <Send size={15} />

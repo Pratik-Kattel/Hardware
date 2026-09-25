@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useStore } from "@/context/StoreContext";
 import { PRODUCTS } from "@/data/products";
 import {
@@ -35,6 +35,12 @@ export function ProductDetailModal() {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<"specs" | "desc" | "delivery">("specs");
+
+  // Fix image/product mismatch bug: always reset activeImageIndex and quantity when selectedProduct changes
+  useEffect(() => {
+    setActiveImageIndex(0);
+    setQuantity(1);
+  }, [selectedProduct?.id]);
 
   if (activeModal !== "product_detail" || !selectedProduct) {
     return null;
@@ -373,7 +379,7 @@ export function ProductDetailModal() {
               >
                 <Truck size={18} color="#4A6572" style={{ flexShrink: 0 }} />
                 <div style={{ fontSize: "12px", color: "#3A3A3C", lineHeight: "1.4" }}>
-                  <strong>Same-Day Dispatch in Kathmandu Valley:</strong> Orders confirmed before 2:00 PM are dispatched directly from our central Kalanki depot.
+                  <strong>Same-Day Dispatch in Kathmandu Valley:</strong> Orders confirmed before 2:00 PM are dispatched directly from our central Kathmandu depot.
                 </div>
               </div>
 
@@ -618,7 +624,7 @@ export function ProductDetailModal() {
                     <li>1x Genuine {selectedProduct.name}</li>
                     <li>Official Manufacturer Warranty Certificate (Nepal)</li>
                     <li>Technical Operation Manual &amp; Safety Guide</li>
-                    <li>Standard Authorized Service Coverage at Kalanki Center</li>
+                    <li>Standard Authorized Service Coverage at Kathmandu Center</li>
                   </ul>
                 </div>
               </div>
@@ -656,7 +662,7 @@ export function ProductDetailModal() {
                       Bulk Heavy Freight / Cement &amp; Steel
                     </div>
                     <p style={{ fontSize: "13px", color: "#6E6E73" }}>
-                      Dedicated mini-truck site delivery dispatched directly from Kalanki depot. Delivery scheduled within 4 hours.
+                      Dedicated mini-truck site delivery dispatched directly from Kathmandu depot. Delivery scheduled within 4 hours.
                     </p>
                   </div>
                 </div>

@@ -33,28 +33,30 @@ export function CheckoutModal() {
 
   // Form states
   const [fullName, setFullName] = useState(user?.name || "Suman Adhikari");
-  const [phone, setPhone] = useState(user?.phone || "9800000000");
+  const [phone, setPhone] = useState(user?.phone || "985-1145065");
   const [email, setEmail] = useState(user?.email || "suman.adhikari@gmail.com");
   const [city, setCity] = useState<"Kathmandu" | "Lalitpur" | "Bhaktapur" | "Outside Valley">("Kathmandu");
-  const [area, setArea] = useState("Kalanki Chowk, Ward 14");
-  const [landmark, setLandmark] = useState("Near Bafal Bridge, Behind Global IME");
+  const [area, setArea] = useState("Ring Road, Ward 14");
+  const [landmark, setLandmark] = useState("Behind Global IME Bank");
   const [isContractorOrder, setIsContractorOrder] = useState(false);
   const [companyPan, setCompanyPan] = useState("602918239");
 
   // Payment Selection
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
-  const [esewaId, setEsewaId] = useState("9800000000");
-  const [khaltiPhone, setKhaltiPhone] = useState("9800000000");
+  const [esewaId, setEsewaId] = useState("985-1145065");
+  const [khaltiPhone, setKhaltiPhone] = useState("985-1145065");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [formError, setFormError] = useState("");
 
   if (activeModal !== "checkout") return null;
 
   const handleCompleteOrder = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !phone || !area) {
-      alert("Please fill in your name, phone number, and delivery address.");
+    if (!fullName.trim() || !phone.trim() || !area.trim()) {
+      setFormError("Please enter your recipient name, mobile number, and delivery area so we can dispatch your materials.");
       return;
     }
+    setFormError("");
 
     setIsProcessing(true);
 
@@ -530,8 +532,8 @@ export function CheckoutModal() {
                     <QrCode size={70} color="#b91c1c" />
                   </div>
                   <div style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.5" }}>
-                    <div><strong>Account Name:</strong> Adhikari Hardware Store</div>
-                    <div><strong>Bank:</strong> Global IME Bank Ltd (Kalanki Branch)</div>
+                    <div><strong>Account Name:</strong> New Adhikari Traders</div>
+                    <div><strong>Bank:</strong> Global IME Bank Ltd (Kathmandu Branch)</div>
                     <div><strong>Account No:</strong> 01201010049281</div>
                   </div>
                 </div>
@@ -593,11 +595,28 @@ export function CheckoutModal() {
               </div>
             </div>
 
+            {formError && (
+              <div
+                style={{
+                  background: "#FEF2F2",
+                  border: "1px solid #FCA5A5",
+                  borderRadius: "var(--radius-md)",
+                  padding: "12px 16px",
+                  color: "#991B1B",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  marginBottom: "14px",
+                }}
+              >
+                {formError}
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={isProcessing}
               className="btn btn-primary btn-full btn-lg"
-              style={{ gap: "8px" }}
+              style={{ gap: "8px", minHeight: "48px" }}
             >
               {isProcessing ? (
                 <span>Generating Order &amp; Invoice...</span>
@@ -622,7 +641,7 @@ export function CheckoutModal() {
               }}
             >
               <ShieldCheck size={16} color="var(--success)" />
-              <span>We verify your order by calling {phone || "9800000000"} before sending our van.</span>
+              <span>We verify your order by calling {phone || "985-1145065"} before sending our van.</span>
             </div>
           </div>
         </form>

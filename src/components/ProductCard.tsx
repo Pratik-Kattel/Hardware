@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Product } from "@/types";
 import { useStore } from "@/context/StoreContext";
 import {
@@ -66,7 +67,7 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
       )}
 
-      {/* Wishlist Button */}
+      {/* Wishlist Button - 44x44px accessible tap target with tooltip */}
       <button
         onClick={(e) => {
           e.stopPropagation();
@@ -74,28 +75,32 @@ export function ProductCard({ product }: ProductCardProps) {
         }}
         style={{
           position: "absolute",
-          top: "10px",
-          right: "10px",
+          top: "8px",
+          right: "8px",
           zIndex: 3,
-          width: "32px",
-          height: "32px",
+          width: "44px",
+          height: "44px",
+          minWidth: "44px",
+          minHeight: "44px",
           borderRadius: "var(--radius-sm)",
           background: "#FFFFFF",
           border: "1px solid #E5E7EB",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          transition: "border-color 0.15s",
+          transition: "border-color 0.15s, background-color 0.15s",
           color: isFavorite ? "#C1512D" : "#6E6E73",
+          cursor: "pointer",
         }}
-        aria-label="Toggle Wishlist"
+        title={isFavorite ? "Remove from Wishlist" : "Save to Wishlist"}
+        aria-label={isFavorite ? `Remove ${product.name} from Wishlist` : `Save ${product.name} to Wishlist`}
       >
-        <Heart size={16} fill={isFavorite ? "#C1512D" : "none"} />
+        <Heart size={18} fill={isFavorite ? "#C1512D" : "none"} />
       </button>
 
-      {/* Product Image Container */}
-      <div
-        onClick={() => openProductDetail(product)}
+      {/* Product Image Link Container */}
+      <Link
+        href={`/product/${product.id}`}
         style={{
           width: "100%",
           height: "210px",
@@ -104,6 +109,7 @@ export function ProductCard({ product }: ProductCardProps) {
           cursor: "pointer",
           overflow: "hidden",
           borderBottom: "1px solid #E5E7EB",
+          display: "block",
         }}
       >
         <img
@@ -119,6 +125,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Quick View Button on Image */}
         <button
           onClick={(e) => {
+            e.preventDefault();
             e.stopPropagation();
             openProductDetail(product);
           }}
@@ -129,21 +136,25 @@ export function ProductCard({ product }: ProductCardProps) {
             transform: "translateX(-50%)",
             background: "#1C1C1E",
             color: "#FFFFFF",
-            padding: "5px 12px",
+            minHeight: "38px",
+            padding: "8px 14px",
             borderRadius: "var(--radius-sm)",
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 600,
             display: "flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "6px",
             border: "none",
-            opacity: 0.9,
+            opacity: 0.95,
+            cursor: "pointer",
           }}
+          title="Quick preview product specifications"
+          aria-label={`Quick View ${product.name}`}
         >
-          <Eye size={13} />
+          <Eye size={14} />
           <span>Quick View</span>
         </button>
-      </div>
+      </Link>
 
       {/* Product Card Details */}
       <div
@@ -179,25 +190,25 @@ export function ProductCard({ product }: ProductCardProps) {
           </span>
         </div>
 
-        {/* Product Title */}
-        <h4
-          onClick={() => openProductDetail(product)}
-          style={{
-            fontSize: "14px",
-            fontWeight: 600,
-            color: "#1C1C1E",
-            lineHeight: "1.35",
-            marginBottom: "8px",
-            cursor: "pointer",
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-            minHeight: "38px",
-          }}
-          title={product.name}
-        >
-          {product.name}
+        {/* Product Title Link */}
+        <h4 style={{ marginBottom: "8px", minHeight: "38px" }}>
+          <Link
+            href={`/product/${product.id}`}
+            style={{
+              fontSize: "14px",
+              fontWeight: 600,
+              color: "#1C1C1E",
+              lineHeight: "1.35",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              textDecoration: "none",
+            }}
+            title={product.name}
+          >
+            {product.name}
+          </Link>
         </h4>
 
         {/* Rating & Stock Status */}
@@ -298,19 +309,29 @@ export function ProductCard({ product }: ProductCardProps) {
           <button
             onClick={() => addToCart(product, 1)}
             disabled={!product.inStock}
-            className="btn btn-primary btn-sm"
+            className="btn btn-primary"
             style={{
-              padding: "7px 12px",
-              gap: "5px",
+              minHeight: "44px",
+              minWidth: "75px",
+              padding: "8px 16px",
+              gap: "6px",
               background: "#4A6572",
               color: "#FFFFFF",
               border: "none",
+              borderRadius: "var(--radius-sm)",
               boxShadow: "none",
+              fontSize: "14px",
+              fontWeight: 600,
+              cursor: product.inStock ? "pointer" : "not-allowed",
               opacity: product.inStock ? 1 : 0.5,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
+            title={product.inStock ? `Add ${product.name} to Cart` : "Currently out of stock"}
             aria-label={`Add ${product.name} to Cart`}
           >
-            <ShoppingCart size={14} />
+            <ShoppingCart size={15} />
             <span>Add</span>
           </button>
         </div>
