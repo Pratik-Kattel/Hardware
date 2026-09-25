@@ -14,6 +14,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { Product, ProductCategory } from "@/types";
+import { clientFetch } from "@/lib/api-client";
 
 export function ProductCatalog() {
   const searchParams = useSearchParams();
@@ -68,9 +69,8 @@ export function ProductCatalog() {
       if (sortOption) query.set("sort", sortOption);
       query.set("limit", "50");
 
-      const res = await fetch(`/api/products?${query.toString()}`);
-      if (res.ok) {
-        const data = await res.json();
+      const data = await clientFetch(`/api/products?${query.toString()}`);
+      if (data) {
         const rawProducts = data.products || [];
         const normalized = rawProducts.map((p: any) => ({
           id: p.id,

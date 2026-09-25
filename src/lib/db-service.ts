@@ -8,14 +8,41 @@ import {
   testimonialsData,
 } from "@/lib/seed-data";
 
+// Circuit-breaker state to prevent socket timeouts from clogging serverless / dev handlers
+const dbHealth = {
+  isAvailable: true,
+  lastChecked: 0,
+  cooldownMs: 30000,
+};
+
+export function isConfiguredDb(): boolean {
+  const url = process.env.DATABASE_URL;
+  if (!url) return false;
+  if (url.includes("ep-empty-pooler") || url.includes("demo_password")) return false;
+  return true;
+}
+
 /**
  * Helper to safely execute a Prisma query with graceful fallback to seed dataset
  * if the database is not yet migrated, unreachable, or has empty tables.
  */
 async function safeDbQuery<T>(queryFn: () => Promise<T>, fallbackFn: () => T | Promise<T>): Promise<T> {
+  if (!isConfiguredDb()) {
+    return await fallbackFn();
+  }
+
+  const now = Date.now();
+  if (!dbHealth.isAvailable && now - dbHealth.lastChecked < dbHealth.cooldownMs) {
+    return await fallbackFn();
+  }
+
   try {
-    return await queryFn();
+    const res = await queryFn();
+    dbHealth.isAvailable = true;
+    return res;
   } catch (error) {
+    dbHealth.isAvailable = false;
+    dbHealth.lastChecked = Date.now();
     console.warn("[Database Notice] Falling back to local data source:", (error as Error).message);
     return await fallbackFn();
   }

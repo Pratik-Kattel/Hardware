@@ -8,14 +8,14 @@ import { Star, CheckCircle2, ChevronLeft, ChevronRight, Quote } from "lucide-rea
 import { useStore } from "@/context/StoreContext";
 import { TestimonialData } from "@/types";
 import { testimonialsData } from "@/lib/seed-data";
+import { clientFetch } from "@/lib/api-client";
 
 export function ReviewsSection() {
   const { storeInfo } = useStore();
   const [reviews, setReviews] = useState<TestimonialData[]>(testimonialsData);
 
   useEffect(() => {
-    fetch("/api/testimonials")
-      .then((res) => (res.ok ? res.json() : []))
+    clientFetch("/api/testimonials")
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setReviews(data);

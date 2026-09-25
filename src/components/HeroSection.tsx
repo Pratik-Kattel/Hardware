@@ -18,6 +18,7 @@ import {
 import { useStore } from "@/context/StoreContext";
 import { HeroSlideData, ProductCategory } from "@/types";
 import { heroSlidesData } from "@/lib/seed-data";
+import { clientFetch } from "@/lib/api-client";
 
 function AnimatedCounter({
   target,
@@ -67,10 +68,9 @@ export function HeroSection() {
   const [slides, setSlides] = useState<HeroSlideData[]>(heroSlidesData as any);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  // Fetch dynamic hero slides from API
+  // Fetch dynamic hero slides from API (deduplicated)
   useEffect(() => {
-    fetch("/api/hero-slides")
-      .then((res) => (res.ok ? res.json() : null))
+    clientFetch("/api/hero-slides")
       .then((data) => {
         if (data && Array.isArray(data) && data.length > 0) {
           setSlides(data);

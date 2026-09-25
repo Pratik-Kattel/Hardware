@@ -14,6 +14,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Product } from "@/types";
+import { clientFetch } from "@/lib/api-client";
 
 export function BestDeals() {
   const { addToCart } = useStore();
@@ -26,10 +27,9 @@ export function BestDeals() {
     seconds: 35,
   });
 
-  // Fetch active deals from /api/deals
+  // Fetch active deals from /api/deals (deduplicated)
   useEffect(() => {
-    fetch("/api/deals")
-      .then((res) => (res.ok ? res.json() : []))
+    clientFetch("/api/deals")
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           const prods = data.map((d: any) => {

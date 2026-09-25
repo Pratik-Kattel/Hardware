@@ -16,6 +16,7 @@ import {
   BrandInfo,
 } from "@/types";
 import { storeInfoData, categoriesData, brandsData } from "@/lib/seed-data";
+import { clientFetch } from "@/lib/api-client";
 
 interface StoreContextType {
   // Store info & dynamic data
@@ -210,24 +211,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [categories, setCategories] = useState<CategoryInfo[]>(categoriesData as any);
   const [brands, setBrands] = useState<BrandInfo[]>(brandsData as any);
 
-  // Fetch live store info, categories, and brands on mount
+  // Fetch live store info, categories, and brands on mount (deduplicated via clientFetch)
   useEffect(() => {
-    fetch("/api/store-info")
-      .then((res) => (res.ok ? res.json() : null))
+    clientFetch("/api/store-info")
       .then((data) => {
         if (data) setStoreInfo(data);
       })
       .catch(() => {});
 
-    fetch("/api/categories")
-      .then((res) => (res.ok ? res.json() : null))
+    clientFetch("/api/categories")
       .then((data) => {
         if (data && Array.isArray(data)) setCategories(data);
       })
       .catch(() => {});
 
-    fetch("/api/brands")
-      .then((res) => (res.ok ? res.json() : null))
+    clientFetch("/api/brands")
       .then((data) => {
         if (data && Array.isArray(data)) setBrands(data);
       })

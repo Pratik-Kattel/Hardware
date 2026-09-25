@@ -13,6 +13,7 @@ import { ContactCTASection } from "@/components/ContactCTASection";
 import { StoreLocationSection } from "@/components/StoreLocationSection";
 import { useStore } from "@/context/StoreContext";
 import { Product } from "@/types";
+import { clientFetch } from "@/lib/api-client";
 import { ArrowRight } from "lucide-react";
 
 export default function HomePage() {
@@ -21,8 +22,7 @@ export default function HomePage() {
   const [totalCount, setTotalCount] = useState(storeInfo?.stats?.productsCataloged || 2500);
 
   useEffect(() => {
-    fetch("/api/products?limit=8&sort=featured")
-      .then((res) => (res.ok ? res.json() : null))
+    clientFetch("/api/products?limit=8&sort=featured")
       .then((data) => {
         if (data?.products && Array.isArray(data.products)) {
           const normalized = data.products.map((p: any) => ({

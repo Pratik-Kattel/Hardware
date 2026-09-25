@@ -2,10 +2,48 @@ import * as dbService from "@/lib/db-service";
 
 const IS_SERVER = typeof window === "undefined";
 
-function getBaseUrl() {
-  if (typeof window !== "undefined") return "";
-  if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL;
-  return "http://localhost:3000";
+// Client-side in-flight request deduplicator & short cache (5s) to eliminate duplicate simultaneous network calls
+const inFlightRequests = new Map<string, Promise<any>>();
+const responseCache = new Map<string, { data: any; expiry: number }>();
+
+export async function clientFetch<T = any>(url: string, options?: RequestInit): Promise<T> {
+  const method = (options?.method || "GET").toUpperCase();
+  if (method !== "GET") {
+    const res = await fetch(url, options);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `HTTP error ${res.status}`);
+    }
+    return res.json();
+  }
+
+  // Deduplicate and short-term cache GET requests
+  const cached = responseCache.get(url);
+  if (cached && Date.now() < cached.expiry) {
+    return cached.data;
+  }
+
+  if (inFlightRequests.has(url)) {
+    return inFlightRequests.get(url)!;
+  }
+
+  const promise = (async () => {
+    try {
+      const res = await fetch(url, options);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP error ${res.status}`);
+      }
+      const data = await res.json();
+      responseCache.set(url, { data, expiry: Date.now() + 5000 });
+      return data;
+    } finally {
+      inFlightRequests.delete(url);
+    }
+  })();
+
+  inFlightRequests.set(url, promise);
+  return promise;
 }
 
 /**
@@ -15,18 +53,14 @@ export async function getCategories() {
   if (IS_SERVER) {
     return await dbService.getCategories();
   }
-  const res = await fetch("/api/categories", { next: { revalidate: 60 } });
-  if (!res.ok) throw new Error("Failed to fetch categories");
-  return res.json();
+  return await clientFetch("/api/categories");
 }
 
 export async function getCategoryBySlug(slug: string) {
   if (IS_SERVER) {
     return await dbService.getCategoryBySlug(slug);
   }
-  const res = await fetch(`/api/categories/${encodeURIComponent(slug)}`, { next: { revalidate: 60 } });
-  if (!res.ok) throw new Error("Failed to fetch category");
-  return res.json();
+  return await clientFetch(`/api/categories/${encodeURIComponent(slug)}`);
 }
 
 /**
@@ -48,18 +82,14 @@ export async function getProducts(params: dbService.ProductFilterParams = {}) {
   if (params.page) query.set("page", String(params.page));
   if (params.limit) query.set("limit", String(params.limit));
 
-  const res = await fetch(`/api/products?${query.toString()}`, { next: { revalidate: 60 } });
-  if (!res.ok) throw new Error("Failed to fetch products");
-  return res.json();
+  return await clientFetch(`/api/products?${query.toString()}`);
 }
 
 export async function getProductBySlug(slug: string) {
   if (IS_SERVER) {
     return await dbService.getProductBySlugOrId(slug);
   }
-  const res = await fetch(`/api/products/${encodeURIComponent(slug)}`, { next: { revalidate: 60 } });
-  if (!res.ok) throw new Error("Failed to fetch product");
-  return res.json();
+  return await clientFetch(`/api/products/${encodeURIComponent(slug)}`);
 }
 
 /**
@@ -69,9 +99,7 @@ export async function getBrands() {
   if (IS_SERVER) {
     return await dbService.getBrands();
   }
-  const res = await fetch("/api/brands", { next: { revalidate: 120 } });
-  if (!res.ok) throw new Error("Failed to fetch brands");
-  return res.json();
+  return await clientFetch("/api/brands");
 }
 
 /**
@@ -81,9 +109,7 @@ export async function getDeals() {
   if (IS_SERVER) {
     return await dbService.getDeals();
   }
-  const res = await fetch("/api/deals", { next: { revalidate: 60 } });
-  if (!res.ok) throw new Error("Failed to fetch deals");
-  return res.json();
+  return await clientFetch("/api/deals");
 }
 
 /**
@@ -93,9 +119,7 @@ export async function getTestimonials() {
   if (IS_SERVER) {
     return await dbService.getTestimonials();
   }
-  const res = await fetch("/api/testimonials", { next: { revalidate: 120 } });
-  if (!res.ok) throw new Error("Failed to fetch testimonials");
-  return res.json();
+  return await clientFetch("/api/testimonials");
 }
 
 /**
@@ -105,9 +129,7 @@ export async function getStoreInfo() {
   if (IS_SERVER) {
     return await dbService.getStoreInfo();
   }
-  const res = await fetch("/api/store-info", { next: { revalidate: 60 } });
-  if (!res.ok) throw new Error("Failed to fetch store info");
-  return res.json();
+  return await clientFetch("/api/store-info");
 }
 
 /**
@@ -117,9 +139,7 @@ export async function getHeroSlides() {
   if (IS_SERVER) {
     return await dbService.getHeroSlides();
   }
-  const res = await fetch("/api/hero-slides", { next: { revalidate: 60 } });
-  if (!res.ok) throw new Error("Failed to fetch hero slides");
-  return res.json();
+  return await clientFetch("/api/hero-slides");
 }
 
 /**
@@ -127,60 +147,54 @@ export async function getHeroSlides() {
  */
 export async function getSearchSuggestions(q: string) {
   if (!q.trim()) return { products: [], categories: [], brands: [] };
-  const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-  if (!res.ok) return { products: [], categories: [], brands: [] };
-  return res.json();
+  try {
+    return await clientFetch(`/api/search?q=${encodeURIComponent(q)}`);
+  } catch {
+    return { products: [], categories: [], brands: [] };
+  }
 }
 
 /**
  * Orders
  */
 export async function createOrderApi(orderData: dbService.CreateOrderPayload) {
-  const res = await fetch("/api/orders", {
+  return await clientFetch("/api/orders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(orderData),
   });
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.error || "Failed to place order");
-  }
-  return res.json();
 }
 
 export async function getOrdersApi(userIdOrPhone: string) {
-  const res = await fetch(`/api/orders?userId=${encodeURIComponent(userIdOrPhone)}`);
-  if (!res.ok) throw new Error("Failed to fetch orders");
-  return res.json();
+  return await clientFetch(`/api/orders?userId=${encodeURIComponent(userIdOrPhone)}`);
 }
 
 export async function getOrderByIdApi(id: string) {
-  const res = await fetch(`/api/orders/${encodeURIComponent(id)}`);
-  if (!res.ok) throw new Error("Failed to fetch order detail");
-  return res.json();
+  return await clientFetch(`/api/orders/${encodeURIComponent(id)}`);
 }
 
 /**
  * Wishlist
  */
 export async function getWishlistApi(userId = "guest-session") {
-  const res = await fetch(`/api/wishlist?userId=${encodeURIComponent(userId)}`);
-  if (!res.ok) return [];
-  return res.json();
+  try {
+    return await clientFetch(`/api/wishlist?userId=${encodeURIComponent(userId)}`);
+  } catch {
+    return [];
+  }
 }
 
 export async function addToWishlistApi(productId: string, userId = "guest-session") {
-  const res = await fetch("/api/wishlist", {
+  return await clientFetch("/api/wishlist", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, productId }),
   });
-  return res.json();
 }
 
 export async function removeFromWishlistApi(productId: string, userId = "guest-session") {
-  const res = await fetch(`/api/wishlist?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}`, {
-    method: "DELETE",
-  });
-  return res.json();
+  return await clientFetch(
+    `/api/wishlist?userId=${encodeURIComponent(userId)}&productId=${encodeURIComponent(productId)}`,
+    { method: "DELETE" }
+  );
 }
