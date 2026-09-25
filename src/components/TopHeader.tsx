@@ -8,9 +8,10 @@ export function TopHeader() {
   const { openModal, storeInfo } = useStore();
 
   const phone = storeInfo?.phone || "985-1145065";
-  const address = storeInfo?.address
-    ? `${storeInfo.address}, ${storeInfo.province || storeInfo.city}`
-    : "Kathmandu, Bagmati Province 44600";
+  const rawAddress = storeInfo?.address || "Kathmandu, Bagmati Province 44600";
+  const address = rawAddress.includes("Bagmati") || rawAddress.includes("44600")
+    ? rawAddress
+    : `${rawAddress}, ${storeInfo?.province || "Bagmati Province 44600"}`;
   const hours = storeInfo?.hours || "7:00 AM – 8:00 PM (Daily)";
 
   return (

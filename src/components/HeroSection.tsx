@@ -170,6 +170,37 @@ export function HeroSection() {
                   padding: "60px 0 76px 0",
                 }}
               >
+                {/* Subtle Ambient Background Image behind text */}
+                {slide.bgImage && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      zIndex: 1,
+                      opacity: 0.18,
+                      overflow: "hidden",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <Image
+                      src={slide.bgImage}
+                      alt=""
+                      fill
+                      priority
+                      unoptimized
+                      style={{ objectFit: "cover" }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background:
+                          "linear-gradient(90deg, #1C1C1E 0%, rgba(28, 28, 30, 0.85) 55%, rgba(28, 28, 30, 0.45) 100%)",
+                      }}
+                    />
+                  </div>
+                )}
+
                 <div className="container" style={{ position: "relative", zIndex: 2 }}>
                   <div
                     style={{
@@ -302,23 +333,23 @@ export function HeroSection() {
                     <div
                       style={{
                         position: "relative",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
+                        width: "100%",
+                        maxWidth: "480px",
+                        margin: "0 auto",
                       }}
                       className="hero-images-wrapper"
                     >
                       {/* Main Primary Image */}
                       <div
                         style={{
-                          width: "92%",
+                          width: "90%",
                           height: "360px",
                           borderRadius: "var(--radius-lg)",
                           overflow: "hidden",
                           position: "relative",
                           border: "2px solid rgba(255, 255, 255, 0.4)",
                           boxShadow: "0 12px 32px rgba(0, 0, 0, 0.35)",
-                          background: "#FFFFFF",
+                          background: "#2A343D",
                         }}
                       >
                         <Image
@@ -326,7 +357,8 @@ export function HeroSection() {
                           alt={slide.headline}
                           fill
                           sizes="(max-width: 768px) 100vw, 50vw"
-                          priority={idx === 0}
+                          priority
+                          unoptimized
                           style={{ objectFit: "cover" }}
                         />
                       </div>
@@ -343,7 +375,7 @@ export function HeroSection() {
                           overflow: "hidden",
                           border: "3px solid #FFFFFF",
                           boxShadow: "0 16px 36px rgba(0, 0, 0, 0.4)",
-                          background: "#FFFFFF",
+                          background: "#2A343D",
                           zIndex: 3,
                         }}
                       >
@@ -352,6 +384,8 @@ export function HeroSection() {
                           alt={`${slide.headline} detail`}
                           fill
                           sizes="(max-width: 768px) 50vw, 30vw"
+                          priority
+                          unoptimized
                           style={{ objectFit: "cover" }}
                         />
 
