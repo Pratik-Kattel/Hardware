@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { PRODUCTS } from "@/data/products";
 import { useStore } from "@/context/StoreContext";
 import {
   Clock,
@@ -13,15 +13,55 @@ import {
   ChevronRight,
   ArrowRight,
 } from "lucide-react";
+import { Product } from "@/types";
 
 export function BestDeals() {
-  const { addToCart, openProductDetail } = useStore();
+  const { addToCart } = useStore();
+  const [dealProducts, setDealProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [timeLeft, setTimeLeft] = useState({
     hours: 14,
     minutes: 42,
     seconds: 35,
   });
+
+  // Fetch active deals from /api/deals
+  useEffect(() => {
+    fetch("/api/deals")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          const prods = data.map((d: any) => {
+            const p = d.product || d;
+            return {
+              id: p.id,
+              name: p.name,
+              brand: p.brand?.name || p.brand || "Authorized",
+              category: p.category?.slug || p.categoryId || "power-tools",
+              price: p.price,
+              originalPrice: p.compareAtPrice || p.originalPrice,
+              discountPercent: d.discountPercent || (p.compareAtPrice ? Math.round(((p.compareAtPrice - p.price) / p.compareAtPrice) * 100) : 15),
+              rating: p.ratingAvg || p.rating || 5.0,
+              reviewsCount: p.ratingCount || p.reviewsCount || 10,
+              inStock: p.isInStock ?? p.inStock ?? true,
+              stockCount: p.stockQuantity ?? p.stockCount ?? 8,
+              sku: p.sku || "SKU",
+              unit: p.unit || "Piece",
+              description: p.description || "",
+              specifications: p.technicalSpecs || p.specifications || {},
+              images: Array.isArray(p.images)
+                ? p.images.map((img: any) => (typeof img === "string" ? img : img.imageUrl))
+                : ["/images/placeholder.webp"],
+              tags: p.tags || ["deal"],
+            } as Product;
+          });
+          setDealProducts(prods);
+        }
+      })
+      .catch((e) => console.warn("Failed to load deals:", e))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -38,10 +78,6 @@ export function BestDeals() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  const dealProducts = PRODUCTS.filter(
-    (p) => (p.discountPercent && p.discountPercent > 0) || p.isBestDeal
-  );
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
@@ -74,6 +110,10 @@ export function BestDeals() {
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
+
+  if (dealProducts.length === 0 && !isLoading) {
+    return null;
+  }
 
   return (
     <section
@@ -127,12 +167,12 @@ export function BestDeals() {
               Best Deals of the Week
             </h2>
 
-            <p style={{ fontSize: "14px", color: "#CBD5E1", maxWidth: "560px" }}>
-              Authorized discounted power tools, waterproofing compounds, and electrical gear.
+            <p style={{ fontSize: "14px", color: "#CBD5E1", maxWidth: "560px", margin: 0 }}>
+              Authorized discounted power tools, waterproofing compounds, and electrical gear direct to site.
             </p>
           </div>
 
-          {/* Countdown Clock - Poppins font only */}
+          {/* Countdown Clock */}
           <div
             style={{
               display: "flex",
@@ -149,20 +189,19 @@ export function BestDeals() {
               <div
                 style={{
                   fontSize: "10px",
+                  fontWeight: 600,
                   color: "#94A3B8",
                   textTransform: "uppercase",
-                  fontWeight: 700,
-                  letterSpacing: "0.06em",
+                  letterSpacing: "0.05em",
                 }}
               >
-                Deal Closes In:
+                Deal Refreshes In
               </div>
               <div
                 style={{
-                  fontSize: "17px",
+                  fontSize: "18px",
                   fontWeight: 800,
                   color: "#FFFFFF",
-                  letterSpacing: "0.04em",
                   fontVariantNumeric: "tabular-nums",
                 }}
               >
@@ -174,20 +213,20 @@ export function BestDeals() {
           </div>
         </div>
 
-        {/* Carousel Slider Controls Bar */}
+        {/* Carousel Header & Controls */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: "16px",
+            marginBottom: "20px",
           }}
         >
-          <div style={{ fontSize: "13px", fontWeight: 600, color: "#6E6E73" }}>
-            Showing {dealProducts.length} Discounted Items
+          <div style={{ fontSize: "15px", fontWeight: 700, color: "#1C1C1E" }}>
+            Discounted Contractor Stock ({dealProducts.length} items)
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div style={{ display: "flex", gap: "8px" }}>
             <button
               onClick={scrollPrev}
               aria-label="Previous deal"
@@ -201,6 +240,7 @@ export function BestDeals() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                cursor: "pointer",
                 transition: "border-color var(--transition-fast)",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
@@ -222,6 +262,7 @@ export function BestDeals() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                cursor: "pointer",
                 transition: "border-color var(--transition-fast)",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
@@ -232,7 +273,7 @@ export function BestDeals() {
           </div>
         </div>
 
-        {/* Embla Deals Slider: 4 visible desktop / 1 mobile */}
+        {/* Embla Deals Slider */}
         <div ref={emblaRef} style={{ overflow: "hidden" }}>
           <div style={{ display: "flex", marginLeft: "-16px" }}>
             {dealProducts.map((prod) => {
@@ -284,12 +325,13 @@ export function BestDeals() {
                       </div>
                     )}
 
-                    {/* Product Image Link */}
+                    {/* Product Image Link using Next.js Image */}
                     <Link
                       href={`/product/${prod.id}`}
                       style={{
                         height: "180px",
                         cursor: "pointer",
+                        position: "relative",
                         overflow: "hidden",
                         borderRadius: "var(--radius-sm)",
                         marginBottom: "12px",
@@ -301,12 +343,12 @@ export function BestDeals() {
                         textDecoration: "none",
                       }}
                     >
-                      <img
-                        src={prod.images[0]}
+                      <Image
+                        src={prod.images[0] || "/images/placeholder.webp"}
                         alt={prod.name}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
                         style={{
-                          width: "100%",
-                          height: "100%",
                           objectFit: "contain",
                           padding: "8px",
                         }}
@@ -397,6 +439,7 @@ export function BestDeals() {
                         background: "#4A6572",
                         color: "#FFFFFF",
                         border: "none",
+                        cursor: "pointer",
                       }}
                     >
                       <ShoppingCart size={15} />
@@ -409,7 +452,7 @@ export function BestDeals() {
           </div>
         </div>
 
-        {/* Carousel Dots in Muted Steel-Blue #4A6572 */}
+        {/* Carousel Dots */}
         <div
           style={{
             display: "flex",
@@ -430,6 +473,7 @@ export function BestDeals() {
                 borderRadius: "3px",
                 background: selectedIndex === idx ? "#4A6572" : "#D1D5DB",
                 border: "none",
+                cursor: "pointer",
                 transition: "all 0.2s ease",
               }}
             />
@@ -438,8 +482,8 @@ export function BestDeals() {
 
         {/* Bottom Catalog Link in Muted Steel-Blue */}
         <div style={{ textAlign: "center", marginTop: "24px" }}>
-          <a
-            href="#shop-section"
+          <Link
+            href="/products"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -447,11 +491,12 @@ export function BestDeals() {
               fontSize: "13px",
               fontWeight: 700,
               color: "#4A6572",
+              textDecoration: "none",
             }}
           >
             <span>Explore All Materials &amp; Hardware Catalog</span>
             <ArrowRight size={14} />
-          </a>
+          </Link>
         </div>
       </div>
 

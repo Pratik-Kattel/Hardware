@@ -5,32 +5,38 @@ import { Phone, MapPin, Clock, Truck, FileText } from "lucide-react";
 import { useStore } from "@/context/StoreContext";
 
 export function TopHeader() {
-  const { openModal } = useStore();
+  const { openModal, storeInfo } = useStore();
+
+  const phone = storeInfo?.phone || "985-1145065";
+  const address = storeInfo?.address
+    ? `${storeInfo.address}, ${storeInfo.province || storeInfo.city}`
+    : "Kathmandu, Bagmati Province 44600";
+  const hours = storeInfo?.hours || "7:00 AM – 8:00 PM (Daily)";
 
   return (
     <div className="top-utility-bar">
-      <div className="container">
+      <div className="header-container">
         <div className="top-bar-inner">
           {/* Left Info */}
           <div style={{ display: "flex", alignItems: "center", gap: "18px", flexWrap: "wrap" }}>
             <div className="top-bar-item">
               <MapPin size={13} color="var(--accent-steel)" />
-              <span>Kathmandu, Bagmati Province 44600</span>
+              <span>{address}</span>
             </div>
 
             <div className="top-bar-item">
               <Phone size={13} color="var(--accent-steel)" />
               <a
-                href="tel:9851145065"
+                href={`tel:${phone.replace(/[^0-9]/g, "")}`}
                 style={{ color: "#FFFFFF", fontWeight: 600, letterSpacing: "0.02em" }}
               >
-                985-1145065
+                {phone}
               </a>
             </div>
 
             <div className="top-bar-item">
               <Clock size={13} color="#9CA3AF" />
-              <span>7:00 AM – 8:00 PM (Daily)</span>
+              <span>{hours}</span>
             </div>
           </div>
 
@@ -53,6 +59,9 @@ export function TopHeader() {
                   display: "flex",
                   alignItems: "center",
                   gap: "4px",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
                 }}
               >
                 <FileText size={12} />

@@ -2,8 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { CATEGORIES } from "@/data/categories";
-import { PRODUCTS } from "@/data/products";
+import { getCategories, getCategoryBySlug, getStoreInfo } from "@/lib/db-service";
 import { ProductCard } from "@/components/ProductCard";
 import {
   ChevronRight,
@@ -12,10 +11,11 @@ import {
   ShieldCheck,
   Truck,
   CheckCircle2,
-  SlidersHorizontal,
   Package,
 } from "lucide-react";
-import { ProductCategory } from "@/types";
+import { Product } from "@/types";
+
+export const revalidate = 60; // ISR cache for 60 seconds
 
 interface PageProps {
   params: Promise<{
@@ -24,14 +24,16 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return CATEGORIES.map((category) => ({
-    slug: category.id,
+  const categories = await getCategories();
+  return categories.map((category) => ({
+    slug: category.slug || category.id,
   }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = CATEGORIES.find((c) => c.id === slug);
+  const category = await getCategoryBySlug(slug);
+  const storeInfo = await getStoreInfo();
 
   if (!category) {
     return {
@@ -39,29 +41,61 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  const nepaliName = category.nameNp || (category as any).nepaliName || "";
+  const subcategories = (category as any).popularSubcategories || [];
+
   return {
-    title: `${category.name} in Kathmandu | New Adhikari Traders`,
-    description: `${category.description} Genuine wholesale & retail stock with direct site delivery across Kathmandu Valley. Phone: 985-1145065.`,
+    title: `${category.name} in Kathmandu | ${storeInfo.businessName}`,
+    description: `${category.description || category.name} Genuine wholesale & retail stock with direct site delivery across Kathmandu Valley. Phone: ${storeInfo.phone}.`,
     keywords: [
       category.name,
-      category.nepaliName || "",
-      ...category.popularSubcategories,
+      nepaliName,
+      ...subcategories,
       "Kathmandu hardware",
-      "New Adhikari Traders",
+      storeInfo.businessName,
     ],
   };
 }
 
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
-  const category = CATEGORIES.find((c) => c.id === slug);
+  const [category, allCategories, storeInfo] = await Promise.all([
+    getCategoryBySlug(slug),
+    getCategories(),
+    getStoreInfo(),
+  ]);
 
   if (!category) {
     notFound();
   }
 
-  // Find all products matching this category
-  const categoryProducts = PRODUCTS.filter((p) => p.category === category.id);
+  const rawProducts = (category as any).products || [];
+  const categoryProducts: Product[] = rawProducts.map((p: any) => ({
+    id: p.id,
+    name: p.name,
+    brand: p.brand?.name || p.brand || "Authorized",
+    category: category.slug as any,
+    subcategory: p.subcategory || "",
+    price: p.price,
+    originalPrice: p.compareAtPrice || p.originalPrice,
+    compareAtPrice: p.compareAtPrice,
+    discountPercent: p.deals?.[0]?.discountPercent || (p.compareAtPrice ? Math.round(((p.compareAtPrice - p.price) / p.compareAtPrice) * 100) : 0),
+    rating: p.ratingAvg || p.rating || 5.0,
+    reviewsCount: p.ratingCount || p.reviewsCount || 10,
+    inStock: p.isInStock ?? p.inStock ?? true,
+    stockCount: p.stockQuantity ?? p.stockCount ?? 8,
+    sku: p.sku,
+    unit: p.unit || "Piece",
+    description: p.description || "",
+    specifications: p.technicalSpecs || p.specifications || {},
+    images: Array.isArray(p.images)
+      ? p.images.map((img: any) => (typeof img === "string" ? img : img.imageUrl))
+      : ["/images/placeholder.webp"],
+    tags: p.tags || [category.name],
+  }));
+
+  const subcategories = (category as any).popularSubcategories || [];
+  const nepaliName = category.nameNp || (category as any).nepaliName;
 
   return (
     <div style={{ background: "#FAFAFA", minHeight: "100vh", paddingBottom: "60px" }}>
@@ -119,18 +153,20 @@ export default async function CategoryPage({ params }: PageProps) {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "6px",
-                  fontSize: "12px",
+                  padding: "4px 10px",
+                  borderRadius: "var(--radius-sm)",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  fontSize: "11px",
                   fontWeight: 700,
+                  color: "#94A3B8",
                   textTransform: "uppercase",
                   letterSpacing: "0.06em",
-                  color: "#94A3B8",
-                  marginBottom: "8px",
+                  marginBottom: "12px",
                 }}
               >
-                <span>Department</span>
-                {category.nepaliName && (
-                  <span style={{ color: "var(--accent-steel)" }}>• {category.nepaliName}</span>
-                )}
+                <HardHat size={13} color="#CBD5E1" />
+                <span>Kathmandu Warehouse Department</span>
               </div>
 
               <h1
@@ -138,12 +174,26 @@ export default async function CategoryPage({ params }: PageProps) {
                   fontSize: "32px",
                   fontWeight: 800,
                   color: "#FFFFFF",
-                  letterSpacing: "-0.02em",
+                  lineHeight: "1.15",
                   marginBottom: "10px",
-                  lineHeight: "1.2",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  flexWrap: "wrap",
                 }}
               >
-                {category.name}
+                <span>{category.name}</span>
+                {nepaliName && (
+                  <span
+                    style={{
+                      fontSize: "18px",
+                      fontWeight: 500,
+                      color: "#94A3B8",
+                    }}
+                  >
+                    ({nepaliName})
+                  </span>
+                )}
               </h1>
 
               <p
@@ -151,164 +201,86 @@ export default async function CategoryPage({ params }: PageProps) {
                   fontSize: "15px",
                   color: "#CBD5E1",
                   lineHeight: "1.6",
-                  marginBottom: "18px",
+                  margin: "0 0 20px 0",
                 }}
               >
                 {category.description}
               </p>
 
-              {/* Trust Badges Bar */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "18px",
-                  fontSize: "12px",
-                  color: "#94A3B8",
-                  flexWrap: "wrap",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <ShieldCheck size={16} color="var(--accent-steel)" />
-                  <span>100% Genuine Authorized Stock</span>
+              {/* Subcategory Filter Pills */}
+              {subcategories.length > 0 && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                  {subcategories.map((sub: string) => (
+                    <span
+                      key={sub}
+                      style={{
+                        fontSize: "12px",
+                        color: "#E2E8F0",
+                        background: "rgba(255, 255, 255, 0.08)",
+                        border: "1px solid rgba(255, 255, 255, 0.15)",
+                        padding: "4px 12px",
+                        borderRadius: "var(--radius-sm)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {sub}
+                    </span>
+                  ))}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Truck size={16} color="var(--accent-steel)" />
-                  <span>Same-Day Site Delivery in Kathmandu Valley</span>
-                </div>
-              </div>
+              )}
             </div>
 
-            {/* Quick Stats Box */}
+            {/* Quick Guarantees Box */}
             <div
               style={{
-                background: "#0F172A",
+                background: "rgba(15, 23, 42, 0.6)",
                 border: "1px solid rgba(255, 255, 255, 0.12)",
-                borderRadius: "var(--radius-lg)",
+                borderRadius: "var(--radius-md)",
                 padding: "20px 24px",
-                minWidth: "220px",
-                textAlign: "left",
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                minWidth: "260px",
               }}
             >
-              <div style={{ fontSize: "11px", color: "#94A3B8", textTransform: "uppercase", fontWeight: 700 }}>
-                Inventory Status
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "13px" }}>
+                <ShieldCheck size={18} color="#94A3B8" />
+                <span style={{ color: "#E2E8F0" }}>100% Genuine Brand Stock</span>
               </div>
-              <div
-                style={{
-                  fontSize: "28px",
-                  fontWeight: 800,
-                  color: "#FFFFFF",
-                  margin: "4px 0",
-                }}
-              >
-                {categoryProducts.length} Items
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "13px" }}>
+                <Truck size={18} color="#94A3B8" />
+                <span style={{ color: "#E2E8F0" }}>Site Delivery in Valley</span>
               </div>
-              <div style={{ fontSize: "12px", color: "#64748B", display: "flex", alignItems: "center", gap: "4px" }}>
-                <CheckCircle2 size={13} color="#22C55E" />
-                <span>Ready for Instant Dispatch</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "13px" }}>
+                <CheckCircle2 size={18} color="#94A3B8" />
+                <span style={{ color: "#E2E8F0" }}>Official Manufacturer Warranty</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Subcategories Filter Pills Bar */}
-      <div
-        style={{
-          background: "#FFFFFF",
-          borderBottom: "1px solid #E5E7EB",
-          padding: "14px 0",
-          position: "sticky",
-          top: 0,
-          zIndex: 40,
-        }}
-      >
-        <div className="container">
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              overflowX: "auto",
-              scrollbarWidth: "none",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "12px",
-                fontWeight: 700,
-                color: "#6E6E73",
-                textTransform: "uppercase",
-                marginRight: "6px",
-                flexShrink: 0,
-              }}
-            >
-              Subcategories:
-            </span>
-
-            <span
-              style={{
-                fontSize: "12px",
-                fontWeight: 700,
-                color: "#FFFFFF",
-                background: "#4A6572",
-                padding: "6px 14px",
-                borderRadius: "var(--radius-full)",
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-              }}
-            >
-              All {category.name} ({categoryProducts.length})
-            </span>
-
-            {category.popularSubcategories.map((sub) => (
-              <span
-                key={sub}
-                style={{
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  color: "#3A3A3C",
-                  background: "#F4F4F6",
-                  border: "1px solid #E5E7EB",
-                  padding: "6px 14px",
-                  borderRadius: "var(--radius-full)",
-                  whiteSpace: "nowrap",
-                  flexShrink: 0,
-                }}
-              >
-                {sub}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Product Grid Container */}
+      {/* Main Content Area */}
       <div className="container" style={{ marginTop: "36px" }}>
-        {/* Active Grid Header */}
+        {/* Section Title & Product Count */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: "20px",
+            marginBottom: "24px",
             flexWrap: "wrap",
             gap: "12px",
+            paddingBottom: "16px",
+            borderBottom: "1px solid #E5E7EB",
           }}
         >
           <div>
-            <h2
-              style={{
-                fontSize: "18px",
-                fontWeight: 800,
-                color: "#1C1C1E",
-                margin: 0,
-              }}
-            >
+            <h2 style={{ fontSize: "20px", fontWeight: 800, color: "#1C1C1E", margin: "0 0 4px 0" }}>
               Available Products in {category.name}
             </h2>
-            <div style={{ fontSize: "12px", color: "#6E6E73", marginTop: "2px" }}>
-              Showing {categoryProducts.length} verified products with direct wholesale &amp; retail pricing
+            <div style={{ fontSize: "13px", color: "#6E6E73" }}>
+              Showing {categoryProducts.length} verified products with real-time stock
             </div>
           </div>
 
@@ -318,57 +290,71 @@ export default async function CategoryPage({ params }: PageProps) {
               fontSize: "13px",
               fontWeight: 700,
               color: "#4A6572",
-              textDecoration: "none",
               display: "inline-flex",
               alignItems: "center",
-              gap: "5px",
+              gap: "6px",
+              textDecoration: "none",
+              padding: "6px 14px",
+              borderRadius: "var(--radius-sm)",
+              background: "#FFFFFF",
+              border: "1px solid #E5E7EB",
             }}
           >
-            <span>Explore All 300+ Hardware Items</span>
+            <span>View All Hardware Products</span>
             <ArrowRight size={14} />
           </Link>
         </div>
 
         {/* Product Cards Grid */}
-        {categoryProducts.length > 0 ? (
+        {categoryProducts.length === 0 ? (
+          <div
+            style={{
+              background: "#FFFFFF",
+              border: "1px solid #E5E7EB",
+              borderRadius: "var(--radius-lg)",
+              padding: "60px 20px",
+              textAlign: "center",
+            }}
+          >
+            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#1C1C1E", marginBottom: "8px" }}>
+              Direct Stock Arrival in Progress
+            </h3>
+            <p style={{ fontSize: "14px", color: "#6E6E73", maxWidth: "420px", margin: "0 auto 20px auto" }}>
+              Our {category.name} inventory is actively being cataloged from the warehouse. Call our supply desk directly for instantaneous availability.
+            </p>
+            <a
+              href={`tel:${storeInfo.phone.replace(/[^0-9]/g, "")}`}
+              className="btn btn-primary"
+              style={{
+                background: "#4A6572",
+                color: "#FFFFFF",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                textDecoration: "none",
+              }}
+            >
+              Call {storeInfo.phone}
+            </a>
+          </div>
+        ) : (
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
               gap: "20px",
+              marginBottom: "48px",
             }}
           >
-            {categoryProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {categoryProducts.map((prod) => (
+              <ProductCard key={prod.id} product={prod} />
             ))}
-          </div>
-        ) : (
-          <div
-            style={{
-              background: "#FFFFFF",
-              borderRadius: "var(--radius-lg)",
-              border: "1px solid #E5E7EB",
-              padding: "60px 24px",
-              textAlign: "center",
-            }}
-          >
-            <SlidersHorizontal size={40} color="#9CA3AF" style={{ margin: "0 auto 16px auto" }} />
-            <h3 style={{ fontSize: "18px", fontWeight: 700, color: "#1C1C1E", marginBottom: "8px" }}>
-              Stock Update in Progress
-            </h3>
-            <p style={{ fontSize: "14px", color: "#6E6E73", maxWidth: "460px", margin: "0 auto 20px auto" }}>
-              Additional inventory items for {category.name} are being added daily to our Kathmandu store catalog.
-            </p>
-            <Link href="/products" className="btn btn-primary">
-              View All Products
-            </Link>
           </div>
         )}
 
-        {/* Contractor Bulk Quote CTA Callout Card */}
+        {/* Bottom Procurement Banner */}
         <div
           style={{
-            marginTop: "48px",
             background: "#FFFFFF",
             border: "1px solid #E5E7EB",
             borderRadius: "var(--radius-lg)",
@@ -380,38 +366,39 @@ export default async function CategoryPage({ params }: PageProps) {
             gap: "24px",
           }}
         >
-          <div style={{ maxWidth: "600px" }}>
+          <div style={{ maxWidth: "620px" }}>
             <div
               style={{
                 fontSize: "11px",
                 fontWeight: 700,
-                color: "var(--accent-steel)",
+                color: "#4A6572",
                 textTransform: "uppercase",
-                letterSpacing: "0.05em",
+                letterSpacing: "0.06em",
                 marginBottom: "4px",
               }}
             >
-              Contractor &amp; Project Supply Desk
+              Direct Contractor Procurement
             </div>
-            <h3 style={{ fontSize: "20px", fontWeight: 800, color: "#1C1C1E", marginBottom: "6px" }}>
-              Ordering {category.name} in Bulk for Site Work?
+            <h3 style={{ fontSize: "18px", fontWeight: 800, color: "#1C1C1E", margin: "0 0 6px 0" }}>
+              Need bulk quantities for a construction or renovation site?
             </h3>
-            <p style={{ fontSize: "14px", color: "#475569", lineHeight: "1.5" }}>
-              New Adhikari Traders provides direct site delivery, official 13% VAT bills, and volume-discounted wholesale prices for building contractors, plumbers, electricians, and interior fabricators in Kathmandu Valley.
+            <p style={{ fontSize: "13px", color: "#6E6E73", margin: 0, lineHeight: "1.5" }}>
+              {storeInfo.businessName} provides direct site delivery and volume-discounted wholesale prices for building contractors, plumbers, electricians, and interior fabricators in Kathmandu Valley.
             </p>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
             <a
-              href="tel:9851145065"
+              href={`tel:${storeInfo.phone.replace(/[^0-9]/g, "")}`}
               className="btn btn-outline"
               style={{
                 borderColor: "#4A6572",
                 color: "#4A6572",
                 fontWeight: 700,
+                textDecoration: "none",
               }}
             >
-              Call 985-1145065
+              Call {storeInfo.phone}
             </a>
             <Link
               href="/account/orders"
@@ -425,6 +412,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 minHeight: "44px",
                 fontSize: "15px",
                 fontWeight: 700,
+                textDecoration: "none",
               }}
             >
               <Package size={16} />
@@ -453,33 +441,35 @@ export default async function CategoryPage({ params }: PageProps) {
               gap: "12px",
             }}
           >
-            {CATEGORIES.filter((c) => c.id !== category.id).map((otherCat) => (
-              <Link
-                key={otherCat.id}
-                href={`/category/${otherCat.id}`}
-                style={{
-                  background: "#FFFFFF",
-                  border: "1px solid #E5E7EB",
-                  borderRadius: "var(--radius-md)",
-                  padding: "12px 16px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  textDecoration: "none",
-                  transition: "all 0.15s",
-                }}
-              >
-                <div>
-                  <div style={{ fontSize: "13px", fontWeight: 700, color: "#1C1C1E" }}>
-                    {otherCat.name}
+            {allCategories
+              .filter((c) => (c.slug || c.id) !== (category.slug || category.id))
+              .map((otherCat) => (
+                <Link
+                  key={otherCat.slug || otherCat.id}
+                  href={`/category/${otherCat.slug || otherCat.id}`}
+                  style={{
+                    background: "#FFFFFF",
+                    border: "1px solid #E5E7EB",
+                    borderRadius: "var(--radius-md)",
+                    padding: "12px 16px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    textDecoration: "none",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: "13px", fontWeight: 700, color: "#1C1C1E" }}>
+                      {otherCat.name}
+                    </div>
+                    <div style={{ fontSize: "11px", color: "#6E6E73" }}>
+                      {otherCat.productCount} Products
+                    </div>
                   </div>
-                  <div style={{ fontSize: "11px", color: "#6E6E73" }}>
-                    {otherCat.productCount} Products
-                  </div>
-                </div>
-                <ArrowRight size={14} color="#4A6572" />
-              </Link>
-            ))}
+                  <ArrowRight size={14} color="#4A6572" />
+                </Link>
+              ))}
           </div>
         </div>
       </div>

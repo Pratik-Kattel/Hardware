@@ -29,22 +29,21 @@ export function CheckoutModal() {
     user,
     savedAddresses,
     placeOrder,
+    storeInfo,
   } = useStore();
 
   // Form states
-  const [fullName, setFullName] = useState(user?.name || "Suman Adhikari");
-  const [phone, setPhone] = useState(user?.phone || "985-1145065");
-  const [email, setEmail] = useState(user?.email || "suman.adhikari@gmail.com");
+  const [fullName, setFullName] = useState(user?.name || "");
+  const [phone, setPhone] = useState(user?.phone || storeInfo?.phone || "");
+  const [email, setEmail] = useState(user?.email || "");
   const [city, setCity] = useState<"Kathmandu" | "Lalitpur" | "Bhaktapur" | "Outside Valley">("Kathmandu");
   const [area, setArea] = useState("Ring Road, Ward 14");
   const [landmark, setLandmark] = useState("Behind Global IME Bank");
-  const [isContractorOrder, setIsContractorOrder] = useState(false);
-  const [companyPan, setCompanyPan] = useState("602918239");
 
   // Payment Selection
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
-  const [esewaId, setEsewaId] = useState("985-1145065");
-  const [khaltiPhone, setKhaltiPhone] = useState("985-1145065");
+  const [esewaId, setEsewaId] = useState(storeInfo?.phone || "");
+  const [khaltiPhone, setKhaltiPhone] = useState(storeInfo?.phone || "");
   const [isProcessing, setIsProcessing] = useState(false);
   const [formError, setFormError] = useState("");
 
@@ -160,7 +159,7 @@ export function CheckoutModal() {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }} className="checkout-two-col">
               <div className="form-group">
-                <label className="form-label">Email (For Digital VAT Bill)</label>
+                <label className="form-label">Email (For Order Updates &amp; Receipt)</label>
                 <input
                   type="email"
                   className="form-input"
@@ -208,52 +207,6 @@ export function CheckoutModal() {
               />
             </div>
 
-            {/* Contractor / Tax VAT bill checkbox */}
-            <div
-              style={{
-                background: "var(--primary-surface)",
-                padding: "12px 16px",
-                borderRadius: "var(--radius-md)",
-                border: "1px solid var(--border-light)",
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-              }}
-            >
-              <input
-                type="checkbox"
-                id="contractor-vat-check"
-                checked={isContractorOrder}
-                onChange={(e) => setIsContractorOrder(e.target.checked)}
-                style={{ width: "18px", height: "18px", accentColor: "var(--accent-steel)" }}
-              />
-              <label htmlFor="contractor-vat-check" style={{ fontSize: "13px", fontWeight: 600, color: "var(--primary)", cursor: "pointer" }}>
-                I need a Commercial Tax Invoice / Company VAT Bill for this order
-              </label>
-            </div>
-
-            {isContractorOrder && (
-              <div style={{ marginTop: "12px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                <div className="form-group">
-                  <label className="form-label">Company PAN Number</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={companyPan}
-                    onChange={(e) => setCompanyPan(e.target.value)}
-                    placeholder="9-digit PAN"
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Registered Business Name</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    defaultValue="Himalayan Builders Pvt Ltd"
-                  />
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Section 2: Payment Method */}
@@ -574,11 +527,6 @@ export function CheckoutModal() {
                 </div>
               )}
 
-              <div style={{ display: "flex", justifyContent: "space-between", color: "var(--text-muted)", fontSize: "12px" }}>
-                <span>Nepal 13% VAT (Included)</span>
-                <span>NPR {Math.round(cartSubtotal * 0.13).toLocaleString()}</span>
-              </div>
-
               <div
                 style={{
                   display: "flex",
@@ -619,7 +567,7 @@ export function CheckoutModal() {
               style={{ gap: "8px", minHeight: "48px" }}
             >
               {isProcessing ? (
-                <span>Generating Order &amp; Invoice...</span>
+                <span>Confirming Your Order...</span>
               ) : (
                 <>
                   <Lock size={18} />
@@ -641,7 +589,7 @@ export function CheckoutModal() {
               }}
             >
               <ShieldCheck size={16} color="var(--success)" />
-              <span>We verify your order by calling {phone || "985-1145065"} before sending our van.</span>
+              <span>We verify your order by calling {phone || storeInfo?.phone || "recipient"} before sending our van.</span>
             </div>
           </div>
         </form>

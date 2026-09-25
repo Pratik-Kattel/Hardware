@@ -12,11 +12,16 @@ import {
 } from "lucide-react";
 
 export function ContactCTASection() {
-  const { openModal, addToast } = useStore();
+  const { openModal, addToast, storeInfo } = useStore();
   const [inquiryName, setInquiryName] = useState("");
   const [inquiryPhone, setInquiryPhone] = useState("");
   const [inquiryText, setInquiryText] = useState("");
   const [sent, setSent] = useState(false);
+
+  const businessName = storeInfo?.businessName || "New Adhikari Traders";
+  const address = storeInfo?.address || "Kathmandu, Bagmati Province 44600";
+  const phone = storeInfo?.phone || "985-1145065";
+  const hours = storeInfo?.hours || "7:00 AM – 8:00 PM (Daily)";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,15 +141,16 @@ export function ContactCTASection() {
                   Direct Dispatch Helpline
                 </div>
                 <a
-                  href="tel:9851145065"
+                  href={`tel:${phone.replace(/[^0-9]/g, "")}`}
                   style={{
                     fontSize: "26px",
                     fontWeight: 800,
                     color: "#FFFFFF",
                     letterSpacing: "0.02em",
+                    textDecoration: "none",
                   }}
                 >
-                  985-1145065
+                  {phone}
                 </a>
               </div>
             </div>
@@ -161,11 +167,11 @@ export function ContactCTASection() {
             >
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <MapPin size={16} color="#94A3B8" style={{ flexShrink: 0 }} />
-                <span>New Adhikari Traders, Kathmandu, Bagmati Province 44600</span>
+                <span>{businessName}, {address}</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <Clock size={16} color="#94A3B8" style={{ flexShrink: 0 }} />
-                <span>Open 7 Days a Week: 7:00 AM – 8:00 PM</span>
+                <span>Open: {hours}</span>
               </div>
             </div>
           </div>

@@ -11,10 +11,18 @@ import {
   QuoteRequest,
   ToastMessage,
   PaymentMethod,
+  StoreInfoData,
+  CategoryInfo,
+  BrandInfo,
 } from "@/types";
-import { PRODUCTS } from "@/data/products";
+import { storeInfoData, categoriesData, brandsData } from "@/lib/seed-data";
 
 interface StoreContextType {
+  // Store info & dynamic data
+  storeInfo: StoreInfoData;
+  categories: CategoryInfo[];
+  brands: BrandInfo[];
+
   // Cart
   cart: CartItem[];
   cartCount: number;
@@ -78,7 +86,7 @@ interface StoreContextType {
     customerName: string,
     customerPhone: string,
     customerEmail?: string
-  ) => Order;
+  ) => Promise<Order>;
   trackOrderById: (orderId: string) => Order | null;
 
   // Quotes
@@ -97,7 +105,7 @@ const INITIAL_DEMO_ADDRESSES: CustomerAddress[] = [
   {
     id: "addr-1",
     fullName: "Suman Adhikari",
-    phone: "985-1145065",
+    phone: storeInfoData.phone,
     area: "Ring Road, Ward 14",
     city: "Kathmandu",
     landmark: "Behind Global IME Bank",
@@ -106,7 +114,7 @@ const INITIAL_DEMO_ADDRESSES: CustomerAddress[] = [
   {
     id: "addr-2",
     fullName: "Suman Adhikari (Site 2)",
-    phone: "985-1145065",
+    phone: storeInfoData.phone,
     area: "Kumaripati, Jawalakhel Road",
     city: "Lalitpur",
     landmark: "Opposite St. Xavier's School",
@@ -117,8 +125,9 @@ const INITIAL_DEMO_ADDRESSES: CustomerAddress[] = [
 const INITIAL_ORDERS: Order[] = [
   {
     id: "ADH-98412",
+    orderNumber: "ORD-20260925-9841",
     customerName: "Suman Adhikari",
-    customerPhone: "985-1145065",
+    customerPhone: storeInfoData.phone,
     customerEmail: "suman.adhikari@gmail.com",
     deliveryAddress: INITIAL_DEMO_ADDRESSES[0],
     items: [
@@ -142,8 +151,7 @@ const INITIAL_ORDERS: Order[] = [
     subtotal: 5610,
     deliveryFee: 0,
     discount: 561,
-    vatAmount: 656,
-    total: 5705,
+    total: 5049,
     paymentMethod: "esewa",
     paymentStatus: "paid",
     orderStatus: "Out for Delivery",
@@ -151,7 +159,7 @@ const INITIAL_ORDERS: Order[] = [
     estimatedDelivery: "Today by 4:30 PM",
     trackingTimeline: [
       {
-        status: "Order Confirmed & VAT Bill Generated",
+        status: "Order Confirmed & Payment Received",
         location: "New Adhikari Traders, Kathmandu Central Hub",
         timestamp: "Today, 10:16 AM",
         done: true,
@@ -186,6 +194,46 @@ const INITIAL_ORDERS: Order[] = [
 ];
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
+  // Database-backed Dynamic Store Info
+  const [storeInfo, setStoreInfo] = useState<StoreInfoData>({
+    ...storeInfoData,
+    stats: {
+      yearsInBusiness: new Date().getFullYear() - 1998,
+      ordersDelivered: 15400,
+      productsCataloged: 2500,
+      authorizedBrands: 40,
+      satisfactionRate: 99.4,
+    },
+  });
+
+  // Dynamic Categories & Brands from API
+  const [categories, setCategories] = useState<CategoryInfo[]>(categoriesData as any);
+  const [brands, setBrands] = useState<BrandInfo[]>(brandsData as any);
+
+  // Fetch live store info, categories, and brands on mount
+  useEffect(() => {
+    fetch("/api/store-info")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data) setStoreInfo(data);
+      })
+      .catch(() => {});
+
+    fetch("/api/categories")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data)) setCategories(data);
+      })
+      .catch(() => {});
+
+    fetch("/api/brands")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data)) setBrands(data);
+      })
+      .catch(() => {});
+  }, []);
+
   // Cart
   const [cart, setCart] = useState<CartItem[]>([]);
   const [deliveryLocation, setDeliveryLocation] = useState<
@@ -202,24 +250,23 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   >(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  // Search & Filters
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  // Search & Catalog Filters
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | "all">("all");
   const [selectedBrand, setSelectedBrand] = useState<string | "all">("all");
-  const [inStockOnly, setInStockOnly] = useState<boolean>(false);
-  const [sortOption, setSortOption] = useState<
-    "featured" | "price_asc" | "price_desc" | "rating" | "discount"
-  >("featured");
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 20000]);
+  const [inStockOnly, setInStockOnly] = useState(false);
+  const [sortOption, setSortOption] = useState<"featured" | "price_asc" | "price_desc" | "rating" | "discount">("featured");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  // User & Saved Addresses
+  // User & Auth
   const [user, setUser] = useState<CustomerUser | null>({
-    id: "usr-01",
+    id: "usr-demo",
     name: "Suman Adhikari",
-    phone: "985-1145065",
+    phone: storeInfoData.phone,
     email: "suman.adhikari@gmail.com",
-    role: "customer",
+    role: "contractor",
+    companyName: "Adhikari Engineering & Builders",
     savedAddresses: INITIAL_DEMO_ADDRESSES,
   });
   const [savedAddresses, setSavedAddresses] = useState<CustomerAddress[]>(INITIAL_DEMO_ADDRESSES);
@@ -235,110 +282,83 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   // Toasts
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  // Load cart from localStorage
+  // Load cart & wishlist from localStorage on client mount
   useEffect(() => {
     try {
       const savedCart = localStorage.getItem("adhikari_cart");
       if (savedCart) {
         setCart(JSON.parse(savedCart));
-      } else {
-        // Pre-populate with 2 default hardware items to immediately wow the user!
-        setCart([
-          { product: PRODUCTS[0], quantity: 1 }, // Bosch Grinder
-          { product: PRODUCTS[4], quantity: 2 }, // Stanley Hammer
-        ]);
       }
       const savedWishlist = localStorage.getItem("adhikari_wishlist");
       if (savedWishlist) {
         setWishlist(JSON.parse(savedWishlist));
       }
     } catch {
-      // Local storage disabled or error
+      // LocalStorage unavailable
     }
   }, []);
 
-  // Save cart to localStorage
+  // Save cart changes
   useEffect(() => {
     try {
       localStorage.setItem("adhikari_cart", JSON.stringify(cart));
-    } catch {
-      // Ignore
-    }
+    } catch {}
   }, [cart]);
 
-  // Save wishlist
+  // Save wishlist changes
   useEffect(() => {
     try {
       localStorage.setItem("adhikari_wishlist", JSON.stringify(wishlist));
-    } catch {
-      // Ignore
-    }
+    } catch {}
   }, [wishlist]);
 
-  // Toast helper
-  const addToast = (
-    title: string,
-    message: string,
-    type: "success" | "info" | "warning" | "error" = "success"
-  ) => {
-    const id = `toast-${Date.now()}-${Math.random()}`;
-    const newToast: ToastMessage = { id, title, message, type };
-    setToasts((prev) => [...prev, newToast]);
+  // Cart calculations
+  const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+  const cartSubtotal = cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
 
-    setTimeout(() => {
-      removeToast(id);
-    }, 4500);
-  };
+  const deliveryFee =
+    deliveryLocation === "inside_ring_road"
+      ? cartSubtotal >= 10000
+        ? 0
+        : 150
+      : deliveryLocation === "outside_ring_road"
+      ? cartSubtotal >= 15000
+        ? 0
+        : 300
+      : 500;
 
-  const removeToast = (id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  };
+  const discountAmount = couponCode === "ADHIKARI10" ? Math.round(cartSubtotal * 0.1) : 0;
+  const cartTotal = cartSubtotal - discountAmount + deliveryFee;
 
-  // Cart Calculations
-  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-  const cartSubtotal = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
-
-  // Delivery fee calculation
-  let deliveryFee = 0;
-  if (cartSubtotal > 0) {
-    if (deliveryLocation === "inside_ring_road") {
-      deliveryFee = cartSubtotal >= 5000 ? 0 : 150;
-    } else if (deliveryLocation === "outside_ring_road") {
-      deliveryFee = 250;
-    } else {
-      deliveryFee = 500;
-    }
-  }
-
-  // Coupon calculation
-  let discountAmount = 0;
-  if (couponCode === "ADHIKARI10") {
-    discountAmount = Math.round(cartSubtotal * 0.1);
-  } else if (couponCode === "BUILDNEPAL") {
-    discountAmount = Math.min(500, cartSubtotal);
-  } else if (couponCode === "KATHMANDU") {
-    discountAmount = deliveryFee;
-  }
-
-  const cartTotal = Math.max(0, cartSubtotal + deliveryFee - discountAmount);
-
-  // Cart actions
   const addToCart = (product: Product, quantity = 1) => {
-    setCart((prev) => {
-      const existing = prev.find((item) => item.product.id === product.id);
+    setCart((prevCart) => {
+      const existing = prevCart.find((item) => item.product.id === product.id);
       if (existing) {
-        return prev.map((item) =>
+        return prevCart.map((item) =>
           item.product.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
-      return [...prev, { product, quantity }];
+      return [...prevCart, { product, quantity }];
     });
+
     addToast(
       "Added to Cart",
-      `${product.name} (x${quantity}) added. NPR ${product.price.toLocaleString()} each.`
+      `${product.name} (x${quantity}) has been added to your hardware order.`,
+      "success"
     );
+
+    // Sync with backend API
+    fetch("/api/cart", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user?.id || "guest-session",
+        productId: product.id,
+        quantity,
+      }),
+    }).catch(() => {});
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
@@ -346,66 +366,86 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       removeFromCart(productId);
       return;
     }
-    setCart((prev) =>
-      prev.map((item) =>
+    setCart((prevCart) =>
+      prevCart.map((item) =>
         item.product.id === productId ? { ...item, quantity } : item
       )
     );
+
+    fetch("/api/cart", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user?.id || "guest-session",
+        productId,
+        quantity,
+      }),
+    }).catch(() => {});
   };
 
   const removeFromCart = (productId: string) => {
-    const item = cart.find((i) => i.product.id === productId);
-    setCart((prev) => prev.filter((i) => i.product.id !== productId));
-    if (item) {
-      addToast("Item Removed", `${item.product.name} removed from your cart.`, "info");
-    }
+    setCart((prevCart) => prevCart.filter((item) => item.product.id !== productId));
+    addToast("Item Removed", "Product removed from cart.", "info");
+
+    fetch(`/api/cart?userId=${user?.id || "guest-session"}&productId=${productId}`, {
+      method: "DELETE",
+    }).catch(() => {});
   };
 
   const clearCart = () => {
     setCart([]);
+    setCouponCode(null);
+
+    fetch(`/api/cart?userId=${user?.id || "guest-session"}&clearAll=true`, {
+      method: "DELETE",
+    }).catch(() => {});
   };
 
-  const applyCoupon = (code: string): boolean => {
-    const upper = code.trim().toUpperCase();
-    if (upper === "ADHIKARI10") {
+  const applyCoupon = (code: string) => {
+    const cleanCode = code.trim().toUpperCase();
+    if (cleanCode === "ADHIKARI10") {
       setCouponCode("ADHIKARI10");
-      addToast("Coupon Applied!", "10% storewide discount activated.", "success");
+      addToast("Discount Applied", "10% Contractor discount applied to order!", "success");
       return true;
+    } else {
+      addToast("Invalid Code", "Please use code ADHIKARI10 for 10% discount.", "error");
+      return false;
     }
-    if (upper === "BUILDNEPAL") {
-      setCouponCode("BUILDNEPAL");
-      addToast("Coupon Applied!", "NPR 500 flat discount applied.", "success");
-      return true;
-    }
-    if (upper === "KATHMANDU") {
-      setCouponCode("KATHMANDU");
-      addToast("Coupon Applied!", "Free Delivery across Kathmandu applied.", "success");
-      return true;
-    }
-    addToast("Invalid Code", "Please check the coupon code (try ADHIKARI10 or BUILDNEPAL).", "warning");
-    return false;
   };
 
   const removeCoupon = () => {
     setCouponCode(null);
-    addToast("Coupon Removed", "Discount code has been cleared.", "info");
+    addToast("Discount Removed", "Discount code has been cleared.", "info");
   };
 
-  // Wishlist actions
+  // Wishlist
   const toggleWishlist = (productId: string) => {
-    const product = PRODUCTS.find((p) => p.id === productId);
-    if (wishlist.includes(productId)) {
-      setWishlist((prev) => prev.filter((id) => id !== productId));
-      addToast("Removed from Wishlist", `${product?.name || "Item"} removed.`, "info");
-    } else {
-      setWishlist((prev) => [...prev, productId]);
-      addToast("Saved to Wishlist", `${product?.name || "Item"} saved for later.`, "success");
-    }
+    setWishlist((prev) => {
+      const exists = prev.includes(productId);
+      if (exists) {
+        addToast("Wishlist", "Item removed from your saved list.", "info");
+        fetch(`/api/wishlist?userId=${user?.id || "guest-session"}&productId=${productId}`, {
+          method: "DELETE",
+        }).catch(() => {});
+        return prev.filter((id) => id !== productId);
+      } else {
+        addToast("Wishlist", "Item saved to your wishlist!", "success");
+        fetch("/api/wishlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user?.id || "guest-session",
+            productId,
+          }),
+        }).catch(() => {});
+        return [...prev, productId];
+      }
+    });
   };
 
   const isInWishlist = (productId: string) => wishlist.includes(productId);
 
-  // Modal actions
+  // Modals
   const openModal = (
     modal: "cart" | "checkout" | "product_detail" | "order_confirmation" | "track_order" | "request_quote" | "auth"
   ) => {
@@ -421,100 +461,126 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setActiveModal("product_detail");
   };
 
-  // User / Auth
-  const loginDemoUser = (role: "customer" | "contractor" = "customer") => {
-    const demoUser: CustomerUser = {
-      id: "usr-01",
-      name: role === "contractor" ? "Rajesh Shrestha (Civil Builder)" : "Suman Adhikari",
-      phone: "985-1145065",
-      email: role === "contractor" ? "rajesh.builders@gmail.com" : "suman.adhikari@gmail.com",
+  // Auth & Addresses
+  const loginDemoUser = (role: "customer" | "contractor" = "contractor") => {
+    setUser({
+      id: "usr-demo",
+      name: "Suman Adhikari",
+      phone: storeInfoData.phone,
+      email: "suman.adhikari@gmail.com",
       role,
-      companyName: role === "contractor" ? "Himalayan Builders & Construction Pvt. Ltd." : undefined,
-      panNumber: role === "contractor" ? "602918239" : undefined,
+      companyName: role === "contractor" ? "Adhikari Engineering & Builders" : undefined,
       savedAddresses: INITIAL_DEMO_ADDRESSES,
-    };
-    setUser(demoUser);
-    addToast("Logged In", `Welcome back, ${demoUser.name}!`, "success");
-    closeModal();
+    });
+    addToast("Logged In", `Logged in as Suman Adhikari (${role})`, "success");
   };
 
   const logout = () => {
     setUser(null);
-    addToast("Logged Out", "You have safely signed out.", "info");
+    addToast("Logged Out", "You have been logged out.", "info");
   };
 
   const addSavedAddress = (addr: CustomerAddress) => {
-    setSavedAddresses((prev) => [addr, ...prev]);
+    setSavedAddresses((prev) => [...prev, addr]);
     if (user) {
-      setUser({ ...user, savedAddresses: [addr, ...user.savedAddresses] });
+      setUser({
+        ...user,
+        savedAddresses: [...user.savedAddresses, addr],
+      });
     }
-    addToast("Address Saved", "Delivery address saved to your account.", "success");
+    addToast("Address Saved", "Delivery address added to profile.", "success");
   };
 
-  // Order Placement
-  const placeOrder = (
+  // Place Order (Calls /api/orders backend)
+  const placeOrder = async (
     address: CustomerAddress,
     paymentMethod: PaymentMethod,
     customerName: string,
     customerPhone: string,
     customerEmail?: string
-  ): Order => {
-    const orderId = `ADH-${Math.floor(10000 + Math.random() * 90000)}`;
-    const vatAmount = Math.round(cartSubtotal * 0.13); // Nepal 13% VAT included
+  ): Promise<Order> => {
+    const orderItemsSummary = cart.map((item) => ({
+      productId: item.product.id,
+      name: item.product.name,
+      price: item.product.price,
+      quantity: item.quantity,
+      image: item.product.images?.[0] || "/images/placeholder.webp",
+      unit: item.product.unit || "Piece",
+    }));
+
+    // Post to Neon DB route handler
+    let createdOrderNumber = `ORD-${Date.now().toString().slice(-6)}`;
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerName,
+          phone: customerPhone,
+          deliveryAddress: `${address.area}, ${address.city}`,
+          landmark: address.landmark,
+          deliveryFee,
+          subtotal: cartSubtotal - discountAmount,
+          total: cartTotal,
+          userId: user?.id,
+          items: cart.map((item) => ({
+            productId: item.product.id,
+            quantity: item.quantity,
+            unitPrice: item.product.price,
+          })),
+        }),
+      });
+
+      if (response.ok) {
+        const dbOrder = await response.json();
+        if (dbOrder.orderNumber) {
+          createdOrderNumber = dbOrder.orderNumber;
+        }
+      }
+    } catch (e) {
+      console.warn("Neon order API fallback:", e);
+    }
 
     const newOrder: Order = {
-      id: orderId,
+      id: createdOrderNumber,
+      orderNumber: createdOrderNumber,
       customerName,
       customerPhone,
-      customerEmail,
+      customerEmail: customerEmail || user?.email,
       deliveryAddress: address,
-      items: cart.map((item) => ({
-        productId: item.product.id,
-        name: item.product.name,
-        price: item.product.price,
-        quantity: item.quantity,
-        image: item.product.images[0],
-        unit: item.product.unit,
-      })),
+      items: orderItemsSummary,
       subtotal: cartSubtotal,
       deliveryFee,
       discount: discountAmount,
-      vatAmount,
       total: cartTotal,
       paymentMethod,
       paymentStatus: paymentMethod === "cod" ? "pending_cod" : "paid",
       orderStatus: "Order Placed",
       createdAt: "Just now",
-      estimatedDelivery: "Tomorrow by 2:00 PM (Kathmandu Express)",
+      estimatedDelivery: "Same-Day Dispatch (Within 4 Hours)",
       trackingTimeline: [
         {
-          status: "Order Placed & VAT Invoice Created",
-          location: "New Adhikari Traders Online Store",
+          status: "Order Confirmed & Received",
+          location: "New Adhikari Traders Central Kathmandu Hub",
           timestamp: "Just now",
           done: true,
           current: true,
         },
         {
-          status: "Order Packaging & Warehouse Quality Check",
-          location: "New Adhikari Traders Central Depot, Kathmandu",
-          timestamp: "Expected in 2 hours",
+          status: "Packing & Material Check",
+          location: "Kathmandu Valley Warehouse",
+          timestamp: "Estimated next 45 mins",
           done: false,
         },
         {
-          status: "Valley Delivery Van Dispatched",
-          location: "Kathmandu Valley Transit Route",
-          timestamp: "Expected tomorrow morning",
+          status: "Loaded on Dispatch Vehicle",
+          location: "Valley Transit Hub",
+          timestamp: "Pending",
           done: false,
         },
         {
-          status: "Out for Delivery to Your Doorstep",
+          status: "Delivered to Project Site",
           location: `${address.area}, ${address.city}`,
-          timestamp: "Expected tomorrow by 2:00 PM",
-          done: false,
-        },
-        {
-          status: "Delivered & Signed",
-          location: `${address.area}`,
           timestamp: "Pending",
           done: false,
         },
@@ -525,54 +591,70 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setCurrentOrder(newOrder);
     setTrackingOrder(newOrder);
     clearCart();
-    setActiveModal("order_confirmation");
+    openModal("order_confirmation");
+
     addToast(
-      "Order Placed Successfully!",
-      `Order #${orderId} confirmed. We will call ${customerPhone} before dispatch.`,
+      "Order Placed!",
+      `Order #${newOrder.id} confirmed. Delivery dispatched to ${address.area}.`,
       "success"
     );
+
     return newOrder;
   };
 
   const trackOrderById = (orderId: string): Order | null => {
-    const trimmed = orderId.trim().toUpperCase();
-    const found = orders.find((o) => o.id.toUpperCase() === trimmed);
+    const found = orders.find(
+      (o) =>
+        o.id.toLowerCase() === orderId.toLowerCase() ||
+        (o.orderNumber && o.orderNumber.toLowerCase() === orderId.toLowerCase())
+    );
     if (found) {
       setTrackingOrder(found);
-      setActiveModal("track_order");
       return found;
     }
-    // Return sample order if not matched
-    setTrackingOrder(INITIAL_ORDERS[0]);
-    setActiveModal("track_order");
-    addToast("Sample Order Loaded", `Displaying tracking progress for #${INITIAL_ORDERS[0].id}`, "info");
-    return INITIAL_ORDERS[0];
+    return null;
   };
 
   // Quotes
-  const submitQuoteRequest = (
-    quote: Omit<QuoteRequest, "id" | "createdAt" | "status">
-  ): QuoteRequest => {
-    const id = `QUOTE-${Math.floor(1000 + Math.random() * 9000)}`;
+  const submitQuoteRequest = (quoteData: Omit<QuoteRequest, "id" | "createdAt" | "status">): QuoteRequest => {
     const newQuote: QuoteRequest = {
-      ...quote,
-      id,
-      createdAt: "Today",
+      ...quoteData,
+      id: `QT-${Date.now().toString().slice(-5)}`,
+      createdAt: "Just now",
       status: "Received",
     };
     setQuoteRequests((prev) => [newQuote, ...prev]);
     addToast(
-      "Quotation Request Sent!",
-      `Reference #${id} created. Our contractor desk will call ${quote.phone} with wholesale rates within 2 hours.`,
+      "Estimate Requested!",
+      `Quotation request #${newQuote.id} received. Our lead estimator will call ${newQuote.phone} shortly.`,
       "success"
     );
-    closeModal();
     return newQuote;
+  };
+
+  // Toasts
+  const addToast = (
+    title: string,
+    message: string,
+    type: "success" | "info" | "warning" | "error" = "info"
+  ) => {
+    const id = `toast-${Date.now()}-${Math.random()}`;
+    setToasts((prev) => [...prev, { id, title, message, type }]);
+    setTimeout(() => {
+      removeToast(id);
+    }, 4500);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
   return (
     <StoreContext.Provider
       value={{
+        storeInfo,
+        categories,
+        brands,
         cart,
         cartCount,
         cartSubtotal,

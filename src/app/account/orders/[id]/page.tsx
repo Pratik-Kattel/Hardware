@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
   return {
     title: `Order #${id} Details | New Adhikari Traders`,
-    description: `Track status, view delivery timeline, and inspect invoice for order #${id} at New Adhikari Traders, Kathmandu.`,
+    description: `Track status, view delivery timeline, and inspect details for order #${id} at New Adhikari Traders, Kathmandu.`,
   };
 }
 

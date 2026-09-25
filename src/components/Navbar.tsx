@@ -29,9 +29,8 @@ import {
   FlaskConical,
   Truck,
 } from "lucide-react";
+import Image from "next/image";
 import { useStore } from "@/context/StoreContext";
-import { CATEGORIES } from "@/data/categories";
-import { PRODUCTS } from "@/data/products";
 import { ProductCategory } from "@/types";
 
 // Helper for consistent mega-menu Lucide icons
@@ -96,6 +95,8 @@ export function Navbar() {
     selectedCategory,
     setSelectedCategory,
     user,
+    categories,
+    storeInfo,
   } = useStore();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -103,6 +104,7 @@ export function Navbar() {
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
   const [moreDropdownOpen, setMoreDropdownOpen] = useState(false);
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  const [matchingProducts, setMatchingProducts] = useState<any[]>([]);
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
@@ -116,15 +118,21 @@ export function Navbar() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Filtered search preview items based on debounced search query
-  const matchingProducts = debouncedQuery.trim()
-    ? PRODUCTS.filter(
-        (p) =>
-          p.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-          p.brand.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-          p.tags.some((t) => t.toLowerCase().includes(debouncedQuery.toLowerCase()))
-      ).slice(0, 5)
-    : [];
+  // Fetch live autocomplete suggestions from /api/search
+  useEffect(() => {
+    if (!debouncedQuery.trim()) {
+      setMatchingProducts([]);
+      return;
+    }
+    fetch(`/api/search?q=${encodeURIComponent(debouncedQuery.trim())}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.products && Array.isArray(data.products)) {
+          setMatchingProducts(data.products.slice(0, 5));
+        }
+      })
+      .catch(() => {});
+  }, [debouncedQuery]);
 
   // Close menus on click outside
   useEffect(() => {
@@ -173,14 +181,14 @@ export function Navbar() {
   return (
     <header className="main-navbar">
       {/* Primary Brand Navigation Row */}
-      <div className="container">
+      <div className="header-container">
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             padding: "12px 0",
-            gap: "16px",
+            gap: "28px",
             flexWrap: "nowrap",
           }}
           className="navbar-top-row"
@@ -272,8 +280,8 @@ export function Navbar() {
             ref={searchContainerRef}
             style={{
               flex: "1 1 360px",
-              maxWidth: "580px",
-              minWidth: "200px",
+              maxWidth: "680px",
+              minWidth: "220px",
               position: "relative",
             }}
             className="navbar-search-wrapper"
@@ -459,17 +467,29 @@ export function Navbar() {
                         (e.currentTarget.style.background = "transparent")
                       }
                     >
-                      <img
-                        src={prod.images[0]}
-                        alt={prod.name}
+                      <div
                         style={{
                           width: "44px",
                           height: "44px",
-                          objectFit: "cover",
+                          position: "relative",
                           borderRadius: "var(--radius-sm)",
                           border: "1px solid var(--border-light)",
+                          overflow: "hidden",
+                          flexShrink: 0,
                         }}
-                      />
+                      >
+                        <Image
+                          src={
+                            (Array.isArray(prod.images) && typeof prod.images[0] === "string"
+                              ? prod.images[0]
+                              : prod.images?.[0]?.imageUrl) || "/images/placeholder.webp"
+                          }
+                          alt={prod.name}
+                          fill
+                          sizes="44px"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div
                           style={{
@@ -553,7 +573,7 @@ export function Navbar() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "8px",
+              gap: "10px",
               flexShrink: 0,
               flexWrap: "nowrap",
             }}
@@ -703,7 +723,7 @@ export function Navbar() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "7px",
-                padding: "0 14px",
+                padding: "0 16px",
                 borderRadius: "6px",
                 background: "#4A6572",
                 color: "#ffffff",
@@ -714,6 +734,7 @@ export function Navbar() {
                 flexShrink: 0,
                 minWidth: "145px",
                 justifyContent: "center",
+                marginLeft: "4px",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "#344955")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#4A6572")}
@@ -768,7 +789,7 @@ export function Navbar() {
           padding: "8px 0",
         }}
       >
-        <div className="container">
+        <div className="header-container">
           <div
             style={{
               display: "flex",
@@ -875,7 +896,7 @@ export function Navbar() {
                         gap: "4px",
                       }}
                     >
-                      <span>Full Inventory Catalog ({PRODUCTS.length} items)</span>
+                      <span>Full Inventory Catalog ({storeInfo?.stats?.productsCataloged || 2500} items)</span>
                       <ArrowRight size={13} />
                     </Link>
                   </div>
@@ -892,10 +913,10 @@ export function Navbar() {
                     }}
                     className="mega-menu-grid"
                   >
-                    {CATEGORIES.map((cat) => (
+                    {categories.map((cat) => (
                       <Link
-                        key={cat.id}
-                        href={`/category/${cat.id}`}
+                        key={cat.id || cat.slug}
+                        href={`/category/${cat.slug || cat.id}`}
                         onClick={() => setMegaMenuOpen(false)}
                         style={{
                           display: "flex",
@@ -1205,14 +1226,14 @@ export function Navbar() {
                 Call Us:
               </span>
               <a
-                href="tel:9851145065"
+                href={`tel:${(storeInfo?.phone || "985-1145065").replace(/[^0-9]/g, "")}`}
                 style={{
                   color: "var(--accent-steel)",
                   fontWeight: 700,
                   whiteSpace: "nowrap",
                 }}
               >
-                985-1145065
+                {storeInfo?.phone || "985-1145065"}
               </a>
             </div>
           </div>
@@ -1354,14 +1375,14 @@ export function Navbar() {
                 >
                   <span>All Products Catalog</span>
                   <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
-                    {PRODUCTS.length}
+                    {storeInfo?.stats?.productsCataloged || 2500}+
                   </span>
                 </Link>
 
-                {CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <Link
                     key={cat.id}
-                    href={`/category/${cat.id}`}
+                    href={`/category/${cat.slug || cat.id}`}
                     onClick={() => setMobileMenuOpen(false)}
                     style={{
                       minHeight: "44px",
@@ -1396,7 +1417,7 @@ export function Navbar() {
                 Support &amp; Order Desk
               </div>
               <a
-                href="tel:9851145065"
+                href={`tel:${(storeInfo?.phone || "985-1145065").replace(/[^0-9]/g, "")}`}
                 style={{
                   fontSize: "16px",
                   fontWeight: 700,
@@ -1405,7 +1426,7 @@ export function Navbar() {
                   padding: "4px 0",
                 }}
               >
-                985-1145065
+                {storeInfo?.phone || "985-1145065"}
               </a>
               <div
                 style={{
@@ -1455,6 +1476,15 @@ export function Navbar() {
           .quick-category-nav {
             overflow-x: auto;
             scrollbar-width: none;
+          }
+        }
+
+        @media (min-width: 1025px) {
+          .navbar-top-row {
+            gap: clamp(24px, 2.5vw, 40px) !important;
+          }
+          .navbar-search-wrapper {
+            margin: 0 clamp(8px, 1.5vw, 24px);
           }
         }
 

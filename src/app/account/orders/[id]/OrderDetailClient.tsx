@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useStore } from "@/context/StoreContext";
 import { Order } from "@/types";
 import {
@@ -23,7 +24,7 @@ interface OrderDetailClientProps {
 }
 
 export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
-  const { orders } = useStore();
+  const { orders, storeInfo } = useStore();
 
   // Find order in store orders (or fall back to first order for demo resilience)
   const order: Order =
@@ -142,7 +143,7 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                 }}
               >
                 <Printer size={16} />
-                <span>Print Tax Invoice</span>
+                <span>Print Order Summary</span>
               </button>
 
               <Link
@@ -333,10 +334,10 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                 marginBottom: "8px",
               }}
             >
-              Billing &amp; Payment Summary
+              Order &amp; Payment Summary
             </div>
             <h3 style={{ fontSize: "18px", fontWeight: 800, color: "#1C1C1E", marginBottom: "14px" }}>
-              Tax Invoice Breakdown
+              Order Cost Breakdown
             </h3>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "15px" }}>
@@ -354,10 +355,6 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                   <span>-NPR {order.discount.toLocaleString()}</span>
                 </div>
               )}
-              <div style={{ display: "flex", justifyContent: "space-between", color: "#475569" }}>
-                <span>Official Nepal VAT (13%):</span>
-                <span>NPR {order.vatAmount.toLocaleString()}</span>
-              </div>
 
               <div
                 style={{
@@ -426,9 +423,11 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
                       flexShrink: 0,
                     }}
                   >
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.name}
+                      width={52}
+                      height={52}
                       style={{ width: "100%", height: "100%", objectFit: "contain", padding: "4px" }}
                     />
                   </div>
@@ -486,7 +485,7 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
           </div>
 
           <a
-            href="tel:9851145065"
+            href={`tel:${(storeInfo?.phone || "985-1145065").replace(/[^0-9]/g, "")}`}
             className="btn btn-outline"
             style={{
               borderColor: "#4A6572",
@@ -501,7 +500,7 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
             }}
           >
             <Phone size={16} />
-            <span>Call Us: 985-1145065</span>
+            <span>Call Us: {storeInfo?.phone || "985-1145065"}</span>
           </a>
         </div>
       </div>

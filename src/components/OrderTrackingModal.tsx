@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 export function OrderTrackingModal() {
-  const { activeModal, closeModal, trackingOrder, trackOrderById } = useStore();
+  const { activeModal, closeModal, trackingOrder, trackOrderById, storeInfo } = useStore();
   const [inputOrderId, setInputOrderId] = useState(trackingOrder?.id || "ADH-98412");
 
   if (activeModal !== "track_order") return null;
@@ -161,7 +161,7 @@ export function OrderTrackingModal() {
                 </div>
 
                 <a
-                  href="tel:9851145065"
+                  href={`tel:${(storeInfo?.phone || "985-1145065").replace(/[^0-9]/g, "")}`}
                   className="btn btn-outline btn-sm"
                   style={{ gap: "6px" }}
                 >

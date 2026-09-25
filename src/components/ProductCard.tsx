@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Product } from "@/types";
 import { useStore } from "@/context/StoreContext";
 import {
@@ -112,12 +113,12 @@ export function ProductCard({ product }: ProductCardProps) {
           display: "block",
         }}
       >
-        <img
-          src={product.images[0]}
+        <Image
+          src={product.images[0] || "/images/placeholder.webp"}
           alt={product.name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           style={{
-            width: "100%",
-            height: "100%",
             objectFit: "cover",
           }}
         />

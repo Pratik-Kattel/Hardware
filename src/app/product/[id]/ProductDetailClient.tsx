@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Product } from "@/types";
 import { useStore } from "@/context/StoreContext";
 import { ProductCard } from "@/components/ProductCard";
@@ -34,7 +35,7 @@ export function ProductDetailClient({
   categoryName,
   relatedProducts,
 }: ProductDetailClientProps) {
-  const { addToCart, isInWishlist, toggleWishlist, openModal } = useStore();
+  const { addToCart, isInWishlist, toggleWishlist, openModal, storeInfo } = useStore();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -215,12 +216,13 @@ export function ProductDetailClient({
                 </button>
               </div>
 
-              <img
-                src={product.images[activeImageIndex] || product.images[0]}
+              <Image
+                src={product.images[activeImageIndex] || product.images[0] || "/images/placeholder.webp"}
                 alt={product.name}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority
                 style={{
-                  width: "100%",
-                  height: "100%",
                   objectFit: "contain",
                   padding: "24px",
                 }}
@@ -246,15 +248,17 @@ export function ProductDetailClient({
                       padding: "4px",
                       cursor: "pointer",
                       overflow: "hidden",
+                      position: "relative",
                     }}
                   >
-                    <img
+                    <Image
                       src={img}
                       alt={`Thumbnail ${idx + 1}`}
+                      fill
+                      sizes="72px"
                       style={{
-                        width: "100%",
-                        height: "100%",
                         objectFit: "contain",
+                        padding: "2px",
                       }}
                     />
                   </button>
@@ -424,7 +428,7 @@ export function ProductDetailClient({
                   </span>
                 )}
                 <span style={{ fontSize: "12px", color: "#6E6E73" }}>
-                  per {product.unit} (13% VAT included)
+                  per {product.unit}
                 </span>
               </div>
               <div
@@ -569,15 +573,14 @@ export function ProductDetailClient({
                 <span>Guaranteed genuine Nepal official warranty</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <ReceiptText size={16} color="#4A6572" style={{ flexShrink: 0 }} />
-                <span>Official 13% VAT tax invoice issued</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <Phone size={16} color="#4A6572" style={{ flexShrink: 0 }} />
                 <span>
                   Order helpline:{" "}
-                  <a href="tel:9851145065" style={{ color: "#4A6572", fontWeight: 700 }}>
-                    985-1145065
+                  <a
+                    href={`tel:${(storeInfo?.phone || "985-1145065").replace(/[^0-9]/g, "")}`}
+                    style={{ color: "#4A6572", fontWeight: 700 }}
+                  >
+                    {storeInfo?.phone || "985-1145065"}
                   </a>
                 </span>
               </div>
@@ -733,7 +736,7 @@ export function ProductDetailClient({
                   Authorized Nepal Warranty &amp; Authenticity Notice
                 </h4>
                 <p style={{ fontSize: "13px", color: "#6E6E73" }}>
-                  This product is supplied directly through authorized Nepal brand distribution channels by New Adhikari Traders. All items carry valid factory warranty stamps and tax receipts for official verification.
+                  This product is supplied directly through authorized Nepal brand distribution channels by New Adhikari Traders. All items carry valid factory warranty stamps and store purchase receipts.
                 </p>
               </div>
             )}

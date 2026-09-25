@@ -1,28 +1,25 @@
 "use client";
 
-import React, { useMemo, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
-import { PRODUCTS } from "@/data/products";
-import { CATEGORIES } from "@/data/categories";
-import { BRANDS } from "@/data/brands";
 import { ProductCard } from "@/components/ProductCard";
 import { useStore } from "@/context/StoreContext";
 import {
-  Filter,
-  SlidersHorizontal,
   RotateCcw,
   LayoutGrid,
   List,
   Search,
-  Check,
   X,
   PackageOpen,
+  Loader2,
 } from "lucide-react";
-import { ProductCategory } from "@/types";
+import { Product, ProductCategory } from "@/types";
 
 export function ProductCatalog() {
   const searchParams = useSearchParams();
   const {
+    categories,
+    brands,
     searchQuery,
     setSearchQuery,
     selectedCategory,
@@ -39,6 +36,10 @@ export function ProductCatalog() {
     setViewMode,
   } = useStore();
 
+  const [products, setProducts] = useState<Product[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
   // Sync URL search params
   useEffect(() => {
     if (!searchParams) return;
@@ -53,51 +54,62 @@ export function ProductCatalog() {
     if (filter === "deals") setSortOption("discount");
   }, [searchParams, setSearchQuery, setSelectedBrand, setSelectedCategory, setSortOption]);
 
-  // Filter and sort products
-  const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((product) => {
-      // Search filter
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase().trim();
-        const matchesName = product.name.toLowerCase().includes(query);
-        const matchesBrand = product.brand.toLowerCase().includes(query);
-        const matchesSubcat = product.subcategory.toLowerCase().includes(query);
-        const matchesTags = product.tags.some((t) => t.toLowerCase().includes(query));
-        if (!matchesName && !matchesBrand && !matchesSubcat && !matchesTags) {
-          return false;
-        }
-      }
+  // Fetch products from /api/products based on active filters
+  const fetchProductsList = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const query = new URLSearchParams();
+      if (searchQuery.trim()) query.set("q", searchQuery.trim());
+      if (selectedCategory !== "all") query.set("category", selectedCategory);
+      if (selectedBrand !== "all") query.set("brand", selectedBrand);
+      if (inStockOnly) query.set("inStock", "true");
+      if (priceRange[0] > 0) query.set("minPrice", String(priceRange[0]));
+      if (priceRange[1] < 100000) query.set("maxPrice", String(priceRange[1]));
+      if (sortOption) query.set("sort", sortOption);
+      query.set("limit", "50");
 
-      // Category filter
-      if (selectedCategory !== "all" && product.category !== selectedCategory) {
-        return false;
-      }
+      const res = await fetch(`/api/products?${query.toString()}`);
+      if (res.ok) {
+        const data = await res.json();
+        const rawProducts = data.products || [];
+        const normalized = rawProducts.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          brand: p.brand?.name || p.brand || "Authorized",
+          category: p.category?.slug || p.categoryId || "power-tools",
+          subcategory: p.subcategory || "",
+          price: p.price,
+          originalPrice: p.compareAtPrice || p.originalPrice,
+          compareAtPrice: p.compareAtPrice,
+          discountPercent: p.deals?.[0]?.discountPercent || (p.compareAtPrice ? Math.round(((p.compareAtPrice - p.price) / p.compareAtPrice) * 100) : 0),
+          rating: p.ratingAvg || p.rating || 5.0,
+          reviewsCount: p.ratingCount || p.reviewsCount || 12,
+          inStock: p.isInStock ?? p.inStock ?? true,
+          stockCount: p.stockQuantity ?? p.stockCount ?? 10,
+          sku: p.sku,
+          unit: p.unit || "Piece",
+          description: p.description || "",
+          specifications: p.technicalSpecs || p.specifications || {},
+          images: Array.isArray(p.images)
+            ? p.images.map((img: any) => (typeof img === "string" ? img : img.imageUrl))
+            : ["/images/placeholder.webp"],
+          tags: p.tags || [p.brand?.name || "hardware"],
+          isFeatured: p.isBestDeal || false,
+        } as Product));
 
-      // Brand filter
-      if (selectedBrand !== "all" && product.brand.toLowerCase() !== selectedBrand.toLowerCase()) {
-        return false;
+        setProducts(normalized);
+        setTotalCount(data.pagination?.total || normalized.length);
       }
+    } catch (e) {
+      console.warn("Failed to fetch products:", e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [searchQuery, selectedCategory, selectedBrand, inStockOnly, priceRange, sortOption]);
 
-      // Stock filter
-      if (inStockOnly && !product.inStock) {
-        return false;
-      }
-
-      // Price range filter
-      if (product.price < priceRange[0] || product.price > priceRange[1]) {
-        return false;
-      }
-
-      return true;
-    }).sort((a, b) => {
-      if (sortOption === "price_asc") return a.price - b.price;
-      if (sortOption === "price_desc") return b.price - a.price;
-      if (sortOption === "rating") return b.rating - a.rating;
-      if (sortOption === "discount") return (b.discountPercent || 0) - (a.discountPercent || 0);
-      // featured default
-      return (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0);
-    });
-  }, [searchQuery, selectedCategory, selectedBrand, inStockOnly, sortOption, priceRange]);
+  useEffect(() => {
+    fetchProductsList();
+  }, [fetchProductsList]);
 
   const resetFilters = () => {
     setSearchQuery("");
@@ -105,7 +117,7 @@ export function ProductCatalog() {
     setSelectedBrand("all");
     setInStockOnly(false);
     setSortOption("featured");
-    setPriceRange([0, 20000]);
+    setPriceRange([0, 100000]);
   };
 
   const hasActiveFilters =
@@ -113,7 +125,7 @@ export function ProductCatalog() {
     selectedCategory !== "all" ||
     selectedBrand !== "all" ||
     inStockOnly ||
-    priceRange[1] < 20000;
+    priceRange[1] < 100000;
 
   return (
     <section id="shop-section" style={{ padding: "60px 0", background: "var(--bg-page)" }}>
@@ -149,29 +161,29 @@ export function ProductCatalog() {
               top: "100px",
             }}
           >
-            {/* Sidebar Header */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                paddingBottom: "16px",
-                borderBottom: "1px solid var(--border-light)",
                 marginBottom: "20px",
+                paddingBottom: "12px",
+                borderBottom: "1px solid var(--border-light)",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 700, color: "var(--primary)" }}>
-                <SlidersHorizontal size={18} color="var(--accent-steel)" />
-                <span>Filters</span>
+              <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--primary)" }}>
+                Filter Products
               </div>
-
               {hasActiveFilters && (
                 <button
                   onClick={resetFilters}
                   style={{
+                    background: "none",
+                    border: "none",
+                    color: "var(--accent-steel)",
                     fontSize: "12px",
                     fontWeight: 600,
-                    color: "var(--accent-steel)",
+                    cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
                     gap: "4px",
@@ -183,7 +195,7 @@ export function ProductCatalog() {
               )}
             </div>
 
-            {/* In Stock Toggle */}
+            {/* In-Stock Only Toggle */}
             <div style={{ marginBottom: "24px" }}>
               <label
                 style={{
@@ -191,12 +203,12 @@ export function ProductCatalog() {
                   alignItems: "center",
                   justifyContent: "space-between",
                   cursor: "pointer",
-                  fontSize: "13px",
+                  fontSize: "14px",
                   fontWeight: 600,
-                  color: "var(--text-main)",
+                  color: "var(--primary)",
                 }}
               >
-                <span>In Stock Only</span>
+                <span>In-Stock Only</span>
                 <input
                   type="checkbox"
                   checked={inStockOnly}
@@ -248,32 +260,42 @@ export function ProductCatalog() {
                     fontSize: "13px",
                     fontWeight: selectedCategory === "all" ? 700 : 500,
                     textAlign: "left",
+                    border: "none",
+                    cursor: "pointer",
                   }}
                 >
                   <span>All Categories</span>
-                  <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>{PRODUCTS.length}</span>
                 </button>
 
-                {CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
+                    key={cat.id || cat.slug}
+                    onClick={() => setSelectedCategory((cat.slug || cat.id) as ProductCategory)}
                     style={{
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
                       padding: "7px 10px",
                       borderRadius: "var(--radius-sm)",
-                      background: selectedCategory === cat.id ? "var(--primary-surface)" : "transparent",
-                      color: selectedCategory === cat.id ? "var(--accent-steel)" : "var(--text-secondary)",
+                      background:
+                        selectedCategory === cat.slug || selectedCategory === cat.id
+                          ? "var(--primary-surface)"
+                          : "transparent",
+                      color:
+                        selectedCategory === cat.slug || selectedCategory === cat.id
+                          ? "var(--accent-steel)"
+                          : "var(--text-secondary)",
                       fontSize: "13px",
-                      fontWeight: selectedCategory === cat.id ? 700 : 500,
+                      fontWeight:
+                        selectedCategory === cat.slug || selectedCategory === cat.id ? 700 : 500,
                       textAlign: "left",
+                      border: "none",
+                      cursor: "pointer",
                     }}
                   >
                     <span>{cat.name}</span>
                     <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
-                      {PRODUCTS.filter((p) => p.category === cat.id).length}
+                      {cat.productCount}
                     </span>
                   </button>
                 ))}
@@ -317,14 +339,16 @@ export function ProductCatalog() {
                     fontSize: "13px",
                     fontWeight: selectedBrand === "all" ? 700 : 500,
                     textAlign: "left",
+                    border: "none",
+                    cursor: "pointer",
                   }}
                 >
                   <span>All Brands</span>
                 </button>
 
-                {BRANDS.map((b) => (
+                {brands.map((b) => (
                   <button
-                    key={b.id}
+                    key={b.id || b.slug}
                     onClick={() => setSelectedBrand(b.name)}
                     style={{
                       display: "flex",
@@ -337,66 +361,20 @@ export function ProductCatalog() {
                       fontSize: "13px",
                       fontWeight: selectedBrand === b.name ? 700 : 500,
                       textAlign: "left",
+                      border: "none",
+                      cursor: "pointer",
                     }}
                   >
                     <span>{b.name}</span>
-                    <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
-                      {PRODUCTS.filter((p) => p.brand.toLowerCase() === b.name.toLowerCase()).length}
-                    </span>
                   </button>
                 ))}
               </div>
             </div>
-
-            {/* Max Price Range Slider */}
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  fontSize: "13px",
-                  fontWeight: 700,
-                  color: "var(--primary)",
-                  marginBottom: "8px",
-                }}
-              >
-                <span>Max Price</span>
-                <span style={{ color: "var(--accent-steel)", fontWeight: 700 }}>
-                  NPR {priceRange[1].toLocaleString()}
-                </span>
-              </div>
-              <input
-                type="range"
-                min="500"
-                max="20000"
-                step="500"
-                value={priceRange[1]}
-                onChange={(e) => setPriceRange([0, Number(e.target.value)])}
-                style={{
-                  width: "100%",
-                  accentColor: "var(--accent-steel)",
-                  cursor: "pointer",
-                }}
-              />
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "11px",
-                  color: "var(--text-muted)",
-                  marginTop: "4px",
-                }}
-              >
-                <span>NPR 0</span>
-                <span>NPR 20,000+</span>
-              </div>
-            </div>
           </aside>
 
-          {/* Right Section: Catalog Controls & Grid */}
+          {/* Right Product Area */}
           <div>
-            {/* Top Toolbar */}
+            {/* Toolbar */}
             <div
               style={{
                 background: "#ffffff",
@@ -412,10 +390,9 @@ export function ProductCatalog() {
                 boxShadow: "var(--shadow-sm)",
               }}
             >
-              {/* Count & Active Pills */}
               <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
                 <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--primary)" }}>
-                  Showing {filteredProducts.length} Products
+                  Showing {products.length} of {totalCount} Products
                 </span>
 
                 {selectedCategory !== "all" && (
@@ -429,7 +406,7 @@ export function ProductCatalog() {
                     }}
                     onClick={() => setSelectedCategory("all")}
                   >
-                    <span>{CATEGORIES.find((c) => c.id === selectedCategory)?.name}</span>
+                    <span>{categories.find((c) => c.slug === selectedCategory || c.id === selectedCategory)?.name || selectedCategory}</span>
                     <X size={12} />
                   </span>
                 )}
@@ -498,6 +475,8 @@ export function ProductCatalog() {
                       color: viewMode === "grid" ? "#ffffff" : "var(--text-muted)",
                       display: "flex",
                       alignItems: "center",
+                      border: "none",
+                      cursor: "pointer",
                     }}
                     title="Grid View"
                   >
@@ -511,6 +490,8 @@ export function ProductCatalog() {
                       color: viewMode === "list" ? "#ffffff" : "var(--text-muted)",
                       display: "flex",
                       alignItems: "center",
+                      border: "none",
+                      cursor: "pointer",
                     }}
                     title="List View"
                   >
@@ -520,8 +501,27 @@ export function ProductCatalog() {
               </div>
             </div>
 
-            {/* Products Grid or Empty State */}
-            {filteredProducts.length === 0 ? (
+            {/* Products Grid or Empty / Loading State */}
+            {isLoading ? (
+              <div
+                style={{
+                  background: "#ffffff",
+                  borderRadius: "var(--radius-lg)",
+                  border: "1px solid var(--border-light)",
+                  padding: "60px 20px",
+                  textAlign: "center",
+                }}
+              >
+                <Loader2
+                  size={32}
+                  color="#4A6572"
+                  style={{ animation: "spin 1s linear infinite", margin: "0 auto 12px auto" }}
+                />
+                <p style={{ fontSize: "14px", color: "var(--text-muted)", margin: 0 }}>
+                  Fetching verified hardware catalog from warehouse...
+                </p>
+              </div>
+            ) : products.length === 0 ? (
               <div
                 style={{
                   background: "#ffffff",
@@ -551,7 +551,7 @@ export function ProductCatalog() {
                   No Products Match Your Filter
                 </h3>
                 <p style={{ fontSize: "14px", color: "var(--text-muted)", marginBottom: "20px", maxWidth: "450px", margin: "0 auto 20px auto" }}>
-                  Try relaxing your price range or selecting a different hardware category. You can also call us directly for custom site procurement.
+                  Try relaxing your search query or selecting a different hardware category. You can also call us directly for custom site procurement.
                 </p>
                 <button onClick={resetFilters} className="btn btn-primary">
                   <RotateCcw size={16} />
@@ -569,7 +569,7 @@ export function ProductCatalog() {
                   gap: "20px",
                 }}
               >
-                {filteredProducts.map((product) => (
+                {products.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
@@ -579,6 +579,14 @@ export function ProductCatalog() {
       </div>
 
       <style jsx>{`
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
         @media (max-width: 992px) {
           .shop-layout-grid {
             grid-template-columns: 1fr !important;

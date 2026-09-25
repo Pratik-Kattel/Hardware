@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useStore } from "@/context/StoreContext";
 import {
   CheckCircle2,
-  Printer,
   Truck,
   PhoneCall,
   MapPin,
@@ -17,15 +16,11 @@ import {
 
 export function OrderConfirmationModal() {
   const router = useRouter();
-  const { activeModal, closeModal, currentOrder } = useStore();
+  const { activeModal, closeModal, currentOrder, storeInfo } = useStore();
 
   if (activeModal !== "order_confirmation" || !currentOrder) {
     return null;
   }
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   const handleViewOrder = () => {
     closeModal();
@@ -33,96 +28,122 @@ export function OrderConfirmationModal() {
   };
 
   return (
-    <div className="modal-overlay" onClick={closeModal}>
+    <div
+      className="modal-overlay"
+      onClick={closeModal}
+      style={{
+        padding: "20px 16px",
+      }}
+    >
       <div
         className="modal-content"
         style={{
-          maxWidth: "700px",
+          maxWidth: "680px",
+          width: "100%",
+          maxHeight: "90vh",
+          display: "flex",
+          flexDirection: "column",
           padding: "0",
           borderRadius: "var(--radius-xl)",
           overflow: "hidden",
+          margin: "auto 0",
+          boxShadow: "0 20px 50px rgba(0, 0, 0, 0.35)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
+        {/* Fixed Header (flex-shrink: 0) */}
         <div
           style={{
+            flexShrink: 0,
             background: "#1C1C1E",
             color: "#ffffff",
-            padding: "32px 30px",
+            padding: "22px 24px 18px 24px",
             textAlign: "center",
             position: "relative",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
           }}
         >
           <button
             onClick={closeModal}
             style={{
               position: "absolute",
-              top: "16px",
-              right: "16px",
+              top: "14px",
+              right: "14px",
               color: "#cbd5e1",
-              background: "rgba(255,255,255,0.1)",
+              background: "rgba(255, 255, 255, 0.12)",
               borderRadius: "50%",
               width: "32px",
               height: "32px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              border: "none",
+              cursor: "pointer",
             }}
+            aria-label="Close confirmation dialog"
           >
             <X size={18} />
           </button>
 
           <div
             style={{
-              width: "68px",
-              height: "68px",
+              width: "50px",
+              height: "50px",
               borderRadius: "50%",
               background: "rgba(16, 185, 129, 0.2)",
-              border: "3px solid #10b981",
+              border: "2.5px solid #10b981",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              margin: "0 auto 16px auto",
+              margin: "0 auto 10px auto",
               color: "#34d399",
             }}
           >
-            <CheckCircle2 size={38} />
+            <CheckCircle2 size={30} />
           </div>
 
           <span
             style={{
-              fontSize: "12px",
+              fontSize: "11px",
               fontWeight: 700,
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               color: "var(--accent-amber)",
               background: "rgba(245, 158, 11, 0.15)",
-              padding: "4px 12px",
+              padding: "3px 10px",
               borderRadius: "var(--radius-full)",
+              display: "inline-block",
             }}
           >
             Order Confirmed
           </span>
 
-          <h2 style={{ fontSize: "24px", fontWeight: 800, color: "#ffffff", margin: "10px 0 6px 0" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: 800, color: "#ffffff", margin: "8px 0 4px 0" }}>
             Dhanyabad! Your Hardware Order is Confirmed
           </h2>
 
-          <p style={{ fontSize: "14px", color: "#cbd5e1", maxWidth: "500px", margin: "0 auto" }}>
-            Order <strong>#{currentOrder.id}</strong> has been received by our Kathmandu warehouse dispatch team.
+          <p style={{ fontSize: "13px", color: "#cbd5e1", maxWidth: "480px", margin: "0 auto" }}>
+            Order <strong style={{ color: "#FFFFFF" }}>#{currentOrder.id}</strong> has been received by our Kathmandu warehouse dispatch team.
           </p>
         </div>
 
-        {/* Body Content */}
-        <div style={{ padding: "24px 30px", maxHeight: "65vh", overflowY: "auto" }}>
+        {/* Scrollable Middle Section (flex: 1; overflow-y: auto) */}
+        <div
+          style={{
+            flex: "1 1 auto",
+            overflowY: "auto",
+            padding: "20px 24px",
+            background: "#FFFFFF",
+          }}
+          className="order-confirmation-scroll-area"
+        >
           {/* Timeline Quick Preview */}
           <div
             style={{
               background: "var(--bg-surface-secondary)",
               borderRadius: "var(--radius-md)",
-              padding: "16px",
-              marginBottom: "24px",
+              padding: "14px 16px",
+              marginBottom: "20px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
@@ -223,7 +244,7 @@ export function OrderConfirmationModal() {
             </div>
           </div>
 
-          {/* Pricing & VAT Bill Breakdown */}
+          {/* Pricing Breakdown */}
           <div
             style={{
               background: "var(--primary-surface)",
@@ -233,7 +254,7 @@ export function OrderConfirmationModal() {
               flexDirection: "column",
               gap: "6px",
               fontSize: "13px",
-              marginBottom: "24px",
+              marginBottom: "8px",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", color: "var(--text-secondary)" }}>
@@ -252,10 +273,6 @@ export function OrderConfirmationModal() {
                 <span style={{ fontWeight: 600 }}>- NPR {currentOrder.discount.toLocaleString()}</span>
               </div>
             )}
-            <div style={{ display: "flex", justifyContent: "space-between", color: "var(--text-muted)", fontSize: "12px" }}>
-              <span>Included 13% Nepal VAT:</span>
-              <span>NPR {currentOrder.vatAmount.toLocaleString()}</span>
-            </div>
             <div
               style={{
                 display: "flex",
@@ -271,14 +288,24 @@ export function OrderConfirmationModal() {
               <span style={{ color: "var(--accent-steel)" }}>NPR {currentOrder.total.toLocaleString()}</span>
             </div>
           </div>
+        </div>
 
-          {/* Bottom Actions */}
+        {/* Pinned Bottom Action Footer (flex-shrink: 0, ALWAYS visible) */}
+        <div
+          style={{
+            flexShrink: 0,
+            background: "#FFFFFF",
+            borderTop: "1px solid #E5E7EB",
+            padding: "16px 24px",
+            boxShadow: "0 -4px 14px rgba(0, 0, 0, 0.05)",
+          }}
+        >
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             <button
               onClick={handleViewOrder}
               className="btn btn-primary"
               style={{
-                flex: "1 1 100%",
+                flex: "1 1 200px",
                 background: "#4A6572",
                 color: "#FFFFFF",
                 minHeight: "44px",
@@ -288,6 +315,9 @@ export function OrderConfirmationModal() {
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "8px",
+                cursor: "pointer",
+                borderRadius: "var(--radius-md)",
+                border: "none",
               }}
             >
               <Truck size={18} />
@@ -295,28 +325,26 @@ export function OrderConfirmationModal() {
             </button>
 
             <button
-              onClick={handlePrint}
-              className="btn btn-outline"
-              style={{ flex: 1, minHeight: "44px", gap: "6px" }}
-            >
-              <Printer size={16} />
-              <span>Print Official VAT Bill</span>
-            </button>
-
-            <button
               onClick={closeModal}
               className="btn btn-secondary"
-              style={{ flex: 1, minHeight: "44px" }}
+              style={{
+                flex: "1 1 150px",
+                minHeight: "44px",
+                fontSize: "14px",
+                fontWeight: 600,
+                cursor: "pointer",
+                borderRadius: "var(--radius-md)",
+              }}
             >
               <span>Continue Shopping</span>
             </button>
           </div>
 
-          {/* Hotline */}
+          {/* Dispatch Helpline */}
           <div
             style={{
               textAlign: "center",
-              marginTop: "20px",
+              marginTop: "12px",
               fontSize: "12px",
               color: "var(--text-muted)",
               display: "flex",
@@ -327,9 +355,12 @@ export function OrderConfirmationModal() {
           >
             <PhoneCall size={14} color="var(--accent-steel)" />
             <span>
-              Have queries regarding your delivery? Call our dispatch desk:{" "}
-              <a href="tel:9851145065" style={{ color: "var(--accent-steel)", fontWeight: 700 }}>
-                985-1145065
+              Queries regarding delivery? Call our dispatch desk:{" "}
+              <a
+                href={`tel:${(storeInfo?.phone || "985-1145065").replace(/[^0-9]/g, "")}`}
+                style={{ color: "var(--accent-steel)", fontWeight: 700, textDecoration: "none" }}
+              >
+                {storeInfo?.phone || "985-1145065"}
               </a>
             </span>
           </div>

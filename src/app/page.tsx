@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { HeroSection } from "@/components/HeroSection";
 import { CategoryGrid } from "@/components/CategoryGrid";
@@ -11,12 +11,51 @@ import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { ContactCTASection } from "@/components/ContactCTASection";
 import { StoreLocationSection } from "@/components/StoreLocationSection";
-import { PRODUCTS } from "@/data/products";
-import { ArrowRight, Sparkles, HardHat, ShieldCheck, Truck } from "lucide-react";
+import { useStore } from "@/context/StoreContext";
+import { Product } from "@/types";
+import { ArrowRight } from "lucide-react";
 
 export default function HomePage() {
-  // 8 Curated Featured Hardware Products for Homepage Overview
-  const featuredProducts = PRODUCTS.filter((p) => p.isFeatured).slice(0, 8);
+  const { storeInfo } = useStore();
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [totalCount, setTotalCount] = useState(storeInfo?.stats?.productsCataloged || 2500);
+
+  useEffect(() => {
+    fetch("/api/products?limit=8&sort=featured")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.products && Array.isArray(data.products)) {
+          const normalized = data.products.map((p: any) => ({
+            id: p.id,
+            name: p.name,
+            brand: p.brand?.name || p.brand || "Authorized",
+            category: p.category?.slug || p.categoryId || "power-tools",
+            subcategory: p.subcategory || "",
+            price: p.price,
+            originalPrice: p.compareAtPrice || p.originalPrice,
+            compareAtPrice: p.compareAtPrice,
+            discountPercent: p.deals?.[0]?.discountPercent || (p.compareAtPrice ? Math.round(((p.compareAtPrice - p.price) / p.compareAtPrice) * 100) : 0),
+            rating: p.ratingAvg || p.rating || 5.0,
+            reviewsCount: p.ratingCount || p.reviewsCount || 12,
+            inStock: p.isInStock ?? p.inStock ?? true,
+            stockCount: p.stockQuantity ?? p.stockCount ?? 10,
+            sku: p.sku,
+            unit: p.unit || "Piece",
+            description: p.description || "",
+            specifications: p.technicalSpecs || p.specifications || {},
+            images: Array.isArray(p.images)
+              ? p.images.map((img: any) => (typeof img === "string" ? img : img.imageUrl))
+              : ["/images/placeholder.webp"],
+            tags: p.tags || ["featured"],
+            isFeatured: true,
+          } as Product));
+
+          setFeaturedProducts(normalized);
+          if (data.pagination?.total) setTotalCount(data.pagination.total);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <>
@@ -72,12 +111,12 @@ export default function HomePage() {
                 transition: "all 0.15s",
               }}
             >
-              <span>View All {PRODUCTS.length} Products</span>
+              <span>View All {totalCount} Products</span>
               <ArrowRight size={16} />
             </Link>
           </div>
 
-          {/* Featured 8 Products Grid */}
+          {/* Featured Products Grid */}
           <div
             style={{
               display: "grid",

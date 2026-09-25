@@ -1,0 +1,236 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Category {
+  id           String      @id @default(cuid())
+  name         String
+  slug         String      @unique
+  nameNp       String?     @map("name_np")
+  description  String?
+  iconKey      String?     @map("icon_key")
+  productCount Int         @default(0) @map("product_count")
+  imageUrl     String?     @map("image_url")
+  parentId     String?     @map("parent_id")
+  sortOrder    Int         @default(0) @map("sort_order")
+  parent       Category?   @relation("SubCategories", fields: [parentId], references: [id])
+  children     Category[]  @relation("SubCategories")
+  products     Product[]
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+
+  @@index([slug])
+  @@map("categories")
+}
+
+model Brand {
+  id                  String    @id @default(cuid())
+  name                String
+  slug                String    @unique
+  logoUrl             String    @map("logo_url")
+  country             String
+  categoryTags        String[]  @default([]) @map("category_tags")
+  isAuthorizedPartner Boolean   @default(true) @map("is_authorized_partner")
+  products            Product[]
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  @@index([slug])
+  @@map("brands")
+}
+
+model Product {
+  id             String         @id @default(cuid())
+  sku            String         @unique
+  name           String
+  slug           String         @unique
+  categoryId     String         @map("category_id")
+  brandId        String         @map("brand_id")
+  description    String
+  technicalSpecs Json?          @map("technical_specs")
+  price          Float
+  compareAtPrice Float?         @map("compare_at_price")
+  stockQuantity  Int            @default(0) @map("stock_quantity")
+  unit           String         @default("Piece")
+  ratingAvg      Float          @default(5.0) @map("rating_avg")
+  ratingCount    Int            @default(0) @map("rating_count")
+  isBestDeal     Boolean        @default(false) @map("is_best_deal")
+  isInStock      Boolean        @default(true) @map("is_in_stock")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  category       Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  brand          Brand          @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  images         ProductImage[]
+  deals          Deal[]
+  orderItems     OrderItem[]
+  wishlistItems  WishlistItem[]
+  cartItems      CartItem[]
+
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([slug])
+  @@map("products")
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  imageUrl  String   @map("image_url")
+  altText   String   @map("alt_text")
+  sortOrder Int      @default(0) @map("sort_order")
+  isPrimary Boolean  @default(false) @map("is_primary")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_images")
+}
+
+model StoreInfo {
+  id           String   @id @default(cuid())
+  businessName String   @map("business_name")
+  address      String
+  city         String   @default("Kathmandu")
+  province     String   @default("Bagmati Province 44600")
+  phone        String
+  hours        String
+  latitude     Float    @map("lat")
+  longitude    Float    @map("lng")
+  socialLinks  Json?    @map("social_links")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("store_info")
+}
+
+model HeroSlide {
+  id          String   @id @default(cuid())
+  categoryTag String   @map("category_tag")
+  headline    String
+  subtext     String
+  ctaText     String   @map("cta_text")
+  ctaAction   String   @map("cta_action")
+  categoryId  String   @map("category_id")
+  bgImage     String   @map("bg_image")
+  mainImage   String   @map("main_image")
+  detailImage String   @map("detail_image")
+  detailBadge String   @map("detail_badge")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("hero_slides")
+}
+
+model Deal {
+  id              String    @id @default(cuid())
+  productId       String    @map("product_id")
+  discountPercent Int       @map("discount_percent")
+  startsAt        DateTime  @default(now()) @map("starts_at")
+  endsAt          DateTime? @map("ends_at")
+  isActive        Boolean   @default(true) @map("is_active")
+  product         Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("deals")
+}
+
+model Testimonial {
+  id         String   @id @default(cuid())
+  name       String
+  role       String
+  projectTag String   @map("project_tag")
+  photoUrl   String   @map("photo_url")
+  rating     Float    @default(5.0)
+  reviewText String   @map("review_text")
+  location   String
+  isVerified Boolean  @default(true) @map("is_verified")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("testimonials")
+}
+
+enum OrderStatus {
+  placed
+  confirmed
+  dispatched
+  out_for_delivery
+  delivered
+  cancelled
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique @map("order_number")
+  customerName    String      @map("customer_name")
+  phone           String
+  deliveryAddress String      @map("delivery_address")
+  landmark        String?
+  status          OrderStatus @default(placed)
+  subtotal        Float
+  deliveryFee     Float       @default(0) @map("delivery_fee")
+  total           Float
+  userId          String?     @map("user_id")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+  items           OrderItem[]
+  user            User?       @relation(fields: [userId], references: [id])
+
+  @@index([orderNumber])
+  @@index([userId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String  @map("order_id")
+  productId String  @map("product_id")
+  quantity  Int
+  unitPrice Float   @map("unit_price")
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("order_items")
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  productId String   @map("product_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@map("wishlist_items")
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  productId String   @map("product_id")
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@map("cart_items")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String   @unique
+  email     String?  @unique
+  address   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  orders    Order[]
+
+  @@map("users")
+}

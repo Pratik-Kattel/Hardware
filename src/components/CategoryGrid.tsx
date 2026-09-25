@@ -2,7 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { CATEGORIES } from "@/data/categories";
 import { useStore } from "@/context/StoreContext";
 import {
   Drill,
@@ -18,10 +17,9 @@ import {
   FlaskConical,
   ArrowRight,
 } from "lucide-react";
-import { ProductCategory } from "@/types";
 
 // Consistent Lucide icon mapping with uniform strokeWidth={2}
-const getCategoryIcon = (iconName: string) => {
+const getCategoryIcon = (iconName?: string) => {
   const iconProps = { size: 24, strokeWidth: 2, color: "#1C1C1E" };
   switch (iconName) {
     case "Drill":
@@ -52,7 +50,7 @@ const getCategoryIcon = (iconName: string) => {
 };
 
 export function CategoryGrid() {
-  const { selectedCategory } = useStore();
+  const { categories, selectedCategory } = useStore();
 
   return (
     <section style={{ padding: "64px 0", background: "#FFFFFF", borderBottom: "1px solid #E5E7EB" }}>
@@ -66,7 +64,7 @@ export function CategoryGrid() {
           </p>
         </div>
 
-        {/* Categories Grid - White cards with 1px border #E5E7EB */}
+        {/* Categories Grid - Dynamic from API/Database */}
         <div
           style={{
             display: "grid",
@@ -74,13 +72,14 @@ export function CategoryGrid() {
             gap: "20px",
           }}
         >
-          {CATEGORIES.map((cat) => {
-            const isSelected = selectedCategory === cat.id;
+          {categories.map((cat) => {
+            const isSelected = selectedCategory === cat.slug || selectedCategory === cat.id;
+            const subcategories = cat.popularSubcategories || [];
 
             return (
               <Link
-                key={cat.id}
-                href={`/category/${cat.id}`}
+                key={cat.id || cat.slug}
+                href={`/category/${cat.slug || cat.id}`}
                 style={{
                   background: "#FFFFFF",
                   border: isSelected ? "1.5px solid #4A6572" : "1px solid #E5E7EB",
@@ -124,7 +123,7 @@ export function CategoryGrid() {
                       justifyContent: "center",
                     }}
                   >
-                    {getCategoryIcon(cat.iconName)}
+                    {getCategoryIcon(cat.iconName || cat.iconKey)}
                   </div>
 
                   <span
@@ -155,7 +154,7 @@ export function CategoryGrid() {
                   }}
                 >
                   <span>{cat.name}</span>
-                  {cat.nepaliName && (
+                  {(cat.nepaliName || cat.nameNp) && (
                     <span
                       style={{
                         fontSize: "12px",
@@ -163,7 +162,7 @@ export function CategoryGrid() {
                         color: "#6E6E73",
                       }}
                     >
-                      {cat.nepaliName}
+                      {cat.nepaliName || cat.nameNp}
                     </span>
                   )}
                 </h3>
@@ -182,30 +181,32 @@ export function CategoryGrid() {
                 </p>
 
                 {/* Subcategories tags */}
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "6px",
-                    marginBottom: "16px",
-                  }}
-                >
-                  {cat.popularSubcategories.slice(0, 3).map((sub) => (
-                    <span
-                      key={sub}
-                      style={{
-                        fontSize: "11px",
-                        color: "#6E6E73",
-                        background: "#FAFAFA",
-                        border: "1px solid #E5E7EB",
-                        padding: "2px 7px",
-                        borderRadius: "var(--radius-sm)",
-                      }}
-                    >
-                      {sub}
-                    </span>
-                  ))}
-                </div>
+                {subcategories.length > 0 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "6px",
+                      marginBottom: "16px",
+                    }}
+                  >
+                    {subcategories.slice(0, 3).map((sub) => (
+                      <span
+                        key={sub}
+                        style={{
+                          fontSize: "11px",
+                          color: "#6E6E73",
+                          background: "#FAFAFA",
+                          border: "1px solid #E5E7EB",
+                          padding: "2px 7px",
+                          borderRadius: "var(--radius-sm)",
+                        }}
+                      >
+                        {sub}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 {/* Bottom Action Link in Steel-Blue */}
                 <div

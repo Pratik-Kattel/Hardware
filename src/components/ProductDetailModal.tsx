@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useStore } from "@/context/StoreContext";
-import { PRODUCTS } from "@/data/products";
+import { Product } from "@/types";
 import {
   X,
   Star,
@@ -48,10 +49,43 @@ export function ProductDetailModal() {
 
   const isFavorite = isInWishlist(selectedProduct.id);
 
-  // Related products from same category
-  const relatedProducts = PRODUCTS.filter(
-    (p) => p.category === selectedProduct.category && p.id !== selectedProduct.id
-  ).slice(0, 3);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    if (!selectedProduct) return;
+    fetch(`/api/products?category=${encodeURIComponent(selectedProduct.category)}&limit=4`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.products && Array.isArray(data.products)) {
+          const list = data.products
+            .filter((p: any) => p.id !== selectedProduct.id)
+            .slice(0, 3)
+            .map((p: any) => ({
+              id: p.id,
+              name: p.name,
+              brand: p.brand?.name || p.brand || "Authorized",
+              category: p.category?.slug || p.categoryId || selectedProduct.category,
+              price: p.price,
+              originalPrice: p.compareAtPrice || p.originalPrice,
+              discountPercent: p.deals?.[0]?.discountPercent || 0,
+              rating: p.ratingAvg || p.rating || 5.0,
+              reviewsCount: p.ratingCount || p.reviewsCount || 10,
+              inStock: p.isInStock ?? p.inStock ?? true,
+              stockCount: p.stockQuantity ?? p.stockCount ?? 8,
+              sku: p.sku,
+              unit: p.unit || "Piece",
+              description: p.description || "",
+              specifications: p.technicalSpecs || p.specifications || {},
+              images: Array.isArray(p.images)
+                ? p.images.map((img: any) => (typeof img === "string" ? img : img.imageUrl))
+                : ["/images/placeholder.webp"],
+              tags: p.tags || [],
+            } as Product));
+          setRelatedProducts(list);
+        }
+      })
+      .catch(() => {});
+  }, [selectedProduct?.id, selectedProduct?.category]);
 
   const handleBuyNow = () => {
     addToCart(selectedProduct, quantity);
@@ -204,14 +238,15 @@ export function ProductDetailModal() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  position: "relative",
                 }}
               >
-                <img
-                  src={selectedProduct.images[activeImageIndex] || selectedProduct.images[0]}
+                <Image
+                  src={selectedProduct.images[activeImageIndex] || selectedProduct.images[0] || "/images/placeholder.webp"}
                   alt={selectedProduct.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   style={{
-                    width: "100%",
-                    height: "100%",
                     objectFit: "contain",
                     padding: "16px",
                   }}
@@ -238,12 +273,15 @@ export function ProductDetailModal() {
                         cursor: "pointer",
                         padding: "4px",
                         transition: "border-color var(--transition-fast)",
+                        position: "relative",
                       }}
                     >
-                      <img
+                      <Image
                         src={img}
                         alt="thumbnail"
-                        style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                        fill
+                        sizes="76px"
+                        style={{ objectFit: "contain", padding: "2px" }}
                       />
                     </button>
                   ))}
@@ -360,7 +398,7 @@ export function ProductDetailModal() {
                   )}
                 </div>
                 <div style={{ fontSize: "12px", color: "#6E6E73" }}>
-                  Unit: <strong>{selectedProduct.unit}</strong> • Inclusive of all Nepali taxes and official 13% VAT bill
+                  Unit: <strong>{selectedProduct.unit}</strong> • Genuine hardware guarantee
                 </div>
               </div>
 
@@ -518,13 +556,13 @@ export function ProductDetailModal() {
             </div>
 
             <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-              <FileCheck size={20} color="#4A6572" style={{ flexShrink: 0, marginTop: "2px" }} />
+              <Truck size={20} color="#4A6572" style={{ flexShrink: 0, marginTop: "2px" }} />
               <div>
                 <strong style={{ fontSize: "13px", color: "#1C1C1E", display: "block" }}>
-                  Official 13% VAT Bill
+                  Kathmandu Valley Delivery
                 </strong>
                 <span style={{ fontSize: "12px", color: "#6E6E73" }}>
-                  Authorized tax invoices with IRD registered PAN 602918239
+                  Direct delivery to site gate or workshop
                 </span>
               </div>
             </div>

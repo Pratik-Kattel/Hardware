@@ -147,6 +147,16 @@ img {
   padding-right: 20px;
 }
 
+/* Wide layout utility specifically for header bars to avoid cramped/overly centered appearance */
+.header-container {
+  width: 100%;
+  max-width: 1680px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(24px, 3.5vw, 48px);
+  padding-right: clamp(24px, 3.5vw, 48px);
+}
+
 /* Restrained Badge Styles - Factual, subtle, min 14px text */
 .badge {
   display: inline-flex;
@@ -446,5 +456,9 @@ img {
   }
   .section-title {
     font-size: 22px;
+  }
+  .header-container {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }

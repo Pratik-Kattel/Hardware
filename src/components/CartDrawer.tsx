@@ -370,7 +370,7 @@ export function CartDrawer() {
               )}
 
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: "16px", fontWeight: 800, color: "var(--primary)", paddingTop: "8px", borderTop: "1px solid var(--border-light)" }}>
-                <span>Total (VAT incl.)</span>
+                <span>Total</span>
                 <span style={{ color: "var(--accent-steel)" }}>NPR {cartTotal.toLocaleString()}</span>
               </div>
             </div>

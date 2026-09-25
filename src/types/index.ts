@@ -16,34 +16,104 @@ export interface Product {
   name: string;
   brand: string;
   category: ProductCategory;
-  subcategory: string;
+  subcategory?: string;
   price: number; // in NPR
   originalPrice?: number; // in NPR
+  compareAtPrice?: number;
   discountPercent?: number;
   rating: number;
+  ratingAvg?: number;
   reviewsCount: number;
+  ratingCount?: number;
   inStock: boolean;
+  isInStock?: boolean;
   stockCount: number;
+  stockQuantity?: number;
   isFeatured?: boolean;
   isBestDeal?: boolean;
   isNewArrival?: boolean;
   sku: string;
+  slug?: string;
   unit: string;
   description: string;
   specifications: Record<string, string>;
+  technicalSpecs?: any;
   images: string[];
   tags: string[];
 }
 
 export interface CategoryInfo {
-  id: ProductCategory;
+  id: ProductCategory | string;
+  slug?: string;
   name: string;
   nepaliName?: string;
+  nameNp?: string;
   iconName: string;
+  iconKey?: string;
   description: string;
   productCount: number;
   popularSubcategories: string[];
   image: string;
+  imageUrl?: string;
+  sortOrder?: number;
+}
+
+export interface BrandInfo {
+  id: string;
+  name: string;
+  slug: string;
+  logoUrl: string;
+  country: string;
+  categoryTags: string[];
+  isAuthorizedPartner: boolean;
+}
+
+export interface HeroSlideData {
+  id: string;
+  categoryTag: string;
+  headline: string;
+  subtext: string;
+  ctaText: string;
+  ctaAction: string;
+  categoryId?: string;
+  bgImage: string;
+  mainImage: string;
+  detailImage: string;
+  detailBadge: string;
+  sortOrder?: number;
+}
+
+export interface TestimonialData {
+  id: string;
+  name: string;
+  role: string;
+  projectTag: string;
+  photoUrl: string;
+  rating: number;
+  reviewText: string;
+  location: string;
+  isVerified: boolean;
+  createdAt?: string;
+}
+
+export interface StoreInfoData {
+  id: string;
+  businessName: string;
+  address: string;
+  city: string;
+  province: string;
+  phone: string;
+  hours: string;
+  latitude: number;
+  longitude: number;
+  socialLinks?: any;
+  stats: {
+    yearsInBusiness: number;
+    ordersDelivered: number;
+    productsCataloged: number;
+    authorizedBrands: number;
+    satisfactionRate: number;
+  };
 }
 
 export interface CartItem {
@@ -68,7 +138,6 @@ export interface CustomerUser {
   email: string;
   role: "customer" | "contractor";
   companyName?: string;
-  panNumber?: string;
   savedAddresses: CustomerAddress[];
 }
 
@@ -85,6 +154,7 @@ export interface OrderItemSummary {
 
 export interface Order {
   id: string;
+  orderNumber?: string;
   customerName: string;
   customerPhone: string;
   customerEmail?: string;
@@ -93,7 +163,6 @@ export interface Order {
   subtotal: number;
   deliveryFee: number;
   discount: number;
-  vatAmount: number;
   total: number;
   paymentMethod: PaymentMethod;
   paymentStatus: "paid" | "pending_cod" | "pending_verification";
@@ -119,7 +188,6 @@ export interface QuoteRequest {
   projectLocation: string; // e.g., "Baneshwor, Kathmandu"
   itemsNeeded: string;
   estimatedBudget?: string;
-  taxPanNumber?: string;
   urgency: "Immediate (Within 24 Hours)" | "Standard (2-3 Days)" | "Upcoming Project";
   createdAt: string;
   status: "Received" | "Under Estimation" | "Quote Sent";

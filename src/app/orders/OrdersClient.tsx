@@ -18,13 +18,13 @@ import {
 } from "lucide-react";
 
 export function OrdersClient() {
-  const { orders, currentOrder, trackingOrder, trackOrderById } = useStore();
+  const { orders, currentOrder, trackingOrder, trackOrderById, storeInfo } = useStore();
 
   const [inputOrderId, setInputOrderId] = useState(
     currentOrder ? currentOrder.id : trackingOrder?.id || "ADH-98412"
   );
   const [inputPhone, setInputPhone] = useState(
-    currentOrder ? currentOrder.customerPhone : "985-1145065"
+    currentOrder ? currentOrder.customerPhone : storeInfo?.phone || "985-1145065"
   );
 
   const activeTracking: Order | undefined =
@@ -133,10 +133,10 @@ export function OrdersClient() {
                   Dispatch Support Hotline:
                 </span>
                 <a
-                  href="tel:9851145065"
+                  href={`tel:${(storeInfo?.phone || "985-1145065").replace(/[^0-9]/g, "")}`}
                   style={{ color: "#FFFFFF", fontWeight: 700, textDecoration: "none" }}
                 >
-                  985-1145065
+                  {storeInfo?.phone || "985-1145065"}
                 </a>
               </div>
             </div>
@@ -224,7 +224,7 @@ export function OrdersClient() {
               </label>
               <input
                 type="text"
-                placeholder="985-1145065"
+                placeholder={storeInfo?.phone || "985-1145065"}
                 value={inputPhone}
                 onChange={(e) => setInputPhone(e.target.value)}
                 style={{
@@ -317,7 +317,7 @@ export function OrdersClient() {
               </div>
 
               <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: "11px", color: "#64748B" }}>Order Value (VAT Incl.)</div>
+                <div style={{ fontSize: "11px", color: "#64748B" }}>Order Total</div>
                 <div style={{ fontSize: "18px", fontWeight: 800, color: "#1C1C1E" }}>
                   NPR {activeTracking.total.toLocaleString()}
                 </div>

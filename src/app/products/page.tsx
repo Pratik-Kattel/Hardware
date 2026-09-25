@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { ProductCatalog } from "@/components/ProductCatalog";
-import { ChevronRight, ShieldCheck, Truck, ReceiptText } from "lucide-react";
+import { ChevronRight, ShieldCheck, Truck, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Complete Hardware & Tools Inventory | New Adhikari Traders Kathmandu",
@@ -108,8 +108,8 @@ export default function ProductsPage() {
                 <span>Same-Day Site Delivery</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <ReceiptText size={16} color="var(--accent-steel)" />
-                <span>13% VAT Invoices</span>
+                <Clock size={16} color="var(--accent-steel)" />
+                <span>Open Daily 7AM – 8PM</span>
               </div>
             </div>
           </div>

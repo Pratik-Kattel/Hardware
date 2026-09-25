@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/context/StoreContext";
 import {
@@ -18,7 +19,7 @@ import {
 
 export function OrdersListClient() {
   const router = useRouter();
-  const { orders } = useStore();
+  const { orders, storeInfo } = useStore();
   const [lookupId, setLookupId] = useState("");
   const [lookupError, setLookupError] = useState("");
 
@@ -135,7 +136,7 @@ export function OrdersListClient() {
                 My Orders
               </h1>
               <p style={{ fontSize: "16px", color: "#CBD5E1", maxWidth: "600px" }}>
-                Review all your hardware purchases, view delivery timelines, download tax invoices, and reorder site supplies.
+                Review all your hardware purchases, view delivery timelines, and reorder site supplies.
               </p>
             </div>
 
@@ -157,10 +158,10 @@ export function OrdersListClient() {
                   Need Order Support?
                 </span>
                 <a
-                  href="tel:9851145065"
+                  href={`tel:${(storeInfo?.phone || "985-1145065").replace(/[^0-9]/g, "")}`}
                   style={{ color: "#FFFFFF", fontWeight: 700, textDecoration: "none" }}
                 >
-                  985-1145065
+                  {storeInfo?.phone || "985-1145065"}
                 </a>
               </div>
             </div>
@@ -186,7 +187,7 @@ export function OrdersListClient() {
             </h2>
           </div>
           <p style={{ fontSize: "14px", color: "#6E6E73", marginBottom: "16px" }}>
-            Have a printed store bill or order reference ID? Enter it below to inspect its detailed status timeline.
+            Have a printed store receipt or order reference ID? Enter it below to inspect its detailed status timeline.
           </p>
 
           <form
@@ -376,9 +377,11 @@ export function OrdersListClient() {
                             }}
                             title={`${item.name} (${item.quantity}x)`}
                           >
-                            <img
+                            <Image
                               src={item.image}
                               alt={item.name}
+                              width={52}
+                              height={52}
                               style={{ width: "100%", height: "100%", objectFit: "contain", padding: "4px" }}
                             />
                           </div>
@@ -400,7 +403,7 @@ export function OrdersListClient() {
                           NPR {order.total.toLocaleString()}
                         </div>
                         <div style={{ fontSize: "12px", color: "#166534", fontWeight: 600 }}>
-                          13% VAT Bill Included
+                          Kathmandu Delivery
                         </div>
                       </div>
                     </div>

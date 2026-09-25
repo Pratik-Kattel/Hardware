@@ -20,7 +20,7 @@ export const CUSTOMER_REVIEWS: CustomerReview[] = [
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=150&q=80",
     rating: 5,
     date: "2 days ago",
-    comment: "New Adhikari Traders is our go-to partner for all commercial site supplies in Kathmandu. When we poured our 4-storey foundation slab, they delivered 200 sacks of Shivam OPC and TMT steel directly to our Sitapaila site within 4 hours. Genuine VAT bills and wholesale contractor rates.",
+    comment: "New Adhikari Traders is our go-to partner for all commercial site supplies in Kathmandu. When we poured our 4-storey foundation slab, they delivered 200 sacks of Shivam OPC and TMT steel directly to our Sitapaila site within 4 hours. Transparent pricing and wholesale contractor rates.",
     verifiedPurchase: true,
     projectType: "Commercial Building RCC Construction",
   },

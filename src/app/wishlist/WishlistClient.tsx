@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useStore } from "@/context/StoreContext";
-import { PRODUCTS } from "@/data/products";
 import {
   Heart,
   ShoppingCart,
@@ -11,17 +11,60 @@ import {
   ChevronRight,
   ArrowRight,
   CheckCircle2,
-  AlertCircle,
   Phone,
   ShieldCheck,
   Truck,
 } from "lucide-react";
+import { Product } from "@/types";
 
 export function WishlistClient() {
-  const { wishlist, toggleWishlist, addToCart } = useStore();
+  const { wishlist, toggleWishlist, addToCart, storeInfo } = useStore();
+  const [savedProducts, setSavedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Resolve saved products from store wishlist IDs
-  const savedProducts = PRODUCTS.filter((p) => wishlist.includes(p.id));
+  // Fetch product details for wishlist items
+  useEffect(() => {
+    if (wishlist.length === 0) {
+      setSavedProducts([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    fetch("/api/products?limit=100")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.products && Array.isArray(data.products)) {
+          const list = data.products
+            .filter((p: any) => wishlist.includes(p.id) || wishlist.includes(p.slug))
+            .map((p: any) => ({
+              id: p.id,
+              name: p.name,
+              brand: p.brand?.name || p.brand || "Authorized",
+              category: p.category?.slug || p.categoryId || "power-tools",
+              subcategory: p.subcategory || "",
+              price: p.price,
+              originalPrice: p.compareAtPrice || p.originalPrice,
+              discountPercent: p.deals?.[0]?.discountPercent || 0,
+              rating: p.ratingAvg || p.rating || 5.0,
+              reviewsCount: p.ratingCount || p.reviewsCount || 10,
+              inStock: p.isInStock ?? p.inStock ?? true,
+              stockCount: p.stockQuantity ?? p.stockCount ?? 8,
+              sku: p.sku,
+              unit: p.unit || "Piece",
+              description: p.description || "",
+              specifications: p.technicalSpecs || p.specifications || {},
+              images: Array.isArray(p.images)
+                ? p.images.map((img: any) => (typeof img === "string" ? img : img.imageUrl))
+                : ["/images/placeholder.webp"],
+              tags: p.tags || [],
+            } as Product));
+          setSavedProducts(list);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [wishlist]);
 
   const handleAddAllToCart = () => {
     savedProducts.forEach((product) => {
@@ -30,6 +73,8 @@ export function WishlistClient() {
       }
     });
   };
+
+  const phoneNum = storeInfo?.phone || "985-1145065";
 
   return (
     <div style={{ background: "#FAFAFA", minHeight: "100vh", paddingBottom: "70px" }}>
@@ -64,40 +109,45 @@ export function WishlistClient() {
           <div
             style={{
               display: "flex",
-              alignItems: "flex-end",
+              alignItems: "center",
               justifyContent: "space-between",
               flexWrap: "wrap",
               gap: "20px",
             }}
           >
             <div>
-              <span
+              <div
                 style={{
-                  fontSize: "14px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "4px 10px",
+                  borderRadius: "var(--radius-sm)",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  fontSize: "12px",
                   fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
                   color: "#94A3B8",
-                  display: "block",
-                  marginBottom: "6px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                  marginBottom: "10px",
                 }}
               >
-                Saved Hardware Supplies
-              </span>
+                <Heart size={13} fill="#C1512D" color="#C1512D" />
+                <span>Saved Hardware &amp; Materials</span>
+              </div>
               <h1
                 style={{
                   fontSize: "30px",
                   fontWeight: 800,
                   color: "#FFFFFF",
-                  letterSpacing: "-0.02em",
-                  lineHeight: "1.2",
-                  marginBottom: "8px",
+                  margin: "0 0 6px 0",
                 }}
               >
-                My Wishlist
+                Saved For Your Project
               </h1>
-              <p style={{ fontSize: "16px", color: "#CBD5E1", maxWidth: "600px" }}>
-                Keep track of essential tools, plumbing fittings, paints, and construction supplies for your upcoming projects.
+              <p style={{ fontSize: "15px", color: "#CBD5E1", margin: 0 }}>
+                Keep track of items you need for upcoming construction phases in Kathmandu Valley.
               </p>
             </div>
 
@@ -108,16 +158,17 @@ export function WishlistClient() {
                 style={{
                   background: "#4A6572",
                   color: "#FFFFFF",
-                  minHeight: "48px",
-                  padding: "12px 24px",
-                  fontSize: "15px",
-                  fontWeight: 700,
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "8px",
+                  minHeight: "44px",
+                  padding: "10px 22px",
+                  fontSize: "15px",
+                  fontWeight: 700,
+                  cursor: "pointer",
                 }}
               >
-                <ShoppingCart size={18} />
+                <ShoppingCart size={17} />
                 <span>Add All In-Stock to Cart</span>
               </button>
             )}
@@ -125,15 +176,16 @@ export function WishlistClient() {
         </div>
       </div>
 
-      <div className="container" style={{ marginTop: "32px" }}>
-        {savedProducts.length === 0 ? (
+      {/* Main Content Area */}
+      <div className="container" style={{ marginTop: "36px" }}>
+        {savedProducts.length === 0 && !loading ? (
           /* Empty State */
           <div
             style={{
               background: "#FFFFFF",
-              borderRadius: "var(--radius-lg)",
               border: "1px solid #E5E7EB",
-              padding: "64px 24px",
+              borderRadius: "var(--radius-lg)",
+              padding: "70px 24px",
               textAlign: "center",
               maxWidth: "600px",
               margin: "0 auto",
@@ -144,15 +196,16 @@ export function WishlistClient() {
                 width: "64px",
                 height: "64px",
                 borderRadius: "50%",
-                background: "rgba(193, 81, 45, 0.1)",
-                color: "#C1512D",
+                background: "#FAFAFA",
+                border: "1px solid #E5E7EB",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 margin: "0 auto 20px auto",
+                color: "#6E6E73",
               }}
             >
-              <Heart size={32} />
+              <Heart size={28} />
             </div>
             <h2
               style={{
@@ -210,7 +263,7 @@ export function WishlistClient() {
                 {savedProducts.length} Saved {savedProducts.length === 1 ? "Product" : "Products"}
               </span>
               <span style={{ fontSize: "14px", color: "#6E6E73" }}>
-                Prices include 13% Official Nepal VAT
+                Real-time Kathmandu depot availability
               </span>
             </div>
 
@@ -249,14 +302,15 @@ export function WishlistClient() {
                         alignItems: "center",
                         justifyContent: "center",
                         flexShrink: 0,
+                        position: "relative",
                       }}
                     >
-                      <img
-                        src={product.images[0]}
+                      <Image
+                        src={product.images[0] || "/images/placeholder.webp"}
                         alt={product.name}
+                        fill
+                        sizes="90px"
                         style={{
-                          width: "100%",
-                          height: "100%",
                           objectFit: "contain",
                           padding: "6px",
                         }}
@@ -266,7 +320,7 @@ export function WishlistClient() {
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div
                         style={{
-                          fontSize: "14px",
+                          fontSize: "12px",
                           fontWeight: 700,
                           textTransform: "uppercase",
                           color: "#4A6572",
@@ -274,96 +328,66 @@ export function WishlistClient() {
                           marginBottom: "4px",
                         }}
                       >
-                        {product.brand} • {product.subcategory}
+                        {product.brand}
                       </div>
 
                       <Link
                         href={`/product/${product.id}`}
                         style={{
-                          fontSize: "16px",
+                          fontSize: "15px",
                           fontWeight: 700,
                           color: "#1C1C1E",
-                          lineHeight: "1.35",
+                          textDecoration: "none",
                           display: "-webkit-box",
                           WebkitLineClamp: 2,
                           WebkitBoxOrient: "vertical",
                           overflow: "hidden",
-                          textDecoration: "none",
+                          lineHeight: "1.35",
                           marginBottom: "8px",
                         }}
                       >
                         {product.name}
                       </Link>
 
-                      {product.inStock ? (
-                        <div
-                          style={{
-                            fontSize: "14px",
-                            fontWeight: 600,
-                            color: "#166534",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                        >
-                          <CheckCircle2 size={14} />
-                          <span>In Stock</span>
-                        </div>
-                      ) : (
-                        <div
-                          style={{
-                            fontSize: "14px",
-                            fontWeight: 600,
-                            color: "#C1512D",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                          }}
-                        >
-                          <AlertCircle size={14} />
-                          <span>Out of Stock</span>
-                        </div>
-                      )}
+                      <div style={{ fontSize: "17px", fontWeight: 800, color: "#1C1C1E" }}>
+                        NPR {product.price.toLocaleString()}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Pricing */}
+                  {/* Stock status indicator */}
                   <div
                     style={{
                       display: "flex",
-                      alignItems: "baseline",
-                      gap: "8px",
+                      alignItems: "center",
+                      gap: "6px",
+                      fontSize: "13px",
                       marginBottom: "16px",
-                      paddingTop: "12px",
-                      borderTop: "1px solid #E5E7EB",
                     }}
                   >
-                    <span style={{ fontSize: "20px", fontWeight: 800, color: "#1C1C1E" }}>
-                      NPR {product.price.toLocaleString()}
-                    </span>
-                    {product.originalPrice && product.originalPrice > product.price && (
-                      <span
-                        style={{
-                          fontSize: "14px",
-                          color: "#9CA3AF",
-                          textDecoration: "line-through",
-                        }}
-                      >
-                        NPR {product.originalPrice.toLocaleString()}
-                      </span>
+                    {product.inStock ? (
+                      <>
+                        <CheckCircle2 size={15} color="#1E824C" />
+                        <span style={{ color: "#1E824C", fontWeight: 600 }}>In Stock</span>
+                        <span style={{ color: "#6E6E73" }}>· Ready for dispatch</span>
+                      </>
+                    ) : (
+                      <>
+                        <span style={{ color: "#DC2626", fontWeight: 600 }}>Out of Stock</span>
+                        <span style={{ color: "#6E6E73" }}>· Available on pre-order</span>
+                      </>
                     )}
-                    <span style={{ fontSize: "14px", color: "#6E6E73" }}>
-                      per {product.unit}
-                    </span>
                   </div>
 
-                  {/* Action Buttons: Add to Cart & Remove (both >= 44px tap target) */}
+                  {/* Actions Row */}
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
                       gap: "10px",
                       marginTop: "auto",
+                      paddingTop: "14px",
+                      borderTop: "1px solid #E5E7EB",
                     }}
                   >
                     <button
@@ -372,44 +396,40 @@ export function WishlistClient() {
                       className="btn btn-primary"
                       style={{
                         flex: 1,
-                        background: "#4A6572",
-                        color: "#FFFFFF",
-                        minHeight: "44px",
-                        fontSize: "14px",
-                        fontWeight: 700,
+                        background: product.inStock ? "#4A6572" : "#E5E7EB",
+                        color: product.inStock ? "#FFFFFF" : "#9CA3AF",
+                        cursor: product.inStock ? "pointer" : "not-allowed",
                         display: "inline-flex",
                         alignItems: "center",
                         justifyContent: "center",
                         gap: "6px",
-                        opacity: product.inStock ? 1 : 0.5,
-                        cursor: product.inStock ? "pointer" : "not-allowed",
+                        minHeight: "40px",
+                        fontSize: "14px",
+                        fontWeight: 700,
+                        border: "none",
                       }}
-                      aria-label={`Add ${product.name} to Cart`}
                     >
-                      <ShoppingCart size={16} />
-                      <span>Add to Cart</span>
+                      <ShoppingCart size={15} />
+                      <span>{product.inStock ? "Add to Cart" : "Out of Stock"}</span>
                     </button>
 
                     <button
                       onClick={() => toggleWishlist(product.id)}
-                      className="btn btn-outline"
                       style={{
-                        minHeight: "44px",
-                        minWidth: "44px",
-                        padding: "8px 14px",
-                        borderColor: "#D1D5DB",
-                        color: "#6E6E73",
-                        fontSize: "14px",
-                        display: "inline-flex",
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "var(--radius-sm)",
+                        background: "#FFFFFF",
+                        border: "1px solid #E5E7EB",
+                        display: "flex",
                         alignItems: "center",
-                        gap: "5px",
+                        justifyContent: "center",
+                        color: "#DC2626",
                         cursor: "pointer",
                       }}
-                      title="Remove from Wishlist"
-                      aria-label={`Remove ${product.name} from Wishlist`}
+                      title="Remove from saved list"
                     >
                       <Trash2 size={16} />
-                      <span>Remove</span>
                     </button>
                   </div>
                 </div>
@@ -418,7 +438,7 @@ export function WishlistClient() {
           </div>
         )}
 
-        {/* Contractor / Support Callout */}
+        {/* Bottom Procurement Banner */}
         <div
           style={{
             marginTop: "48px",
@@ -434,8 +454,8 @@ export function WishlistClient() {
           }}
         >
           <div>
-            <h3 style={{ fontSize: "18px", fontWeight: 800, color: "#1C1C1E", marginBottom: "4px" }}>
-              Ordering Bulk Quantities for Project Sites?
+            <h3 style={{ fontSize: "17px", fontWeight: 800, color: "#1C1C1E", margin: "0 0 4px 0" }}>
+              Looking for commercial bulk quotation?
             </h3>
             <p style={{ fontSize: "14px", color: "#6E6E73", margin: 0 }}>
               Direct contractor volume rates and same-day delivery available across Kathmandu Valley.
@@ -443,7 +463,7 @@ export function WishlistClient() {
           </div>
 
           <a
-            href="tel:9851145065"
+            href={`tel:${phoneNum.replace(/[^0-9]/g, "")}`}
             className="btn btn-outline"
             style={{
               borderColor: "#4A6572",
@@ -454,10 +474,11 @@ export function WishlistClient() {
               display: "inline-flex",
               alignItems: "center",
               gap: "8px",
+              textDecoration: "none",
             }}
           >
             <Phone size={16} />
-            <span>Call Us: 985-1145065</span>
+            <span>Call Us: {phoneNum}</span>
           </a>
         </div>
       </div>

@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 export function CustomerAuthModal() {
-  const { activeModal, closeModal, user, loginDemoUser, logout, savedAddresses, addSavedAddress } = useStore();
+  const { activeModal, closeModal, user, loginDemoUser, logout, savedAddresses, addSavedAddress, storeInfo } = useStore();
 
   const [tab, setTab] = useState<"login" | "register">("login");
   const [showAddAddress, setShowAddAddress] = useState(false);
@@ -33,7 +33,7 @@ export function CustomerAuthModal() {
     addSavedAddress({
       id: `addr-${Date.now()}`,
       fullName: user?.name || "Customer",
-      phone: user?.phone || "985-1145065",
+      phone: user?.phone || storeInfo?.phone || "",
       area: newArea.trim(),
       city: newCity,
       landmark: newLandmark.trim(),
@@ -114,7 +114,7 @@ export function CustomerAuthModal() {
                   <div style={{ fontSize: "12px", color: "#94a3b8" }}>{user.email}</div>
                   {user.companyName && (
                     <div style={{ fontSize: "12px", color: "var(--accent-amber)", marginTop: "4px" }}>
-                      {user.companyName} (PAN: {user.panNumber})
+                      {user.companyName}
                     </div>
                   )}
                 </div>
@@ -295,9 +295,8 @@ export function CustomerAuthModal() {
                   <div style={{ position: "relative" }}>
                     <input
                       type="text"
-                      defaultValue="985-1145065"
                       className="form-input"
-                      placeholder="985-1145065"
+                      placeholder="98XXXXXXXX"
                     />
                     <Phone size={16} color="var(--text-muted)" style={{ position: "absolute", right: "12px", top: "14px" }} />
                   </div>

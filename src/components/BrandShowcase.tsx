@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BRANDS } from "@/data/brands";
 import { useStore } from "@/context/StoreContext";
 
 // Evenly sized Brand Vector SVG Logos calibrated to uniform cap-height (28px height, sitting on one baseline)
 function BrandLogoBaselineSvg({ brandId }: { brandId: string }) {
-  switch (brandId) {
+  const normalizedId = brandId.toLowerCase().replace(/\s+/g, "-");
+  switch (normalizedId) {
     case "bosch":
       return (
         <svg viewBox="0 0 130 28" height="28" style={{ width: "auto", display: "block" }} fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -128,7 +128,7 @@ function BrandLogoBaselineSvg({ brandId }: { brandId: string }) {
 
 export function BrandShowcase() {
   const router = useRouter();
-  const { setSelectedBrand } = useStore();
+  const { brands, setSelectedBrand } = useStore();
   const [hoveredBrand, setHoveredBrand] = useState<string | null>(null);
 
   const handleBrandClick = (brandName: string) => {
@@ -137,7 +137,7 @@ export function BrandShowcase() {
   };
 
   // Repeated array for seamless continuous marquee loop
-  const marqueeBrands = [...BRANDS, ...BRANDS];
+  const marqueeBrands = [...brands, ...brands];
 
   return (
     <section
@@ -149,7 +149,7 @@ export function BrandShowcase() {
       }}
     >
       <div className="container">
-        {/* Section Header: Plain uppercase label, NO pill */}
+        {/* Section Header */}
         <div className="section-header" style={{ marginBottom: "28px" }}>
           <span className="section-tag">Authorized Brand Partners</span>
           <h2 className="section-title">Direct Factory Distribution</h2>
@@ -159,14 +159,14 @@ export function BrandShowcase() {
         </div>
       </div>
 
-      {/* Horizontal Auto-Scroll Logo Row (Continuous, slow, pauses on hover + swipeable/draggable) */}
+      {/* Horizontal Auto-Scroll Logo Row */}
       <div className="brand-strip-wrapper">
         <div className="brand-strip-track">
           {marqueeBrands.map((b, index) => (
             <div
-              key={`${b.id}-${index}`}
+              key={`${b.id || b.slug}-${index}`}
               onClick={() => handleBrandClick(b.name)}
-              onMouseEnter={() => setHoveredBrand(`${b.id}-${index}`)}
+              onMouseEnter={() => setHoveredBrand(`${b.id || b.slug}-${index}`)}
               onMouseLeave={() => setHoveredBrand(null)}
               className="brand-logo-item"
               title={`View ${b.name} Products`}
@@ -178,32 +178,32 @@ export function BrandShowcase() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  filter:
+                    hoveredBrand === `${b.id || b.slug}-${index}`
+                      ? "none"
+                      : "grayscale(100%) opacity(0.85)",
+                  transition: "filter 0.15s ease",
                 }}
               >
-                <BrandLogoBaselineSvg brandId={b.id} />
+                <BrandLogoBaselineSvg brandId={b.slug || b.id} />
               </div>
 
-              {/* Reveal-on-hover caption tooltip (keeps strip clean & uncluttered) */}
-              {hoveredBrand === `${b.id}-${index}` && (
+              {/* Authorized Partner Tick */}
+              {b.isAuthorizedPartner && (
                 <div
                   style={{
                     position: "absolute",
-                    top: "calc(100% + 8px)",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    background: "#1C1C1E",
-                    color: "#FFFFFF",
-                    padding: "5px 10px",
-                    borderRadius: "4px",
-                    fontSize: "11px",
-                    fontWeight: 500,
-                    whiteSpace: "nowrap",
-                    zIndex: 20,
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                    pointerEvents: "none",
+                    top: "6px",
+                    right: "8px",
+                    fontSize: "9px",
+                    fontWeight: 700,
+                    color: "var(--accent-steel)",
+                    background: "rgba(74, 101, 114, 0.08)",
+                    padding: "2px 5px",
+                    borderRadius: "2px",
                   }}
                 >
-                  <span style={{ color: "#A4B8C4" }}>{b.category}</span> • {b.country}
+                  DEALER
                 </div>
               )}
             </div>
@@ -215,34 +215,26 @@ export function BrandShowcase() {
         .brand-strip-wrapper {
           width: 100%;
           overflow-x: auto;
-          overflow-y: visible;
-          position: relative;
-          padding: 16px 0 24px 0;
           scrollbar-width: none;
+          -ms-overflow-style: none;
           cursor: grab;
+          user-select: none;
+          padding: 8px 0;
         }
-
-        .brand-strip-wrapper:active {
-          cursor: grabbing;
-        }
-
         .brand-strip-wrapper::-webkit-scrollbar {
           display: none;
         }
-
         .brand-strip-track {
           display: flex;
           align-items: center;
-          gap: 32px;
+          gap: 20px;
           width: max-content;
-          animation: brandMarquee 40s linear infinite;
+          animation: marqueeScroll 45s linear infinite;
         }
-
-        .brand-strip-track:hover {
+        .brand-strip-wrapper:hover .brand-strip-track {
           animation-play-state: paused;
         }
-
-        @keyframes brandMarquee {
+        @keyframes marqueeScroll {
           0% {
             transform: translateX(0);
           }
@@ -250,23 +242,26 @@ export function BrandShowcase() {
             transform: translateX(-50%);
           }
         }
-
         .brand-logo-item {
-          padding: 12px 20px;
+          flex-shrink: 0;
+          height: 64px;
+          min-width: 150px;
+          padding: 0 20px;
           background: #FAFAFA;
           border: 1px solid #E5E7EB;
           border-radius: var(--radius-md);
           display: flex;
           align-items: center;
           justifyContent: center;
+          cursor: pointer;
           position: relative;
-          transition: border-color var(--transition-fast), background-color var(--transition-fast);
-          flex-shrink: 0;
+          transition: all 0.15s ease;
         }
-
         .brand-logo-item:hover {
-          border-color: #4A6572;
           background: #FFFFFF;
+          border-color: #4A6572;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
       `}</style>
     </section>

@@ -8,10 +8,18 @@ import {
   MapPin,
   Phone,
   Clock,
+  Send,
+  FileText,
+  Package,
 } from "lucide-react";
 
 export function Footer() {
-  const { openModal } = useStore();
+  const { openModal, storeInfo, categories } = useStore();
+
+  const businessName = storeInfo?.businessName || "New Adhikari Traders";
+  const address = storeInfo?.address || "Kathmandu, Bagmati Province 44600";
+  const phone = storeInfo?.phone || "985-1145065";
+  const hours = storeInfo?.hours || "Open 7:00 AM – 8:00 PM (Daily)";
 
   return (
     <footer
@@ -39,11 +47,11 @@ export function Footer() {
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
               <div
                 style={{
-                  width: "38px",
-                  height: "38px",
+                  width: "36px",
+                  height: "36px",
                   borderRadius: "var(--radius-sm)",
-                  background: "#2C2C2E",
-                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  background: "rgba(74, 101, 114, 0.2)",
+                  border: "1px solid rgba(74, 101, 114, 0.35)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -59,28 +67,31 @@ export function Footer() {
             </div>
 
             <p style={{ fontSize: "14px", color: "#9CA3AF", lineHeight: "1.65", marginBottom: "18px" }}>
-              New Adhikari Traders is Nepal&apos;s trusted hardware store and building materials distributor located in Kathmandu, Bagmati Province. Serving contractors, tradesmen, and builders with genuine tools, electrical supplies, pipes, and official 13% VAT invoices.
+              {businessName} is Nepal&apos;s trusted hardware store and building materials distributor located in {address}. Serving contractors, tradesmen, and builders with genuine tools, electrical supplies, plumbing, and construction materials.
             </p>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", fontSize: "14px" }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
                 <MapPin size={16} color="#4A6572" style={{ marginTop: "3px", flexShrink: 0 }} />
-                <span>Kathmandu, Bagmati Province 44600, Nepal</span>
+                <span>{address}, Nepal</span>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <Phone size={16} color="#4A6572" style={{ flexShrink: 0 }} />
-                <a href="tel:9851145065" style={{ color: "#FFFFFF", fontWeight: 700 }}>
-                  985-1145065
+                <a
+                  href={`tel:${phone.replace(/[^0-9]/g, "")}`}
+                  style={{ color: "#FFFFFF", fontWeight: 700, textDecoration: "none" }}
+                >
+                  {phone}
                 </a>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <Clock size={16} color="#4A6572" style={{ flexShrink: 0 }} />
-                <span>Open 7:00 AM – 8:00 PM (Daily)</span>
+                <span>{hours}</span>
               </div>
             </div>
           </div>
 
-          {/* Col 2: Categories */}
+          {/* Col 2: Categories (Dynamic from DB) */}
           <div>
             <div
               style={{
@@ -94,150 +105,23 @@ export function Footer() {
             >
               Hardware Categories
             </div>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", fontSize: "14px" }}>
-              <li>
-                <Link
-                  href="/category/power-tools"
-                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  Power Tools (Bosch, Makita)
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/category/hand-tools"
-                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  Hand Tools (Stanley, Taparia)
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/category/plumbing"
-                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  Plumbing (Astral CPVC)
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/category/electrical"
-                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  Electrical (Havells Pure Copper)
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/category/paint-supplies"
-                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  Paints (Asian Paints)
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/category/construction-materials"
-                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  Cement &amp; TMT Steel Rebars
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products"
-                  style={{ color: "var(--accent-steel)", fontWeight: 600, textDecoration: "none" }}
-                >
-                  Browse All Categories →
-                </Link>
-              </li>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", fontSize: "14px", padding: 0 }}>
+              {categories.slice(0, 6).map((cat) => (
+                <li key={cat.id || cat.slug}>
+                  <Link
+                    href={`/category/${cat.slug || cat.id}`}
+                    style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
+                  >
+                    {cat.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Col 3: Contractor Services & Orders */}
-          <div>
-            <div
-              style={{
-                fontSize: "14px",
-                fontWeight: 700,
-                color: "#FFFFFF",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-                marginBottom: "16px",
-              }}
-            >
-              Contractor &amp; Support
-            </div>
-            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", fontSize: "14px" }}>
-              <li>
-                <Link
-                  href="/account/orders"
-                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  My Orders &amp; Purchase History
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/wishlist"
-                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  My Saved Wishlist
-                </Link>
-              </li>
-              <li>
-                <button
-                  onClick={() => openModal("request_quote")}
-                  style={{
-                    color: "#D1D5DB",
-                    transition: "color 0.15s",
-                    background: "none",
-                    border: "none",
-                    padding: 0,
-                    cursor: "pointer",
-                    textAlign: "left",
-                    fontSize: "14px",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
-                >
-                  Request Contractor Bulk Quote
-                </button>
-              </li>
-              <li>
-                <Link
-                  href="/products?filter=deals"
-                  style={{ color: "#C1512D", fontWeight: 600, textDecoration: "none" }}
-                >
-                  Weekly Flash Deals
-                </Link>
-              </li>
-              <li>
-                <span style={{ color: "#9CA3AF" }}>Kathmandu Valley Same-Day Dispatch</span>
-              </li>
-              <li>
-                <span style={{ color: "#9CA3AF" }}>Official 13% VAT Invoices</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 4: Nepal Payment Partners as Plain Logo Chips (NO colored pill backgrounds) */}
+          {/* Col 3: Customer Care & Services */}
           <div>
             <div
               style={{
@@ -249,88 +133,127 @@ export function Footer() {
                 marginBottom: "16px",
               }}
             >
-              Payment Methods
+              Contractor Desk
             </div>
-            <p style={{ fontSize: "14px", color: "#9CA3AF", lineHeight: "1.5", marginBottom: "14px" }}>
-              We accept direct digital payments or Cash on Delivery at your construction site.
-            </p>
+            <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px", fontSize: "14px", padding: 0 }}>
+              <li>
+                <Link
+                  href="/account/orders"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s", display: "inline-flex", alignItems: "center", gap: "6px" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
+                >
+                  <Package size={14} />
+                  <span>Track &amp; View Orders</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/wishlist"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
+                >
+                  Saved Wishlist
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={() => openModal("request_quote")}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    color: "#D1D5DB",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    textAlign: "left",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
+                >
+                  <FileText size={14} />
+                  <span>Request Bulk Site Quote</span>
+                </button>
+              </li>
+              <li>
+                <Link
+                  href="/products"
+                  style={{ color: "#D1D5DB", textDecoration: "none", transition: "color 0.15s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#4A6572")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "#D1D5DB")}
+                >
+                  Direct Depot Stock Catalog
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-            {/* Plain Logo Chips (NO colored pill backgrounds) */}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "18px" }}>
-              <span
-                style={{
-                  background: "rgba(255, 255, 255, 0.08)",
-                  border: "1px solid rgba(255, 255, 255, 0.15)",
-                  color: "#FFFFFF",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  padding: "6px 12px",
-                  borderRadius: "var(--radius-sm)",
-                }}
-              >
-                eSewa
-              </span>
-
-              <span
-                style={{
-                  background: "rgba(255, 255, 255, 0.08)",
-                  border: "1px solid rgba(255, 255, 255, 0.15)",
-                  color: "#FFFFFF",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  padding: "6px 12px",
-                  borderRadius: "var(--radius-sm)",
-                }}
-              >
-                Khalti
-              </span>
-
-              <span
-                style={{
-                  background: "rgba(255, 255, 255, 0.08)",
-                  border: "1px solid rgba(255, 255, 255, 0.15)",
-                  color: "#FFFFFF",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  padding: "6px 12px",
-                  borderRadius: "var(--radius-sm)",
-                }}
-              >
-                Fonepay QR
-              </span>
-
-              <span
-                style={{
-                  background: "rgba(255, 255, 255, 0.08)",
-                  border: "1px solid rgba(255, 255, 255, 0.15)",
-                  color: "#FFFFFF",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  padding: "6px 12px",
-                  borderRadius: "var(--radius-sm)",
-                }}
-              >
-                Cash on Delivery
-              </span>
-            </div>
-
+          {/* Col 4: Newsletter & Verification */}
+          <div>
             <div
               style={{
-                background: "rgba(255, 255, 255, 0.04)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                borderRadius: "var(--radius-sm)",
-                padding: "10px 12px",
-                fontSize: "14px",
-                color: "#9CA3AF",
-                lineHeight: "1.4",
+                fontSize: "15px",
+                fontWeight: 700,
+                color: "#FFFFFF",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                marginBottom: "16px",
               }}
             >
-              <strong>Govt. Registered Firm:</strong> PAN 602918239 • Department of Commerce &amp; Supply Management Nepal.
+              Direct Contractor Updates
             </div>
+            <p style={{ fontSize: "14px", color: "#9CA3AF", lineHeight: "1.5", marginBottom: "16px" }}>
+              Get weekly wholesale commodity price alerts for cement, TMT rebars, CPVC fittings, and promotional tool kits.
+            </p>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert("Thank you! You will receive Kathmandu hardware updates.");
+              }}
+              style={{ display: "flex", gap: "8px", marginBottom: "16px" }}
+            >
+              <input
+                type="text"
+                placeholder="Phone or Email"
+                required
+                style={{
+                  flex: 1,
+                  background: "rgba(255, 255, 255, 0.08)",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "9px 12px",
+                  fontSize: "13px",
+                  color: "#FFFFFF",
+                  outline: "none",
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  background: "#4A6572",
+                  color: "#FFFFFF",
+                  border: "none",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "0 14px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                aria-label="Subscribe"
+              >
+                <Send size={15} />
+              </button>
+            </form>
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Bottom Sub-Bar */}
         <div
           style={{
             borderTop: "1px solid rgba(255, 255, 255, 0.08)",
@@ -345,13 +268,13 @@ export function Footer() {
           }}
         >
           <div>
-            © 2026 <strong>New Adhikari Traders</strong> (Kathmandu, Nepal). All rights reserved.
+            © {new Date().getFullYear()} <strong>{businessName}</strong> ({address}). All rights reserved.
           </div>
 
           <div style={{ display: "flex", gap: "18px" }}>
-            <span>Direct Phone: 985-1145065</span>
+            <span>Direct Phone: {phone}</span>
             <span>Currency: NPR (Rs.)</span>
-            <span>Kathmandu, Bagmati Province 44600</span>
+            <span>{address}</span>
           </div>
         </div>
       </div>

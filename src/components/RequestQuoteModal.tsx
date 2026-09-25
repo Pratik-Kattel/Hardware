@@ -15,19 +15,16 @@ import {
 } from "lucide-react";
 
 export function RequestQuoteModal() {
-  const { activeModal, closeModal, submitQuoteRequest, user } = useStore();
+  const { activeModal, closeModal, submitQuoteRequest, user, storeInfo } = useStore();
 
-  const [contractorName, setContractorName] = useState(user?.name || "Rajesh Shrestha");
-  const [companyName, setCompanyName] = useState(user?.companyName || "Himalayan Builders Pvt Ltd");
-  const [phone, setPhone] = useState(user?.phone || "985-1145065");
-  const [email, setEmail] = useState(user?.email || "rajesh.builders@gmail.com");
-  const [projectLocation, setProjectLocation] = useState("Sitapaila / Ring Road, Kathmandu");
+  const [contractorName, setContractorName] = useState(user?.name || "");
+  const [companyName, setCompanyName] = useState(user?.companyName || "");
+  const [phone, setPhone] = useState(user?.phone || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [projectLocation, setProjectLocation] = useState("Kathmandu Valley");
   const [projectType, setProjectType] = useState<any>("Residential Construction");
   const [urgency, setUrgency] = useState<any>("Immediate (Within 24 Hours)");
-  const [itemsNeeded, setItemsNeeded] = useState(
-    "150 Sacks Shivam 53-Grade OPC Cement\n3 Tons 12mm TMT Steel Rebar (NS 191)\n20 Coils Havells 2.5mm HRFR Wire\n50 Lengths Astral 1-inch CPVC Pipe"
-  );
-  const [taxPanNumber, setTaxPanNumber] = useState(user?.panNumber || "602918239");
+  const [itemsNeeded, setItemsNeeded] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [generatedQuoteId, setGeneratedQuoteId] = useState("");
   const [formError, setFormError] = useState("");
@@ -51,7 +48,6 @@ export function RequestQuoteModal() {
       projectType,
       itemsNeeded,
       urgency,
-      taxPanNumber,
     });
     setGeneratedQuoteId(newQuote.id);
     setIsSubmitted(true);
@@ -131,7 +127,7 @@ export function RequestQuoteModal() {
           </div>
 
           <p style={{ fontSize: "13px", color: "#cbd5e1", margin: 0 }}>
-            Special tiered pricing, direct mini-truck site delivery, and VAT invoices for construction projects in Nepal.
+            Special tiered pricing and direct mini-truck site delivery for construction projects in Nepal.
           </p>
         </div>
 
@@ -262,30 +258,17 @@ export function RequestQuoteModal() {
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "20px" }} className="quote-grid">
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">Timeline / Urgency</label>
-                  <select
-                    className="form-select"
-                    value={urgency}
-                    onChange={(e) => setUrgency(e.target.value as any)}
-                  >
-                    <option value="Immediate (Within 24 Hours)">Immediate (Within 24 Hours)</option>
-                    <option value="Standard (2-3 Days)">Standard (2-3 Days)</option>
-                    <option value="Upcoming Project">Upcoming Project (Next Month)</option>
-                  </select>
-                </div>
-
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <label className="form-label">Business PAN Number (Optional)</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={taxPanNumber}
-                    onChange={(e) => setTaxPanNumber(e.target.value)}
-                    placeholder="9-digit PAN for VAT"
-                  />
-                </div>
+              <div className="form-group" style={{ marginBottom: "20px" }}>
+                <label className="form-label">Timeline / Urgency</label>
+                <select
+                  className="form-select"
+                  value={urgency}
+                  onChange={(e) => setUrgency(e.target.value as any)}
+                >
+                  <option value="Immediate (Within 24 Hours)">Immediate (Within 24 Hours)</option>
+                  <option value="Standard (2-3 Days)">Standard (2-3 Days)</option>
+                  <option value="Upcoming Project">Upcoming Project (Next Month)</option>
+                </select>
               </div>
 
               {/* Inline Form Error */}
@@ -329,7 +312,7 @@ export function RequestQuoteModal() {
                 }}
               >
                 <ShieldCheck size={14} color="var(--success)" />
-                <span>Or speak to our contractor lead directly at 985-1145065</span>
+                <span>Or speak to our contractor lead directly at {storeInfo?.phone || "985-1145065"}</span>
               </div>
             </form>
           )}

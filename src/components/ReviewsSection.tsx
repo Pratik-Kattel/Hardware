@@ -1,12 +1,29 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { CUSTOMER_REVIEWS } from "@/data/reviews";
 import { Star, CheckCircle2, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { useStore } from "@/context/StoreContext";
+import { TestimonialData } from "@/types";
+import { testimonialsData } from "@/lib/seed-data";
 
 export function ReviewsSection() {
+  const { storeInfo } = useStore();
+  const [reviews, setReviews] = useState<TestimonialData[]>(testimonialsData);
+
+  useEffect(() => {
+    fetch("/api/testimonials")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setReviews(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -39,6 +56,8 @@ export function ReviewsSection() {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
+  const ordersCount = storeInfo?.stats?.ordersDelivered || 15400;
+
   return (
     <section
       style={{
@@ -69,7 +88,7 @@ export function ReviewsSection() {
             </p>
           </div>
 
-          {/* Clean Rating Summary Bar - 1px border #E5E7EB */}
+          {/* Dynamic Rating Summary Bar */}
           <div
             style={{
               background: "#FAFAFA",
@@ -108,7 +127,7 @@ export function ReviewsSection() {
                 lineHeight: "1.4",
               }}
             >
-              <strong>2,400+ Verified Orders</strong> delivered across Kathmandu, Lalitpur, and Bhaktapur.
+              <strong>{ordersCount.toLocaleString()}+ Verified Orders</strong> delivered across Kathmandu, Lalitpur, and Bhaktapur.
             </div>
           </div>
         </div>
@@ -136,6 +155,7 @@ export function ReviewsSection() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              cursor: "pointer",
               transition: "border-color var(--transition-fast)",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
@@ -157,6 +177,7 @@ export function ReviewsSection() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              cursor: "pointer",
               transition: "border-color var(--transition-fast)",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#4A6572")}
@@ -166,15 +187,15 @@ export function ReviewsSection() {
           </button>
         </div>
 
-        {/* Reviews Embla Carousel: 2 visible desktop / 1 mobile */}
+        {/* Reviews Carousel Slider */}
         <div ref={emblaRef} style={{ overflow: "hidden" }}>
           <div style={{ display: "flex", marginLeft: "-20px" }}>
-            {CUSTOMER_REVIEWS.map((rev) => (
+            {reviews.map((rev) => (
               <div
                 key={rev.id}
                 className="review-slide-item"
                 style={{
-                  flex: "0 0 50%",
+                  flex: "0 0 33.333%",
                   minWidth: 0,
                   paddingLeft: "20px",
                 }}
@@ -208,7 +229,7 @@ export function ReviewsSection() {
 
                   {/* Star Rating */}
                   <div style={{ display: "flex", gap: "3px", marginBottom: "12px" }}>
-                    {[...Array(rev.rating)].map((_, i) => (
+                    {[...Array(Math.floor(rev.rating))].map((_, i) => (
                       <Star key={i} size={14} fill="#D97706" color="#D97706" />
                     ))}
                   </div>
@@ -223,7 +244,7 @@ export function ReviewsSection() {
                       flex: 1,
                     }}
                   >
-                    &ldquo;{rev.comment}&rdquo;
+                    &ldquo;{rev.reviewText}&rdquo;
                   </p>
 
                   {/* Project Tag */}
@@ -237,11 +258,11 @@ export function ReviewsSection() {
                         borderRadius: "var(--radius-sm)",
                       }}
                     >
-                      Project: {rev.projectType}
+                      Project: {rev.projectTag}
                     </span>
                   </div>
 
-                  {/* Author Info */}
+                  {/* Author Info using Next.js Image */}
                   <div
                     style={{
                       display: "flex",
@@ -251,17 +272,25 @@ export function ReviewsSection() {
                       borderTop: "1px solid #E5E7EB",
                     }}
                   >
-                    <img
-                      src={`${rev.avatar}&fm=webp`}
-                      alt={rev.name}
+                    <div
                       style={{
                         width: "42px",
                         height: "42px",
                         borderRadius: "50%",
-                        objectFit: "cover",
+                        overflow: "hidden",
+                        position: "relative",
+                        flexShrink: 0,
                         border: "1px solid #E5E7EB",
                       }}
-                    />
+                    >
+                      <Image
+                        src={rev.photoUrl}
+                        alt={rev.name}
+                        width={42}
+                        height={42}
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
                     <div>
                       <div
                         style={{
@@ -274,17 +303,14 @@ export function ReviewsSection() {
                         }}
                       >
                         <span>{rev.name}</span>
-                        {rev.verifiedPurchase && (
+                        {rev.isVerified && (
                           <span title="Verified Site Buyer" style={{ display: "inline-flex" }}>
                             <CheckCircle2 size={13} color="#1E824C" />
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: "12px", color: "#4A6572", fontWeight: 600 }}>
-                        {rev.role}
-                      </div>
-                      <div style={{ fontSize: "11px", color: "#6E6E73" }}>
-                        {rev.location} • {rev.date}
+                      <div style={{ fontSize: "12px", color: "#6E6E73" }}>
+                        {rev.role} · {rev.location}
                       </div>
                     </div>
                   </div>
@@ -294,27 +320,27 @@ export function ReviewsSection() {
           </div>
         </div>
 
-        {/* Carousel Dots in Muted Steel-Blue #4A6572 */}
+        {/* Carousel Dots */}
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
             gap: "6px",
-            marginTop: "24px",
+            marginTop: "28px",
           }}
         >
-          {scrollSnaps.map((_, idx) => (
+          {scrollSnaps.slice(0, Math.min(scrollSnaps.length, 6)).map((_, idx) => (
             <button
               key={idx}
               onClick={() => emblaApi && emblaApi.scrollTo(idx)}
-              aria-label={`Go to review group ${idx + 1}`}
+              aria-label={`Go to slide group ${idx + 1}`}
               style={{
                 width: selectedIndex === idx ? "20px" : "6px",
                 height: "6px",
                 borderRadius: "3px",
                 background: selectedIndex === idx ? "#4A6572" : "#D1D5DB",
                 border: "none",
+                cursor: "pointer",
                 transition: "all 0.2s ease",
               }}
             />
@@ -323,7 +349,12 @@ export function ReviewsSection() {
       </div>
 
       <style jsx>{`
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+          .review-slide-item {
+            flex: 0 0 50% !important;
+          }
+        }
+        @media (max-width: 640px) {
           .review-slide-item {
             flex: 0 0 100% !important;
           }
