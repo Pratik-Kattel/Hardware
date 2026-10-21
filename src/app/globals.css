@@ -443,22 +443,229 @@ img {
   z-index: 900;
 }
 
-/* Responsive adjustments */
-@media (max-width: 992px) {
-  .section-title {
-    font-size: 26px;
+/* =========================================================
+   COMPREHENSIVE MOBILE & TABLET RESPONSIVE SYSTEM
+   Guarantees 100% responsiveness on iPhone, Android, and iPads
+   ========================================================= */
+
+/* Prevent horizontal page overflow */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  position: relative;
+}
+
+/* 1. Header & Mobile Navigation */
+@media (max-width: 1024px) {
+  .top-utility-bar {
+    display: none !important;
+  }
+  .mobile-hamburger-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px !important;
+    min-height: 42px !important;
+  }
+  .nav-helpline,
+  .call-us-prefix,
+  .contractor-nav-btn {
+    display: none !important;
+  }
+  .nav-btn-label {
+    display: none !important;
+  }
+  .header-nav-btn {
+    min-width: 42px !important;
+    padding: 0 10px !important;
+  }
+  .header-nav-cart {
+    min-width: 42px !important;
+    padding: 0 12px !important;
+  }
+  .quick-category-nav {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 6px 0 !important;
+    gap: 8px !important;
+  }
+  .quick-category-nav::-webkit-scrollbar {
+    display: none !important;
   }
 }
 
 @media (max-width: 768px) {
-  .top-utility-bar {
-    display: none;
+  .header-container {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  .navbar-top-row {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 8px 0 !important;
+  }
+  .navbar-search-wrapper {
+    order: 3 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    margin-top: 6px !important;
+  }
+  .user-name-wrapper {
+    display: none !important;
+  }
+  .section-header {
+    margin-bottom: 24px !important;
+    text-align: left !important;
   }
   .section-title {
-    font-size: 22px;
+    font-size: clamp(20px, 5.5vw, 26px) !important;
   }
-  .header-container {
-    padding-left: 16px;
-    padding-right: 16px;
+  .section-subtitle {
+    font-size: 13.5px !important;
+  }
+}
+
+/* 2. Hero Section on Mobile */
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  .hero-headline {
+    font-size: clamp(26px, 6vw, 36px) !important;
+    line-height: 1.18 !important;
+    margin-bottom: 14px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-grid > div:last-child {
+    display: none !important;
+  }
+  .counter-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    padding: 0 4px !important;
+  }
+  .counter-item div:first-child {
+    font-size: clamp(22px, 6vw, 28px) !important;
+  }
+  .counter-item div:nth-child(2) {
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+  }
+  .counter-item div:nth-child(3) {
+    display: none !important;
+  }
+}
+
+/* 3. Category Grid on Mobile */
+@media (max-width: 640px) {
+  .category-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .category-card-item {
+    padding: 12px !important;
+  }
+  .cat-card-desc,
+  .cat-subcategories-wrap {
+    display: none !important;
+  }
+}
+
+/* 4. Product Cards & Grids (2 Columns on Mobile - Like Native App) */
+@media (max-width: 640px) {
+  .featured-products-grid,
+  .catalog-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .product-card-img-wrap {
+    height: 150px !important;
+  }
+  .product-card-body {
+    padding: 10px !important;
+  }
+  .product-card-root h4 {
+    min-height: auto !important;
+    margin-bottom: 4px !important;
+  }
+  .product-card-root h4 a {
+    font-size: 12.5px !important;
+    line-height: 1.3 !important;
+    height: 32px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+  }
+  .product-card-quick-view {
+    display: none !important;
+  }
+  .product-card-btn {
+    min-width: 36px !important;
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+  }
+}
+
+/* 5. Carousels (Deals & Reviews) Responsive Slide Widths */
+@media (max-width: 1024px) {
+  .deal-slide-item {
+    flex: 0 0 45% !important;
+  }
+  .review-slide-item {
+    flex: 0 0 50% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .deal-slide-item {
+    flex: 0 0 82% !important;
+  }
+  .review-slide-item {
+    flex: 0 0 88% !important;
+  }
+}
+
+/* 6. Two-Column Content Sections Stack on Mobile */
+@media (max-width: 900px) {
+  .trust-grid,
+  .map-store-grid,
+  .contact-grid,
+  .shop-layout-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+/* 7. Modals & Drawers on Mobile */
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 8px !important;
+  }
+  .modal-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    max-height: 92vh !important;
+    border-radius: 12px 12px 0 0 !important;
+  }
+  .modal-header {
+    padding: 14px 16px !important;
+  }
+  .product-detail-grid,
+  .checkout-two-col {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
 }

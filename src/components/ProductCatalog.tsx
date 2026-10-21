@@ -561,6 +561,7 @@ export function ProductCatalog() {
               </div>
             ) : (
               <div
+                className="catalog-products-grid"
                 style={{
                   display: "grid",
                   gridTemplateColumns:

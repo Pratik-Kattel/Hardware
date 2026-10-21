@@ -119,6 +119,7 @@ export default function HomePage() {
 
           {/* Featured Products Grid */}
           <div
+            className="featured-products-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",

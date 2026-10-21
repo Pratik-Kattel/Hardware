@@ -25,6 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div
+      className="product-card-root"
       style={{
         background: "#FFFFFF",
         borderRadius: "var(--radius-lg)",
@@ -102,6 +103,7 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Product Image Link Container */}
       <Link
         href={`/product/${product.id}`}
+        className="product-card-img-wrap"
         style={{
           width: "100%",
           height: "210px",
@@ -130,6 +132,7 @@ export function ProductCard({ product }: ProductCardProps) {
             e.stopPropagation();
             openProductDetail(product);
           }}
+          className="product-card-quick-view"
           style={{
             position: "absolute",
             bottom: "8px",
@@ -159,6 +162,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
       {/* Product Card Details */}
       <div
+        className="product-card-body"
         style={{
           padding: "16px",
           display: "flex",

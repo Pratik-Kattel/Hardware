@@ -71,6 +71,7 @@ export function CategoryGrid() {
             gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
             gap: "20px",
           }}
+          className="category-cards-grid"
         >
           {categories.map((cat) => {
             const isSelected = selectedCategory === cat.slug || selectedCategory === cat.id;
@@ -80,6 +81,7 @@ export function CategoryGrid() {
               <Link
                 key={cat.id || cat.slug}
                 href={`/category/${cat.slug || cat.id}`}
+                className="category-card-item"
                 style={{
                   background: "#FFFFFF",
                   border: isSelected ? "1.5px solid #4A6572" : "1px solid #E5E7EB",
@@ -169,6 +171,7 @@ export function CategoryGrid() {
 
                 {/* Description */}
                 <p
+                  className="cat-card-desc"
                   style={{
                     fontSize: "13px",
                     color: "#3A3A3C",
@@ -183,6 +186,7 @@ export function CategoryGrid() {
                 {/* Subcategories tags */}
                 {subcategories.length > 0 && (
                   <div
+                    className="cat-subcategories-wrap"
                     style={{
                       display: "flex",
                       flexWrap: "wrap",

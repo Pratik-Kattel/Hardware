@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useStore } from "@/context/StoreContext";
 import {
   Wrench,
@@ -47,18 +48,25 @@ export function Footer() {
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
               <div
                 style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "var(--radius-sm)",
-                  background: "rgba(74, 101, 114, 0.2)",
-                  border: "1px solid rgba(74, 101, 114, 0.35)",
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "8px",
+                  overflow: "hidden",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#4A6572",
+                  flexShrink: 0,
+                  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)",
+                  background: "#2D3D52",
                 }}
               >
-                <Wrench size={19} />
+                <Image
+                  src="/logo.png"
+                  alt="New Adhikari Traders Logo"
+                  width={38}
+                  height={38}
+                  style={{ objectFit: "contain", width: "100%", height: "100%" }}
+                />
               </div>
               <div style={{ fontSize: "18px", fontWeight: 800, color: "#FFFFFF", letterSpacing: "-0.02em" }}>
                 <span>NEW ADHIKARI</span>{" "}

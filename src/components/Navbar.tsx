@@ -224,19 +224,26 @@ export function Navbar() {
             >
               <div
                 style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "var(--radius-md)",
-                  background: "#4A6572",
+                  width: "42px",
+                  height: "42px",
+                  borderRadius: "8px",
+                  overflow: "hidden",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#FFFFFF",
-                  border: "1px solid rgba(0, 0, 0, 0.08)",
                   flexShrink: 0,
+                  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.12)",
+                  background: "#2D3D52",
                 }}
               >
-                <Wrench size={20} strokeWidth={2.2} />
+                <Image
+                  src="/logo.png"
+                  alt="New Adhikari Traders Logo"
+                  width={42}
+                  height={42}
+                  priority
+                  style={{ objectFit: "contain", width: "100%", height: "100%" }}
+                />
               </div>
               <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <div
@@ -1273,27 +1280,63 @@ export function Navbar() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                paddingBottom: "12px",
+                borderBottom: "1px solid var(--border-light)",
               }}
             >
-              <div
-                style={{
-                  fontWeight: 800,
-                  color: "var(--primary)",
-                  fontSize: "16px",
-                }}
-              >
-                NEW ADHIKARI TRADERS
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "6px",
+                    overflow: "hidden",
+                    flexShrink: 0,
+                    background: "#2D3D52",
+                    boxShadow: "0 2px 5px rgba(0,0,0,0.15)",
+                  }}
+                >
+                  <Image
+                    src="/logo.png"
+                    alt="Logo"
+                    width={36}
+                    height={36}
+                    style={{ objectFit: "contain", width: "100%", height: "100%" }}
+                  />
+                </div>
+                <div>
+                  <div
+                    style={{
+                      fontWeight: 800,
+                      color: "var(--primary)",
+                      fontSize: "15px",
+                      lineHeight: "1.1",
+                    }}
+                  >
+                    NEW ADHIKARI TRADERS
+                  </div>
+                  <div style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }}>
+                    Kathmandu Store &amp; Depot
+                  </div>
+                </div>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
                 style={{
-                  background: "none",
-                  border: "none",
-                  padding: "4px",
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "6px",
+                  background: "var(--bg-surface-secondary)",
+                  border: "1px solid var(--border-light)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                   cursor: "pointer",
+                  color: "var(--primary)",
                 }}
+                aria-label="Close menu"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
