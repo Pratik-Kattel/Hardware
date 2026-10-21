@@ -172,7 +172,6 @@ export function RequestQuoteModal() {
                     className="form-input"
                     value={contractorName}
                     onChange={(e) => setContractorName(e.target.value)}
-                    placeholder="e.g. Er. Rajesh Shrestha"
                   />
                 </div>
 
@@ -183,7 +182,6 @@ export function RequestQuoteModal() {
                     className="form-input"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    placeholder="e.g. Himalayan Builders Pvt. Ltd."
                   />
                 </div>
               </div>
@@ -197,7 +195,6 @@ export function RequestQuoteModal() {
                     className="form-input"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="98XXXXXXXX"
                   />
                 </div>
 
@@ -208,7 +205,6 @@ export function RequestQuoteModal() {
                     className="form-input"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="contractor@email.com"
                   />
                 </div>
               </div>
@@ -238,7 +234,6 @@ export function RequestQuoteModal() {
                     className="form-input"
                     value={projectLocation}
                     onChange={(e) => setProjectLocation(e.target.value)}
-                    placeholder="e.g. Sitapaila, Kathmandu"
                   />
                 </div>
               </div>
@@ -253,7 +248,6 @@ export function RequestQuoteModal() {
                   className="form-textarea"
                   value={itemsNeeded}
                   onChange={(e) => setItemsNeeded(e.target.value)}
-                  placeholder="Example: 100 bags Shivam OPC, 2 tons 12mm rebar, 30 rolls Havells wire, 10 sets Jaquar mixers..."
                   style={{ resize: "vertical" }}
                 />
               </div>

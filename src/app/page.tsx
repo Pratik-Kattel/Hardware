@@ -13,12 +13,13 @@ import { ContactCTASection } from "@/components/ContactCTASection";
 import { StoreLocationSection } from "@/components/StoreLocationSection";
 import { useStore } from "@/context/StoreContext";
 import { Product } from "@/types";
+import { PRODUCTS } from "@/data/products";
 import { clientFetch } from "@/lib/api-client";
 import { ArrowRight } from "lucide-react";
 
 export default function HomePage() {
   const { storeInfo } = useStore();
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>(() => PRODUCTS.slice(0, 8));
   const [totalCount, setTotalCount] = useState(storeInfo?.stats?.productsCataloged || 2500);
 
   useEffect(() => {

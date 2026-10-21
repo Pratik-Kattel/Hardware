@@ -687,7 +687,7 @@ export function ProductDetailClient({
                     overflow: "hidden",
                   }}
                 >
-                  {Object.entries(product.specifications).map(([key, val], idx) => (
+                  {Object.entries(product.specifications || {}).map(([key, val], idx) => (
                     <div
                       key={key}
                       style={{
@@ -697,7 +697,7 @@ export function ProductDetailClient({
                         fontSize: "13px",
                         background: idx % 2 === 0 ? "#FAFAFA" : "#FFFFFF",
                         borderBottom:
-                          idx < Object.entries(product.specifications).length - 1
+                          idx < Object.entries(product.specifications || {}).length - 1
                             ? "1px solid #E5E7EB"
                             : "none",
                       }}

@@ -62,7 +62,7 @@ export function OrderTrackingModal() {
             <div style={{ position: "relative", flex: 1 }}>
               <input
                 type="text"
-                placeholder="Enter Order ID (e.g. ADH-98412)"
+                placeholder="Enter Order ID"
                 value={inputOrderId}
                 onChange={(e) => setInputOrderId(e.target.value)}
                 className="form-input"

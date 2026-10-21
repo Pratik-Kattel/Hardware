@@ -201,13 +201,13 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: `repeat(${order.trackingTimeline.length}, 1fr)`,
+              gridTemplateColumns: `repeat(${Math.max(1, (order.trackingTimeline || []).length)}, 1fr)`,
               gap: "16px",
               position: "relative",
             }}
             className="order-detail-stepper"
           >
-            {order.trackingTimeline.map((step, idx) => (
+            {(order.trackingTimeline || []).map((step, idx) => (
               <div
                 key={idx}
                 style={{
@@ -389,11 +389,11 @@ export function OrderDetailClient({ orderId }: OrderDetailClientProps) {
           }}
         >
           <h3 style={{ fontSize: "18px", fontWeight: 800, color: "#1C1C1E", marginBottom: "16px" }}>
-            Ordered Hardware Items ({order.items.length})
+            Ordered Hardware Items ({(order.items || []).length})
           </h3>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-            {order.items.map((item, idx) => (
+            {(order.items || []).map((item, idx) => (
               <div
                 key={idx}
                 style={{

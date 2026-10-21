@@ -166,7 +166,7 @@ export function ProductCard({ product }: ProductCardProps) {
           flex: 1,
         }}
       >
-        {/* Brand & Subcategory */}
+        {/* Brand & Subcategory with SKU */}
         <div
           style={{
             display: "flex",
@@ -175,24 +175,41 @@ export function ProductCard({ product }: ProductCardProps) {
             marginBottom: "4px",
           }}
         >
-          <span
-            style={{
-              fontSize: "11px",
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "0.04em",
-              color: "#4A6572",
-            }}
-          >
-            {product.brand}
-          </span>
-          <span style={{ fontSize: "11px", color: "#6E6E73" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 800,
+                textTransform: "uppercase",
+                letterSpacing: "0.04em",
+                color: "#0F172A",
+              }}
+            >
+              {product.brand}
+            </span>
+            {product.sku && (
+              <span
+                style={{
+                  fontSize: "10px",
+                  color: "#64748B",
+                  background: "#F1F5F9",
+                  padding: "1px 5px",
+                  borderRadius: "3px",
+                  fontFamily: "monospace",
+                  fontWeight: 600,
+                }}
+              >
+                {product.sku}
+              </span>
+            )}
+          </div>
+          <span style={{ fontSize: "11px", color: "#64748B" }}>
             {product.subcategory}
           </span>
         </div>
 
         {/* Product Title Link */}
-        <h4 style={{ marginBottom: "8px", minHeight: "38px" }}>
+        <h4 style={{ marginBottom: "6px", minHeight: "38px" }}>
           <Link
             href={`/product/${product.id}`}
             style={{
@@ -212,13 +229,43 @@ export function ProductCard({ product }: ProductCardProps) {
           </Link>
         </h4>
 
+        {/* Quick Specs Chips if available */}
+        {product.specifications && Object.keys(product.specifications).length > 0 && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              flexWrap: "wrap",
+              marginBottom: "8px",
+            }}
+          >
+            {Object.entries(product.specifications).slice(0, 2).map(([k, v]) => (
+              <span
+                key={k}
+                style={{
+                  fontSize: "10px",
+                  color: "#475569",
+                  background: "#F8FAFC",
+                  border: "1px solid #E2E8F0",
+                  padding: "1px 5px",
+                  borderRadius: "3px",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <strong>{k}:</strong> {v}
+              </span>
+            ))}
+          </div>
+        )}
+
         {/* Rating & Stock Status */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginBottom: "12px",
+            marginBottom: "10px",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -286,23 +333,27 @@ export function ProductCard({ product }: ProductCardProps) {
           <div>
             <div
               style={{
-                fontSize: "17px",
+                fontSize: "16px",
                 fontWeight: 800,
-                color: "#1C1C1E",
+                color: "#0F172A",
                 lineHeight: "1.1",
               }}
             >
-              NPR {product.price.toLocaleString()}
+              Rs. {product.price.toLocaleString()}
+              <span style={{ fontSize: "11px", fontWeight: 500, color: "#64748B", marginLeft: "3px" }}>
+                /{product.unit || "pc"}
+              </span>
             </div>
             {product.originalPrice && product.originalPrice > product.price && (
               <div
                 style={{
                   fontSize: "11px",
-                  color: "#9CA3AF",
+                  color: "#94A3B8",
                   textDecoration: "line-through",
+                  marginTop: "2px",
                 }}
               >
-                NPR {product.originalPrice.toLocaleString()}
+                Rs. {product.originalPrice.toLocaleString()}
               </div>
             )}
           </div>
@@ -312,27 +363,32 @@ export function ProductCard({ product }: ProductCardProps) {
             disabled={!product.inStock}
             className="btn btn-primary"
             style={{
-              minHeight: "44px",
+              minHeight: "40px",
               minWidth: "75px",
-              padding: "8px 16px",
+              padding: "6px 14px",
               gap: "6px",
-              background: "#4A6572",
+              background: product.inStock ? "#EA580C" : "#94A3B8",
               color: "#FFFFFF",
               border: "none",
               borderRadius: "var(--radius-sm)",
-              boxShadow: "none",
-              fontSize: "14px",
-              fontWeight: 600,
+              fontSize: "13px",
+              fontWeight: 700,
               cursor: product.inStock ? "pointer" : "not-allowed",
-              opacity: product.inStock ? 1 : 0.5,
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
+              transition: "background 0.15s ease",
+            }}
+            onMouseEnter={(e) => {
+              if (product.inStock) e.currentTarget.style.background = "#C2410C";
+            }}
+            onMouseLeave={(e) => {
+              if (product.inStock) e.currentTarget.style.background = "#EA580C";
             }}
             title={product.inStock ? `Add ${product.name} to Cart` : "Currently out of stock"}
             aria-label={`Add ${product.name} to Cart`}
           >
-            <ShoppingCart size={15} />
+            <ShoppingCart size={14} />
             <span>Add</span>
           </button>
         </div>

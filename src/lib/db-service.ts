@@ -103,10 +103,16 @@ export async function getCategories() {
         return categoriesData;
       }
 
-      return categories.map((c) => ({
-        ...c,
-        productCount: c._count.products > 0 ? c._count.products : c.productCount,
-      }));
+      return categories.map((c) => {
+        const seedCat = categoriesData.find((s) => s.slug === c.slug || s.id === c.id);
+        return {
+          ...c,
+          iconName: c.iconKey || seedCat?.iconName || "Boxes",
+          popularSubcategories: seedCat?.popularSubcategories || [],
+          image: c.imageUrl || seedCat?.image || "",
+          productCount: c._count.products > 0 ? c._count.products : c.productCount,
+        };
+      });
     },
     () => categoriesData
   );
@@ -135,7 +141,13 @@ export async function getCategoryBySlug(slug: string) {
         return { ...fallback, products: fallbackProducts };
       }
 
-      return category;
+      const seedCat = categoriesData.find((s) => s.slug === category.slug || s.id === category.id);
+      return {
+        ...category,
+        iconName: category.iconKey || seedCat?.iconName || "Boxes",
+        popularSubcategories: seedCat?.popularSubcategories || [],
+        image: category.imageUrl || seedCat?.image || "",
+      };
     },
     () => {
       const fallback = categoriesData.find((c) => c.slug === slug);

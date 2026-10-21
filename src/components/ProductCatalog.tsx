@@ -14,6 +14,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { Product, ProductCategory } from "@/types";
+import { PRODUCTS } from "@/data/products";
 import { clientFetch } from "@/lib/api-client";
 
 export function ProductCatalog() {
@@ -37,9 +38,9 @@ export function ProductCatalog() {
     setViewMode,
   } = useStore();
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(() => PRODUCTS);
+  const [totalCount, setTotalCount] = useState(() => PRODUCTS.length);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Sync URL search params
   useEffect(() => {

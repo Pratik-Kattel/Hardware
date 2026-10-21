@@ -171,7 +171,6 @@ export function CustomerAuthModal() {
                         type="text"
                         required
                         className="form-input"
-                        placeholder="e.g. Baneshwor, Ward 10"
                         value={newArea}
                         onChange={(e) => setNewArea(e.target.value)}
                         style={{ padding: "8px 12px", fontSize: "13px" }}
@@ -196,7 +195,6 @@ export function CustomerAuthModal() {
                         <input
                           type="text"
                           className="form-input"
-                          placeholder="Near Bank"
                           value={newLandmark}
                           onChange={(e) => setNewLandmark(e.target.value)}
                           style={{ padding: "8px 12px", fontSize: "13px" }}
@@ -296,7 +294,6 @@ export function CustomerAuthModal() {
                     <input
                       type="text"
                       className="form-input"
-                      placeholder="98XXXXXXXX"
                     />
                     <Phone size={16} color="var(--text-muted)" style={{ position: "absolute", right: "12px", top: "14px" }} />
                   </div>

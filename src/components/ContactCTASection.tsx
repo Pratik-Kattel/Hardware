@@ -225,7 +225,6 @@ export function ContactCTASection() {
                     <input
                       type="text"
                       className="form-input"
-                      placeholder="e.g. Ramesh Thapa"
                       value={inquiryName}
                       onChange={(e) => setInquiryName(e.target.value)}
                     />
@@ -237,7 +236,6 @@ export function ContactCTASection() {
                       type="tel"
                       required
                       className="form-input"
-                      placeholder="98XXXXXXXX"
                       value={inquiryPhone}
                       onChange={(e) => setInquiryPhone(e.target.value)}
                     />
@@ -248,7 +246,6 @@ export function ContactCTASection() {
                     <textarea
                       rows={2}
                       className="form-textarea"
-                      placeholder="e.g. 50 bags cement, CPVC pipes, angle grinder"
                       value={inquiryText}
                       onChange={(e) => setInquiryText(e.target.value)}
                       style={{ resize: "none" }}

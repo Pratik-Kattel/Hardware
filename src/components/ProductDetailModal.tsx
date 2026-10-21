@@ -624,7 +624,7 @@ export function ProductDetailModal() {
                   }}
                 >
                   <tbody>
-                    {Object.entries(selectedProduct.specifications).map(([key, val], idx) => (
+                    {Object.entries(selectedProduct.specifications || {}).map(([key, val], idx) => (
                       <tr
                         key={key}
                         style={{

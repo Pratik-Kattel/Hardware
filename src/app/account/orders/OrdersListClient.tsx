@@ -201,7 +201,7 @@ export function OrdersListClient() {
           >
             <input
               type="text"
-              placeholder="Enter Order ID (e.g. ADH-98412)"
+              placeholder="Enter Order ID"
               value={lookupId}
               onChange={(e) => setLookupId(e.target.value)}
               style={{
@@ -360,7 +360,7 @@ export function OrdersListClient() {
                       }}
                     >
                       <div style={{ display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
-                        {order.items.slice(0, 3).map((item, idx) => (
+                        {(order.items || []).slice(0, 3).map((item, idx) => (
                           <div
                             key={idx}
                             style={{
@@ -378,7 +378,7 @@ export function OrdersListClient() {
                             title={`${item.name} (${item.quantity}x)`}
                           >
                             <Image
-                              src={item.image}
+                              src={item.image || "/images/placeholder.webp"}
                               alt={item.name}
                               width={52}
                               height={52}
@@ -389,10 +389,10 @@ export function OrdersListClient() {
 
                         <div>
                           <div style={{ fontSize: "15px", fontWeight: 700, color: "#1C1C1E" }}>
-                            {order.items.map((i) => i.name).join(", ")}
+                            {(order.items || []).map((i) => i.name).join(", ")}
                           </div>
                           <div style={{ fontSize: "14px", color: "#6E6E73", marginTop: "2px" }}>
-                            Delivery destination: {order.deliveryAddress.area}, {order.deliveryAddress.city}
+                            Delivery destination: {order.deliveryAddress?.area || "Kathmandu"}, {order.deliveryAddress?.city || "Nepal"}
                           </div>
                         </div>
                       </div>

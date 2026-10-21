@@ -16,11 +16,14 @@ import {
   Truck,
 } from "lucide-react";
 import { Product } from "@/types";
+import { PRODUCTS } from "@/data/products";
 
 export function WishlistClient() {
   const { wishlist, toggleWishlist, addToCart, storeInfo } = useStore();
-  const [savedProducts, setSavedProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [savedProducts, setSavedProducts] = useState<Product[]>(() =>
+    PRODUCTS.filter((p) => wishlist.includes(p.id) || wishlist.includes(p.slug || ""))
+  );
+  const [loading, setLoading] = useState(false);
 
   // Fetch product details for wishlist items
   useEffect(() => {

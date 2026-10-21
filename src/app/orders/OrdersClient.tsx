@@ -191,11 +191,10 @@ export function OrdersClient() {
                   marginBottom: "6px",
                 }}
               >
-                Order ID (e.g. ADH-98412)
+                Order ID
               </label>
               <input
                 type="text"
-                placeholder="ADH-98412"
                 value={inputOrderId}
                 onChange={(e) => setInputOrderId(e.target.value)}
                 style={{
@@ -224,7 +223,6 @@ export function OrdersClient() {
               </label>
               <input
                 type="text"
-                placeholder={storeInfo?.phone || "985-1145065"}
                 value={inputPhone}
                 onChange={(e) => setInputPhone(e.target.value)}
                 style={{
@@ -329,13 +327,13 @@ export function OrdersClient() {
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: `repeat(${activeTracking.trackingTimeline.length}, 1fr)`,
+                  gridTemplateColumns: `repeat(${Math.max(1, (activeTracking.trackingTimeline || []).length)}, 1fr)`,
                   gap: "16px",
                   position: "relative",
                 }}
                 className="order-stepper-grid"
               >
-                {activeTracking.trackingTimeline.map((step, idx) => (
+                {(activeTracking.trackingTimeline || []).map((step, idx) => (
                   <div
                     key={idx}
                     style={{
@@ -423,10 +421,10 @@ export function OrdersClient() {
                       marginBottom: "8px",
                     }}
                   >
-                    Ordered Hardware Items ({activeTracking.items.length})
+                    Ordered Hardware Items ({(activeTracking.items || []).length})
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                    {activeTracking.items.map((item, idx) => (
+                    {(activeTracking.items || []).map((item, idx) => (
                       <div
                         key={idx}
                         style={{

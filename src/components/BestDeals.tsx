@@ -14,12 +14,15 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Product } from "@/types";
+import { PRODUCTS } from "@/data/products";
 import { clientFetch } from "@/lib/api-client";
 
 export function BestDeals() {
   const { addToCart } = useStore();
-  const [dealProducts, setDealProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [dealProducts, setDealProducts] = useState<Product[]>(() =>
+    PRODUCTS.filter((p) => p.isBestDeal || (p.discountPercent && p.discountPercent > 10)).slice(0, 8)
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
   const [timeLeft, setTimeLeft] = useState({
     hours: 14,
@@ -428,19 +431,25 @@ export function BestDeals() {
                       <strong style={{ color: "#3A3A3C" }}>{stockRemaining} units left</strong>
                     </div>
 
-                    {/* Add to Cart Button in Muted Steel-Blue */}
+                    {/* Add to Cart Button in Industrial Amber/Orange */}
                     <button
                       onClick={() => addToCart(prod, 1)}
                       className="btn btn-primary btn-full btn-sm"
                       style={{
                         gap: "6px",
-                        padding: "9px",
+                        padding: "10px",
                         marginTop: "auto",
-                        background: "#4A6572",
+                        background: "#EA580C",
                         color: "#FFFFFF",
                         border: "none",
+                        borderRadius: "var(--radius-sm)",
                         cursor: "pointer",
+                        fontWeight: 700,
+                        fontSize: "13px",
+                        transition: "background 0.15s ease",
                       }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "#C2410C")}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = "#EA580C")}
                     >
                       <ShoppingCart size={15} />
                       <span>Add to Cart</span>

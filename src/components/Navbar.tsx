@@ -950,7 +950,7 @@ export function Navbar() {
                             flexShrink: 0,
                           }}
                         >
-                          {getCategoryIcon(cat.iconName, 18)}
+                          {getCategoryIcon(cat.iconName || cat.iconKey || "Boxes", 18)}
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div
@@ -993,7 +993,9 @@ export function Navbar() {
                               textOverflow: "ellipsis",
                             }}
                           >
-                            {cat.popularSubcategories.slice(0, 3).join(" • ")}
+                            {(cat.popularSubcategories && cat.popularSubcategories.length > 0)
+                              ? cat.popularSubcategories.slice(0, 3).join(" • ")
+                              : (cat.description || "Tools & accessories")}
                           </div>
                         </div>
                       </Link>

@@ -137,7 +137,6 @@ export function CheckoutModal() {
                   className="form-input"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="e.g. Suman Adhikari"
                 />
               </div>
 
@@ -150,7 +149,6 @@ export function CheckoutModal() {
                     className="form-input"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="98XXXXXXXX"
                   />
                   <Phone size={15} color="var(--text-muted)" style={{ position: "absolute", right: "12px", top: "14px" }} />
                 </div>
@@ -165,7 +163,6 @@ export function CheckoutModal() {
                   className="form-input"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="email@example.com"
                 />
               </div>
 
@@ -192,7 +189,6 @@ export function CheckoutModal() {
                 className="form-input"
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
-                placeholder="e.g. Kalanki Chowk, Sitapaila Road, Baneshwor, etc."
               />
             </div>
 
@@ -203,7 +199,6 @@ export function CheckoutModal() {
                 className="form-input"
                 value={landmark}
                 onChange={(e) => setLandmark(e.target.value)}
-                placeholder="e.g. Opposite Nepal Police Station, Behind Global Bank"
               />
             </div>
 
