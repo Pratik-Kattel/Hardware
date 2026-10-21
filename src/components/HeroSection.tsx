@@ -101,9 +101,19 @@ export function HeroSection() {
     return () => observer.disconnect();
   }, []);
 
+  const autoplayRef = useRef(
+    Autoplay({
+      delay: 4500,
+      stopOnMouseEnter: false,
+      stopOnInteraction: false,
+      stopOnFocusIn: false,
+      playOnInit: true,
+    })
+  );
+
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, duration: 25 },
-    [Autoplay({ delay: 5500, stopOnMouseEnter: true, stopOnInteraction: false })]
+    [autoplayRef.current]
   );
 
   const onSelect = useCallback(() => {
@@ -115,21 +125,34 @@ export function HeroSection() {
     if (!emblaApi) return;
     emblaApi.on("select", onSelect);
     onSelect();
+    const autoplay = emblaApi.plugins()?.autoplay;
+    if (autoplay && !autoplay.isPlaying()) {
+      autoplay.play();
+    }
   }, [emblaApi, onSelect]);
 
   const scrollTo = useCallback(
     (index: number) => {
-      if (emblaApi) emblaApi.scrollTo(index);
+      if (emblaApi) {
+        emblaApi.scrollTo(index);
+        emblaApi.plugins()?.autoplay?.reset();
+      }
     },
     [emblaApi]
   );
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
+    if (emblaApi) {
+      emblaApi.scrollPrev();
+      emblaApi.plugins()?.autoplay?.reset();
+    }
   }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
+    if (emblaApi) {
+      emblaApi.scrollNext();
+      emblaApi.plugins()?.autoplay?.reset();
+    }
   }, [emblaApi]);
 
   const handleCtaClick = (slide: HeroSlideData) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
@@ -82,13 +82,23 @@ export function BestDeals() {
     return () => clearInterval(timer);
   }, []);
 
+  const autoplayRef = useRef(
+    Autoplay({
+      delay: 4000,
+      stopOnMouseEnter: false,
+      stopOnInteraction: false,
+      stopOnFocusIn: false,
+      playOnInit: true,
+    })
+  );
+
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
       align: "start",
       slidesToScroll: 1,
     },
-    [Autoplay({ delay: 5000, stopOnMouseEnter: true, stopOnInteraction: false })]
+    [autoplayRef.current]
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -104,14 +114,24 @@ export function BestDeals() {
     setScrollSnaps(emblaApi.scrollSnapList());
     emblaApi.on("select", onSelect);
     onSelect();
+    const autoplay = emblaApi.plugins()?.autoplay;
+    if (autoplay && !autoplay.isPlaying()) {
+      autoplay.play();
+    }
   }, [emblaApi, onSelect]);
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
+    if (emblaApi) {
+      emblaApi.scrollPrev();
+      emblaApi.plugins()?.autoplay?.reset();
+    }
   }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
+    if (emblaApi) {
+      emblaApi.scrollNext();
+      emblaApi.plugins()?.autoplay?.reset();
+    }
   }, [emblaApi]);
 
   if (dealProducts.length === 0 && !isLoading) {
@@ -474,7 +494,12 @@ export function BestDeals() {
           {scrollSnaps.slice(0, Math.min(scrollSnaps.length, 6)).map((_, idx) => (
             <button
               key={idx}
-              onClick={() => emblaApi && emblaApi.scrollTo(idx)}
+              onClick={() => {
+                if (emblaApi) {
+                  emblaApi.scrollTo(idx);
+                  emblaApi.plugins()?.autoplay?.reset();
+                }
+              }}
               aria-label={`Go to slide group ${idx + 1}`}
               style={{
                 width: selectedIndex === idx ? "20px" : "6px",
